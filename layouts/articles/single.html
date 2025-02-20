@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+    <title>{{ .Title }}</title>
+    <meta content="{{ .Description }}" name="description">
+    <meta content="" name="keywords">
+
+    <!-- Favicons -->
+    <link href="{{ "img/me.jpg" | relURL }}" rel="icon">
+    <link href="{{ "img/apple-touch-icon.png" | relURL }}" rel="apple-touch-icon">
+
+    <!-- Vendor CSS Files -->
+    <link href="{{ "vendor/bootstrap/css/bootstrap.min.css" | relURL }}" rel="stylesheet">
+    <link href="{{ "vendor/bootstrap-icons/bootstrap-icons.css" | relURL }}" rel="stylesheet">
+    <link href="{{ "vendor/glightbox/css/glightbox.min.css" | relURL }}" rel="stylesheet">
+    <link href="{{ "vendor/swiper/swiper-bundle.min.css" | relURL }}" rel="stylesheet">
+
+    <!-- Template Main CSS File -->
+    <link href="{{ "css/style.css" | relURL }}" rel="stylesheet">
+
+    <style>
+        .post-thumb img,
+        .article-content img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .container {
+            max-width: 1200px;
+        }
+
+        .col-md-8 {
+            flex: 0 0 100%;
+            max-width: 100%;
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- ======= Header ======= -->
+<header id="header" class="fixed-top">
+    <div class="container d-flex align-items-center justify-content-between">
+        <h1 class="logo"><a href="{{ "/" | relURL }}">Younes Belouche</a></h1>
+
+        <nav id="navbar" class="navbar">
+            <ul>
+                <li><a class="nav-link scrollto" href="{{ "/" | relURL }}">Home</a></li>
+                <li><a class="nav-link scrollto" href="{{ "/#about" | relURL }}">About</a></li>
+                <li><a class="nav-link scrollto" href="{{ "/#services" | relURL }}">Services</a></li>
+                <li><a class="nav-link scrollto" href="{{ "/#work" | relURL }}">Projects</a></li>
+                <li><a class="nav-link scrollto" href="{{ "/#blog" | relURL }}">Blog</a></li>
+                <li><a class="nav-link scrollto" href="{{ "/#contact" | relURL }}">Contact</a></li>
+            </ul>
+            <i class="bi bi-list mobile-nav-toggle"></i>
+        </nav>
+    </div>
+</header>
+
+<div class="hero hero-single route bg-image">
+    <div class="overlay-mf"></div>
+    <div class="hero-content display-table">
+        <div class="table-cell">
+            <div class="container">
+                <h2 class="hero-title mb-4">{{ .Title }}</h2>
+            </div>
+        </div>
+    </div>
+</div>
+
+<main id="main">
+    <!-- ======= Blog Single Section ======= -->
+    <section class="blog-wrapper sect-pt4" id="blog">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="post-box">
+                        <div class="post-thumb">
+                            <img src="{{ .Params.image | relURL }}" class="img-fluid" alt="">
+                        </div>
+                        <div class="post-meta">
+                            <h1 class="article-title">{{ .Title }}</h1>
+                            <ul>
+                                <li><span class="bi bi-person"></span> Younes Belouche</li>
+                                <li><span class="bi bi-tag"></span> {{ .Params.context }}</li>
+                            </ul>
+                        </div>
+                        <div class="article-content">
+                            {{ .Content | safeHTML }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<!-- ======= Footer ======= -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="copyright-box">
+                    <p class="copyright">&copy; Copyright <strong>DevFolio</strong>. All Rights Reserved</p>
+                    <div class="credits">
+                        Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- Vendor JS Files -->
+<script src="{{ "vendor/purecounter/purecounter_vanilla.js" | relURL }}"></script>
+<script src="{{ "vendor/bootstrap/js/bootstrap.bundle.min.js" | relURL }}"></script>
+<script src="{{ "vendor/glightbox/js/glightbox.min.js" | relURL }}"></script>
+<script src="{{ "vendor/swiper/swiper-bundle.min.js" | relURL }}"></script>
+<script src="{{ "vendor/typed.js/typed.min.js" | relURL }}"></script>
+<script src="{{ "vendor/php-email-form/validate.js" | relURL }}"></script>
+<script src="{{ "js/main.js" | relURL }}"></script>
+
+</body>
+</html>

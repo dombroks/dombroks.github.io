@@ -1,0 +1,9 @@
+baseURL = "/"
+languageCode = "en-us"
+title = "My Personal Website"
+theme = ""
+
+[permalinks]
+  articles = "/blog/:slug/"
+
+

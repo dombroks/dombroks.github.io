@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+    <title>{{ .Title }}</title>
+    <meta content="{{ .Description }}" name="description">
+    <meta content="" name="keywords">
+
+    <!-- Favicons -->
+    <link href="{{ "img/me.jpg" | relURL }}" rel="icon">
+    <link href="{{ "img/apple-touch-icon.png" | relURL }}" rel="apple-touch-icon">
+
+    <!-- Vendor CSS Files -->
+    <link href="{{ "vendor/bootstrap/css/bootstrap.min.css" | relURL }}" rel="stylesheet">
+    <link href="{{ "vendor/bootstrap-icons/bootstrap-icons.css" | relURL }}" rel="stylesheet">
+    <link href="{{ "vendor/glightbox/css/glightbox.min.css" | relURL }}" rel="stylesheet">
+    <link href="{{ "vendor/swiper/swiper-bundle.min.css" | relURL }}" rel="stylesheet">
+
+    <!-- Template Main CSS File -->
+    <link href="{{ "css/style.css" | relURL }}" rel="stylesheet">
+</head>
+
+<body>
+
+<!-- ======= Header ======= -->
+<header id="header" class="fixed-top">
+    <div class="container d-flex align-items-center justify-content-between">
+        <h1 class="logo"><a href="{{ "/" | relURL }}">Younes Belouche</a></h1>
+
+        <nav id="navbar" class="navbar">
+            <ul>
+                <li><a class="nav-link scrollto" href="{{ "/" | relURL }}">Home</a></li>
+                <li><a class="nav-link scrollto" href="{{ "/#about" | relURL }}">About</a></li>
+                <li><a class="nav-link scrollto" href="{{ "/#services" | relURL }}">Services</a></li>
+                <li><a class="nav-link scrollto" href="{{ "/#work" | relURL }}">Projects</a></li>
+                <li><a class="nav-link scrollto" href="{{ "/#blog" | relURL }}">Blog</a></li>
+                <li><a class="nav-link scrollto" href="{{ "/#contact" | relURL }}">Contact</a></li>
+            </ul>
+            <i class="bi bi-list mobile-nav-toggle"></i>
+        </nav>
+    </div>
+</header>
+
+<div class="hero hero-single route bg-image">
+    <div class="overlay-mf"></div>
+    <div class="hero-content display-table">
+        <div class="table-cell">
+            <div class="container">
+                <h2 class="hero-title mb-4">{{ .Title }}</h2>
+            </div>
+        </div>
+    </div>
+</div>
+
+<main>
+    <div class="container">
+        <img src="{{ .Params.image | relURL }}" class="img-fluid" alt="{{ .Title }}">
+
+        <p><strong>Context:</strong> {{ .Params.context }}</p>
+        <p><strong>Published on:</strong> {{ .Date.Format "Jan 2, 2006" }}</p>
+
+        {{ if .Params.screenshots }}
+        <h2>Project Screenshots</h2>
+        <div class="row">
+            {{ range .Params.screenshots }}
+            <div class="col-md-4">
+                <img src="{{ . | relURL }}" class="img-fluid" alt="Screenshot">
+            </div>
+            {{ end }}
+        </div>
+        {{ end }}
+
+        <p><strong>Description:</strong></p>
+        <p>{{ .Content }}</p>
+
+        {{ if .Params.link }}
+        <p><a href="{{ .Params.link }}" target="_blank" class="btn btn-primary">View Project</a></p>
+        {{ end }}
+    </div>
+</main>
+
+<!-- ======= Footer ======= -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="copyright-box">
+                    <p class="copyright">&copy; Copyright <strong>DevFolio</strong>. All Rights Reserved</p>
+                    <div class="credits">
+                        Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- Vendor JS Files -->
+<script src="{{ "vendor/purecounter/purecounter_vanilla.js" | relURL }}"></script>
+<script src="{{ "vendor/bootstrap/js/bootstrap.bundle.min.js" | relURL }}"></script>
+<script src="{{ "vendor/glightbox/js/glightbox.min.js" | relURL }}"></script>
+<script src="{{ "vendor/swiper/swiper-bundle.min.js" | relURL }}"></script>
+<script src="{{ "vendor/typed.js/typed.min.js" | relURL }}"></script>
+<script src="{{ "vendor/php-email-form/validate.js" | relURL }}"></script>
+<script src="{{ "js/main.js" | relURL }}"></script>
+
+</body>
+</html>
