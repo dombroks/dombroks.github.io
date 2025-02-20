@@ -399,7 +399,7 @@
                                 </div>
                             </div>
                             <h3 class="card-title"><a href="{{ .RelPermalink }}">{{ .Title }}</a></h3>
-                            <p class="card-description">{{ .Params.brief }}</p>
+                            <p class="card-description">{{ .Params.brief | truncate 120 }}</p>
                         </div>
                         <div class="card-footer">
                             <div class="post-author">

@@ -1265,6 +1265,9 @@ a:hover {
 @media (min-width: 767px) {
     .card-blog {
         margin-bottom: 3rem;
+        display: flex;
+        flex-direction: column;
+        height: 100%; /* Ensures all cards stretch to equal height */
 
     }
 }
@@ -1272,6 +1275,7 @@ a:hover {
 
 .card-blog .card-body {
     position: relative;
+    flex-grow: 1; /* Allows the body to take up available space */
 }
 
 .card-blog .card-category-box {
