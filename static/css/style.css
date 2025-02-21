@@ -1262,21 +1262,41 @@ a:hover {
 /*--------------------------------------------------------------
 # Blog
 --------------------------------------------------------------*/
-@media (min-width: 767px) {
-    .card-blog {
-        margin-bottom: 3rem;
-        display: flex;
-        flex-direction: column;
-        height: 100%; /* Ensures all cards stretch to equal height */
-
-    }
+/* Ensure the parent container uses flex layout */
+#blog .row {
+    display: flex;
+    flex-wrap: wrap;
 }
 
+#blog .col-md-4 {
+    display: flex;
+    flex-direction: column;
+}
+
+.card-blog {
+    display: flex;
+    flex-direction: column;
+    height: 100%; /* Ensures all cards stretch to equal height */
+    margin-bottom: 3rem; /* Spacing between cards */
+}
+
+.card-blog .card-img {
+    height: 200px; /* Fixed image height */
+    overflow: hidden; /* Ensures images don't overflow */
+}
+
+.card-blog .card-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Maintain aspect ratio */
+}
 
 .card-blog .card-body {
     flex-grow: 1; /* Allows the body to take up available space */
     display: flex;
     flex-direction: column;
+    padding-top: 2rem; /* Space for absolute positioned category */
+    position: relative; /* Needed for absolute positioning of category */
 }
 
 .card-blog .card-category-box {
@@ -1286,23 +1306,20 @@ a:hover {
     left: 15px;
     right: 15px;
     line-height: 25px;
-    overflow: hidden;
 }
 
 .card-blog .card-category {
     display: inline-block;
     color: #fff;
-    padding: 0 15px 5px;
-    overflow: hidden;
+    padding: 8px 18px;
     background-color: #200A3E;
     border-radius: 4px;
 }
 
 .card-blog .card-category .category {
     color: #fff;
-    display: inline-block;
     text-transform: uppercase;
-    font-size: 0.7rem;
+    font-size: 0.9rem;
     letter-spacing: 0.1px;
     margin-bottom: 0;
 }
@@ -1313,19 +1330,40 @@ a:hover {
 }
 
 .card-blog .card-description {
+    flex-grow: 1; /* Makes description fill available space */
     color: #4e4e4e;
-    max-height: 100px;
+    min-height: 60px; /* Minimum height for short content */
+    overflow: hidden;
+}
+
+.card-blog .card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    background-color: transparent;
+    border-top: 1px solid #e9ecef;
 }
 
 .card-blog .post-author {
-    display: inline-block;
+    display: flex;
+    align-items: center;
 }
 
+.card-blog .post-author .avatar {
+    width: 30px;
+    height: 30px;
+    margin-right: 10px;
+}
 
 .card-blog .post-date {
     color: #200A3E;
-    display: inline-block;
-    float: right;
+    display: flex;
+    align-items: center;
+}
+
+.card-blog .post-date .bi-clock {
+    margin-right: 5px;
 }
 
 /*--------------------------------------------------------------
