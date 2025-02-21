@@ -1274,8 +1274,9 @@ a:hover {
 
 
 .card-blog .card-body {
-    position: relative;
     flex-grow: 1; /* Allows the body to take up available space */
+    display: flex;
+    flex-direction: column;
 }
 
 .card-blog .card-category-box {
