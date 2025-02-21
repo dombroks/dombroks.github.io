@@ -1,9 +1,9 @@
 ---
-title: "my awesome project"
-date: 2025-02-20
-image: "/img/work-1.jpg"
-context: "Web Development"
-link : "https://www.google.com"
+title: "Delivery App"
+date: 2021-03-13
+image: "/img/delivery_app.png"
+context: "Mobile Development | Flutter"
+link : "https://github.com/dombroks/delivery_app"
 ---
-This is a detailed description of the project.
+Delivery app built using Flutter, Provider and MVVM
 
