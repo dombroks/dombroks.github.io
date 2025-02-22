@@ -59,7 +59,7 @@
     <div class="container">
         <img src="{{ .Params.image | relURL }}" class="img-fluid" alt="{{ .Title }}">
 
-        <p><strong>Context:</strong> {{ .Params.context }}</p>
+        <p><strong>Category:</strong> {{ .Params.context }}</p>
         <p><strong>Published on:</strong> {{ .Date.Format "Jan 2, 2006" }}</p>
 
         {{ if .Params.screenshots }}
