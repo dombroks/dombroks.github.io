@@ -950,11 +950,30 @@ a:hover {
 /*--------------------------------------------------------------
 # Portfolio
 --------------------------------------------------------------*/
+/* Add very small gap between work elements */
+#work .row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem; /* Very small gap */
+    margin: 0 -0.25rem; /* Counteract Bootstrap's default negative margins */
+}
+
+/* Ensure columns take full height and adjust width for very small gap */
+#work .col-md-4 {
+    display: flex;
+    flex-direction: column;
+    width: calc(33.333% - 0.333rem); /* Adjusted for very small gap */
+    padding: 0 0.25rem; /* Add small padding to columns */
+}
+
 .work-box {
     margin-bottom: 3rem;
     -webkit-backface-visibility: hidden;
     backface-visibility: hidden;
     background-color: #fff;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
 }
 
 .work-box:hover img {
@@ -964,14 +983,21 @@ a:hover {
 .work-img {
     display: block;
     overflow: hidden;
+    height: 200px;
 }
 
 .work-img img {
     transition: all 1s;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
 
 .work-content {
     padding: 2rem 3% 1rem 4%;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
 }
 
 .work-content .w-more {
@@ -986,11 +1012,16 @@ a:hover {
 .work-content .w-like {
     font-size: 2.5rem;
     color: #200A3E;
-    float: right;
+    display: flex; /* Use Flexbox */
+    justify-content: flex-end; /* Align to the right */
+    align-items: center; /* Center vertically */
+    height: 100%; /* Take full height of the parent */
 }
 
 .work-content .w-like a {
     color: #200A3E;
+    display: flex; /* Ensure the link uses Flexbox */
+    align-items: center; /* Center the icon vertically */
 }
 
 .work-content .w-like .num-like {
@@ -999,8 +1030,8 @@ a:hover {
 
 .w-title {
     font-size: 1.2rem;
+    margin-top: 0.6rem;
 }
-
 /*--------------------------------------------------------------
 # Portfolio Details
 --------------------------------------------------------------*/
