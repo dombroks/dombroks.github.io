@@ -1,7 +1,7 @@
 ---
 title: "Grocery App"
 date: 2020-07-26
-image: "img/grocery_app.png"
+image: "img/grocery_app_mockups.png"
 context: "Mobile Development | Flutter"
 link : "https://github.com/dombroks/Grocery_App"
 ---
