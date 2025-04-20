@@ -1,7 +1,7 @@
 ---
 title: "Islamic App"
 date: 2020-06-25
-image: "img/islamic_app.png"
+image: "img/islamic_app_mockups.png"
 context: "Mobile Development | Android"
 link : "https://github.com/dombroks/Rafiqi"
 ---
