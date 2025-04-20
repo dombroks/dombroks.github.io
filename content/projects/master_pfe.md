@@ -1,7 +1,7 @@
 ---
 title: "3D Stereoscopic Reconstruction"
 date: 2021-06-06
-image: "img/3d_reconstruction.png"
+image: "img/tsr.png"
 context: "Computer Vision | Python"
 link : "https://dspace.univ-bba.dz/items/89dc355d-bd4a-4aee-8f69-a5c80439f775"
 ---
