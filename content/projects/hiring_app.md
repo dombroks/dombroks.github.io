@@ -1,7 +1,7 @@
 ---
 title: "Hiring App"
 date: 2020-07-02
-image: "img/hiring_app.png"
+image: "img/hire_me_mockups.png"
 context: "Mobile Development | Android"
 link : "https://github.com/dombroks/Hire_Me"
 ---
@@ -10,7 +10,7 @@ Jober is an Android app designed for tech professionals looking for employment. 
 
 The Design is made by me (Figma project is available).
 
-### Some technical informations about the app:
+### Some technical information about the app:
 
 
 - Dagger-Hilt for dependency injection.
