@@ -221,9 +221,20 @@
    */
   let preloader = select('#preloader');
   if (preloader) {
-    window.addEventListener('load', () => {
-      preloader.remove()
-    });
+    // Remove preloader as soon as DOM is ready, don't wait for all resources
+    const removePreloader = () => {
+      preloader.style.opacity = '0';
+      setTimeout(() => {
+        preloader.remove();
+      }, 300);
+    };
+
+    // Remove on DOM ready instead of full load
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', removePreloader);
+    } else {
+      removePreloader();
+    }
   }
 
   /**

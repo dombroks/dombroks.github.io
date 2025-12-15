@@ -372,6 +372,7 @@ a:hover {
     z-index: 9999;
     overflow: hidden;
     background: #fff;
+    transition: opacity 0.3s ease;
 }
 
 #preloader:before {
@@ -958,16 +959,38 @@ a:hover {
     margin: 0 -0.25rem; /* Counteract Bootstrap's default negative margins */
 }
 
-/* Ensure columns take full height and adjust width for very small gap */
+/* Mobile: Full width */
+#work .col-12 {
+    width: 100%;
+    padding: 0 0.25rem;
+}
+
+/* Small screens (tablets): 2 columns */
+@media (min-width: 576px) {
+    #work .col-sm-6 {
+        width: calc(50% - 0.25rem);
+        padding: 0 0.25rem;
+    }
+}
+
+/* Medium screens and up: 3 columns */
+@media (min-width: 768px) {
+    #work .col-md-4 {
+        width: calc(33.333% - 0.333rem);
+        padding: 0 0.25rem;
+    }
+}
+
+/* Ensure columns take full height */
+#work .col-12,
+#work .col-sm-6,
 #work .col-md-4 {
     display: flex;
     flex-direction: column;
-    width: calc(33.333% - 0.333rem); /* Adjusted for very small gap */
-    padding: 0 0.25rem; /* Add small padding to columns */
 }
 
 .work-box {
-    margin-bottom: 3rem;
+    margin-bottom: 1.5rem;
     -webkit-backface-visibility: hidden;
     backface-visibility: hidden;
     background-color: #fff;

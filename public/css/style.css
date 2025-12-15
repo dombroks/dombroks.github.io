@@ -372,6 +372,7 @@ a:hover {
     z-index: 9999;
     overflow: hidden;
     background: #fff;
+    transition: opacity 0.3s ease;
 }
 
 #preloader:before {
@@ -950,11 +951,52 @@ a:hover {
 /*--------------------------------------------------------------
 # Portfolio
 --------------------------------------------------------------*/
+/* Add very small gap between work elements */
+#work .row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem; /* Very small gap */
+    margin: 0 -0.25rem; /* Counteract Bootstrap's default negative margins */
+}
+
+/* Mobile: Full width */
+#work .col-12 {
+    width: 100%;
+    padding: 0 0.25rem;
+}
+
+/* Small screens (tablets): 2 columns */
+@media (min-width: 576px) {
+    #work .col-sm-6 {
+        width: calc(50% - 0.25rem);
+        padding: 0 0.25rem;
+    }
+}
+
+/* Medium screens and up: 3 columns */
+@media (min-width: 768px) {
+    #work .col-md-4 {
+        width: calc(33.333% - 0.333rem);
+        padding: 0 0.25rem;
+    }
+}
+
+/* Ensure columns take full height */
+#work .col-12,
+#work .col-sm-6,
+#work .col-md-4 {
+    display: flex;
+    flex-direction: column;
+}
+
 .work-box {
-    margin-bottom: 3rem;
+    margin-bottom: 1.5rem;
     -webkit-backface-visibility: hidden;
     backface-visibility: hidden;
     background-color: #fff;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
 }
 
 .work-box:hover img {
@@ -964,14 +1006,21 @@ a:hover {
 .work-img {
     display: block;
     overflow: hidden;
+    height: 200px;
 }
 
 .work-img img {
     transition: all 1s;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
 
 .work-content {
     padding: 2rem 3% 1rem 4%;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
 }
 
 .work-content .w-more {
@@ -986,11 +1035,16 @@ a:hover {
 .work-content .w-like {
     font-size: 2.5rem;
     color: #200A3E;
-    float: right;
+    display: flex; /* Use Flexbox */
+    justify-content: flex-end; /* Align to the right */
+    align-items: center; /* Center vertically */
+    height: 100%; /* Take full height of the parent */
 }
 
 .work-content .w-like a {
     color: #200A3E;
+    display: flex; /* Ensure the link uses Flexbox */
+    align-items: center; /* Center the icon vertically */
 }
 
 .work-content .w-like .num-like {
@@ -999,8 +1053,8 @@ a:hover {
 
 .w-title {
     font-size: 1.2rem;
+    margin-top: 0.6rem;
 }
-
 /*--------------------------------------------------------------
 # Portfolio Details
 --------------------------------------------------------------*/
@@ -1262,16 +1316,41 @@ a:hover {
 /*--------------------------------------------------------------
 # Blog
 --------------------------------------------------------------*/
-@media (min-width: 767px) {
-    .card-blog {
-        margin-bottom: 3rem;
-
-    }
+/* Ensure the parent container uses flex layout */
+#blog .row {
+    display: flex;
+    flex-wrap: wrap;
 }
 
+#blog .col-md-4 {
+    display: flex;
+    flex-direction: column;
+}
+
+.card-blog {
+    display: flex;
+    flex-direction: column;
+    height: 100%; /* Ensures all cards stretch to equal height */
+    margin-bottom: 3rem; /* Spacing between cards */
+}
+
+.card-blog .card-img {
+    height: 200px; /* Fixed image height */
+    overflow: hidden; /* Ensures images don't overflow */
+}
+
+.card-blog .card-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Maintain aspect ratio */
+}
 
 .card-blog .card-body {
-    position: relative;
+    flex-grow: 1; /* Allows the body to take up available space */
+    display: flex;
+    flex-direction: column;
+    padding-top: 2rem; /* Space for absolute positioned category */
+    position: relative; /* Needed for absolute positioning of category */
 }
 
 .card-blog .card-category-box {
@@ -1281,23 +1360,20 @@ a:hover {
     left: 15px;
     right: 15px;
     line-height: 25px;
-    overflow: hidden;
 }
 
 .card-blog .card-category {
     display: inline-block;
     color: #fff;
-    padding: 0 15px 5px;
-    overflow: hidden;
+    padding: 8px 18px;
     background-color: #200A3E;
     border-radius: 4px;
 }
 
 .card-blog .card-category .category {
     color: #fff;
-    display: inline-block;
     text-transform: uppercase;
-    font-size: 0.7rem;
+    font-size: 0.9rem;
     letter-spacing: 0.1px;
     margin-bottom: 0;
 }
@@ -1308,19 +1384,40 @@ a:hover {
 }
 
 .card-blog .card-description {
+    flex-grow: 1; /* Makes description fill available space */
     color: #4e4e4e;
-    max-height: 100px;
+    min-height: 60px; /* Minimum height for short content */
+    overflow: hidden;
+}
+
+.card-blog .card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    background-color: transparent;
+    border-top: 1px solid #e9ecef;
 }
 
 .card-blog .post-author {
-    display: inline-block;
+    display: flex;
+    align-items: center;
 }
 
+.card-blog .post-author .avatar {
+    width: 30px;
+    height: 30px;
+    margin-right: 10px;
+}
 
 .card-blog .post-date {
     color: #200A3E;
-    display: inline-block;
-    float: right;
+    display: flex;
+    align-items: center;
+}
+
+.card-blog .post-date .bi-clock {
+    margin-right: 5px;
 }
 
 /*--------------------------------------------------------------

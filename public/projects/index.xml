@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Projects on My Personal Website</title>
+    <link>/projects/</link>
+    <description>Recent content in Projects on My Personal Website</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sun, 06 Jun 2021 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="/projects/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>3D Stereoscopic Reconstruction</title>
+      <link>/projects/master_pfe/</link>
+      <pubDate>Sun, 06 Jun 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/projects/master_pfe/</guid>
+      <description>Abstract Computer vision is a sub field of artificial intelligence (AI) that offers the computers
+and systems the ability to extract meaningful information from digital images and videos,
+this way computers can take decisions or perform actions based on that information.
+Computers now can observe and see as if they have eyes.
+Stereoscopy, also called stereo imaging, creates the illusion of three-dimensional depth
+from given two-dimensional images. The human vision is a great example of stereoscopy,</description>
+    </item>
+    
+    <item>
+      <title>Delivery App</title>
+      <link>/projects/delivery_app/</link>
+      <pubDate>Sat, 13 Mar 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/projects/delivery_app/</guid>
+      <description>Delivery app built using Flutter, Provider and MVVM</description>
+    </item>
+    
+    <item>
+      <title>Grocery App</title>
+      <link>/projects/grocery_app/</link>
+      <pubDate>Sun, 26 Jul 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/projects/grocery_app/</guid>
+      <description>Grocery App 📱 Flutter application made for selling fruits and vegetables 🍓🍆 With a seamless user interface and a comprehensive list of features, this app is designed to make your grocery shopping experience a breeze. Browse thousands of grocery items from the comfort of your own home and add them to your shopping cart with just a few clicks. Enjoy the convenience of creating and managing your shopping list right from your phone, and receive personalized recommendations based on your previous purchases.</description>
+    </item>
+    
+    <item>
+      <title>Hiring App</title>
+      <link>/projects/hiring_app/</link>
+      <pubDate>Thu, 02 Jul 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/projects/hiring_app/</guid>
+      <description>Jober is an Android app designed for tech professionals looking for employment. Users can create profiles, upload work experience and portfolios. Employers can search for candidates, view their profiles and contact them directly through the app. Employers can also post job offers, including job descriptions, work type (remote, in-office or hybrid) and office location on a map view. The app also provides a feature where users can share a link to their CV.</description>
+    </item>
+    
+    <item>
+      <title>Islamic App</title>
+      <link>/projects/islamic_app/</link>
+      <pubDate>Thu, 25 Jun 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/projects/islamic_app/</guid>
+      <description>Rafiqi V1 Rafiqi is Android Application that aims to help muslims around the world to read,listen to Quran Al-karimk, it contains a lot of other nice features such us : Getting prayer times by location every time the user lunchs the app, if the user doesn&amp;rsquo;t have an internet connection , the app will automatically set location with it&amp;rsquo;s last record. There is also Tassbih , Douaa , Qibla &amp;hellip;etc. This project uses a prepopulated sqlite database that holds All the Quran with surrah number and juz.</description>
+    </item>
+    
+  </channel>
+</rss>

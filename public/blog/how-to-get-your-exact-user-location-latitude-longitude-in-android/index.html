@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+    <title>How to get your exact user location (latitude, longitude) in Android</title>
+    <meta content="" name="description">
+    <meta content="" name="keywords">
+
+    
+    <link href="/img/me.jpg" rel="icon">
+    <link href="/img/apple-touch-icon.png" rel="apple-touch-icon">
+
+    
+    <link href="/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+    <link href="/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
+    <link href="/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+
+    
+    <link href="/css/style.css" rel="stylesheet">
+
+    <style>
+        .post-thumb img,
+        .article-content img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .container {
+            max-width: 1200px;
+        }
+
+        .col-md-8 {
+            flex: 0 0 100%;
+            max-width: 100%;
+        }
+    </style>
+</head>
+
+<body>
+
+
+<header id="header" class="fixed-top">
+    <div class="container d-flex align-items-center justify-content-between">
+        <h1 class="logo"><a href="/">Younes Belouche</a></h1>
+
+        <nav id="navbar" class="navbar">
+            <ul>
+                <li><a class="nav-link scrollto" href="/">Home</a></li>
+                <li><a class="nav-link scrollto" href="/#about">About</a></li>
+                <li><a class="nav-link scrollto" href="/#services">Services</a></li>
+                <li><a class="nav-link scrollto" href="/#work">Projects</a></li>
+                <li><a class="nav-link scrollto" href="/#blog">Blog</a></li>
+                <li><a class="nav-link scrollto" href="/#contact">Contact</a></li>
+            </ul>
+            <i class="bi bi-list mobile-nav-toggle"></i>
+        </nav>
+    </div>
+</header>
+
+<div class="hero hero-single route bg-image">
+    <div class="overlay-mf"></div>
+    <div class="hero-content display-table">
+        <div class="table-cell">
+            <div class="container">
+                <h2 class="hero-title mb-4">How to get your exact user location (latitude, longitude) in Android</h2>
+            </div>
+        </div>
+    </div>
+</div>
+
+<main id="main">
+    
+    <section class="blog-wrapper sect-pt4" id="blog">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="post-box">
+                        <div class="post-thumb">
+                            <img src="/img/location_android.webp" class="img-fluid" alt="">
+                        </div>
+                        <div class="post-meta">
+                            <h1 class="article-title">How to get your exact user location (latitude, longitude) in Android</h1>
+                            <ul>
+                                <li><span class="bi bi-person"></span> Younes Belouche</li>
+                                <li><span class="bi bi-tag"></span> Android | Location</li>
+                            </ul>
+                        </div>
+                        <div class="article-content">
+                            <hr>
+<p>Image Credit: <a href="https://unsplash.com/@kelsoknight">Kelsey Knight</a> in <a href="https://unsplash.com/">Unsplash</a></p>
+<p>We all know that getting the users current location is an important thing for apps that provide services that need location like pizza ordering, transportation, health care applications and a lot more. Location is based on two metrics, latitude and longitude, these are angles that uniquely define points on a sphere, from those values you can determine the exact user location, Google made it easy and clear for us by providing an API called <a href="https://developers.google.com/android/reference/com/google/android/gms/location/FusedLocationProviderClient" title="Fused Location Provider">Fused Location Provider</a>. This API provides high accuracy with ability to control the power consumption by choosing the most efficient way to access the location.</p>
+<p>Let me show how to use this API</p>
+<p>First, we will check that Google’s library is added in our project by verifying that this <code>google()</code> is existed in the <strong>build.gradle</strong> file in the repositories.</p>
+<p>Then we must add this line into our dependencies.</p>
+<p><code>implementation 'com.google.android.gms:play-services-location:17.0.0'</code></p>
+<p>You can change the version from 17.0.0 to the latest version, you will know the latest one from <a href="https://developers.google.com/android/guides/releases" title="Google APIs for Android">Google APIs for Android</a>.</p>
+<p>Second, in the manifest file, we must add the permissions that allow us to get the location, these permissions are:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-XML" data-lang="XML"><span style="color:#f92672">&lt;uses-permission</span> <span style="color:#a6e22e">android:name=</span><span style="color:#e6db74">&#34;android.permission.ACCESS\COARSE\LOCATION&#34;</span><span style="color:#f92672">/&gt;</span>
+
+<span style="color:#f92672">&lt;uses-permission</span> <span style="color:#a6e22e">android:name=</span><span style="color:#e6db74">&#34;android.permission.ACCESS\FINE\LOCATION&#34;</span><span style="color:#f92672">/&gt;</span>
+</code></pre></div><p>By doing that, with those two permissions, the API will return a location with an accuracy approximately equivalent to a city block and we will get most relevant location information.</p>
+<p>For security reasons starting from Marshmallow (android 6.0), we should request permissions from the users for the necessary access in runtime.</p>
+<p>Next, we well implement our first method, checkPermission(), from the method name you will figure out that it is used to check that the permissions are granted or not by returning true or false.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Java" data-lang="Java"> <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">boolean</span> <span style="color:#a6e22e">checkPermissions</span><span style="color:#f92672">(){</span>
+    <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>ActivityCompat<span style="color:#f92672">.</span><span style="color:#a6e22e">checkSelfPermission</span><span style="color:#f92672">(</span><span style="color:#66d9ef">this</span><span style="color:#f92672">,</span> Manifest<span style="color:#f92672">.</span><span style="color:#a6e22e">permission</span><span style="color:#f92672">.</span><span style="color:#a6e22e">ACCESS_COARSE_LOCATION</span><span style="color:#f92672">)</span> <span style="color:#f92672">==</span> PackageManager<span style="color:#f92672">.</span><span style="color:#a6e22e">PERMISSION_GRANTED</span> <span style="color:#f92672">&amp;&amp;</span>
+            ActivityCompat<span style="color:#f92672">.</span><span style="color:#a6e22e">checkSelfPermission</span><span style="color:#f92672">(</span><span style="color:#66d9ef">this</span><span style="color:#f92672">,</span> Manifest<span style="color:#f92672">.</span><span style="color:#a6e22e">permission</span><span style="color:#f92672">.</span><span style="color:#a6e22e">ACCESS_FINE_LOCATION</span><span style="color:#f92672">)</span> <span style="color:#f92672">==</span> PackageManager<span style="color:#f92672">.</span><span style="color:#a6e22e">PERMISSION_GRANTED</span><span style="color:#f92672">){</span>
+        <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">true</span><span style="color:#f92672">;</span>
+    <span style="color:#f92672">}</span>
+    <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">false</span><span style="color:#f92672">;</span>
+<span style="color:#f92672">}</span>
+</code></pre></div><p>But, for checking if the permissions are granted or not we must first request them by this simple method.<strong>PERMISSION_ID</strong> which is an integer value that helps us to identify the user’s action with which permission request. Declare it in you Main Activity like this:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Java" data-lang="Java"><span style="color:#66d9ef">int</span> PERMISSION_ID <span style="color:#f92672">=</span> 75<span style="color:#f92672">;</span>
+</code></pre></div><p>Note that <strong>75</strong> is just a number, you can use any number you want.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Java" data-lang="Java"><span style="color:#66d9ef">private</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">requestPermissions</span><span style="color:#f92672">(){</span>
+    ActivityCompat<span style="color:#f92672">.</span><span style="color:#a6e22e">requestPermissions</span><span style="color:#f92672">(</span>
+            <span style="color:#66d9ef">this</span><span style="color:#f92672">,</span>
+            <span style="color:#66d9ef">new</span> String<span style="color:#f92672">[]{</span>Manifest<span style="color:#f92672">.</span><span style="color:#a6e22e">permission</span><span style="color:#f92672">.</span><span style="color:#a6e22e">ACCESS_COARSE_LOCATION</span><span style="color:#f92672">,</span> Manifest<span style="color:#f92672">.</span><span style="color:#a6e22e">permission</span><span style="color:#f92672">.</span><span style="color:#a6e22e">ACCESS_FINE_LOCATION</span><span style="color:#f92672">},</span>
+            PERMISSION_ID
+    <span style="color:#f92672">);</span>
+<span style="color:#f92672">}</span>
+</code></pre></div><p>Now, we need a method which is called when the user allows or denies our requested permissions and it will help us to continue when the permissions are granted.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Java" data-lang="Java"><span style="color:#a6e22e">@Override</span>
+<span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">onRequestPermissionsResult</span><span style="color:#f92672">(</span><span style="color:#66d9ef">int</span> requestCode<span style="color:#f92672">,</span> String<span style="color:#f92672">[]</span> permissions<span style="color:#f92672">,</span> <span style="color:#66d9ef">int</span><span style="color:#f92672">[]</span> grantResults<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+    <span style="color:#66d9ef">super</span><span style="color:#f92672">.</span><span style="color:#a6e22e">onRequestPermissionsResult</span><span style="color:#f92672">(</span>requestCode<span style="color:#f92672">,</span> permissions<span style="color:#f92672">,</span> grantResults<span style="color:#f92672">);</span>
+    <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>requestCode <span style="color:#f92672">==</span> PERMISSION_ID<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+        <span style="color:#66d9ef">if</span><span style="color:#f92672">(</span>grantResults<span style="color:#f92672">.</span><span style="color:#a6e22e">length</span><span style="color:#f92672">&gt;</span>0 <span style="color:#f92672">&amp;&amp;</span> grantResults<span style="color:#f92672">[</span>0<span style="color:#f92672">]</span> <span style="color:#f92672">==</span> PackageManager<span style="color:#f92672">.</span><span style="color:#a6e22e">PERMISSION_GRANTED</span><span style="color:#f92672">){</span>
+            <span style="color:#75715e">//Permissions are granted.
+</span><span style="color:#75715e"></span>        <span style="color:#f92672">}</span>
+    <span style="color:#f92672">}</span>
+<span style="color:#f92672">}</span>
+</code></pre></div><p>After that you check if the user has turned on the location from his device or not, the next method does that.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Java" data-lang="Java"><span style="color:#66d9ef">private</span> <span style="color:#66d9ef">boolean</span> <span style="color:#a6e22e">isLocationEnabled</span><span style="color:#f92672">(){</span>
+    LocationManager Manager <span style="color:#f92672">=</span> <span style="color:#f92672">(</span>LocationManager<span style="color:#f92672">)</span> getSystemService<span style="color:#f92672">(</span>Context<span style="color:#f92672">.</span><span style="color:#a6e22e">LOCATION_SERVICE</span><span style="color:#f92672">);</span>
+    <span style="color:#66d9ef">return</span> Manager<span style="color:#f92672">.</span><span style="color:#a6e22e">isProviderEnabled</span><span style="color:#f92672">(</span>LocationManager<span style="color:#f92672">.</span><span style="color:#a6e22e">GPS_PROVIDER</span><span style="color:#f92672">)</span> <span style="color:#f92672">||</span> Manager<span style="color:#f92672">.</span><span style="color:#a6e22e">isProviderEnabled</span><span style="color:#f92672">(</span>
+            LocationManager<span style="color:#f92672">.</span><span style="color:#a6e22e">NETWORK_PROVIDER</span>
+    <span style="color:#f92672">);</span>
+<span style="color:#f92672">}</span>
+</code></pre></div><p>It’s time to use the Fused Location Provider API to get the current location, first we need to declare it as a variable like this:</p>
+<p><code>**FusedLocationProviderClient mFusedLocationClient;**</code></p>
+<p>And also we need to initialize it like this:</p>
+<p><code>mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);</code></p>
+<p>We almost done.</p>
+<p>In order to get the user’s position, we’ll create a new method and call it by <code>getLastLocation()</code></p>
+<p>This method provides the last record of device’s location information and of course we’ll use our previous methods here to check whether the permissions are granted or not and the location is turned on</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Java" data-lang="Java">SuppressLint<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;MissingPermission&#34;</span><span style="color:#f92672">)</span>
+<span style="color:#66d9ef">private</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">getLastLocation</span><span style="color:#f92672">(){</span>
+    <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>checkPermissions<span style="color:#f92672">())</span> <span style="color:#f92672">{</span>
+        <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>isLocationEnabled<span style="color:#f92672">())</span> <span style="color:#f92672">{</span>
+            mFusedLocationClient<span style="color:#f92672">.</span><span style="color:#a6e22e">getLastLocation</span><span style="color:#f92672">().</span><span style="color:#a6e22e">addOnCompleteListener</span><span style="color:#f92672">(</span>
+                    <span style="color:#66d9ef">new</span> OnCompleteListener<span style="color:#f92672">&lt;</span>Location<span style="color:#f92672">&gt;()</span> <span style="color:#f92672">{</span>
+                        <span style="color:#a6e22e">@Override</span>
+                        <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">onComplete</span><span style="color:#f92672">(</span><span style="color:#a6e22e">@NonNull</span> Task<span style="color:#f92672">&lt;</span>Location<span style="color:#f92672">&gt;</span> task<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+                            Location location <span style="color:#f92672">=</span> task<span style="color:#f92672">.</span><span style="color:#a6e22e">getResult</span><span style="color:#f92672">();</span>
+                            <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>location <span style="color:#f92672">==</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+                                requestNewData<span style="color:#f92672">();</span>
+                            <span style="color:#f92672">}</span> <span style="color:#66d9ef">else</span> <span style="color:#f92672">{</span>
+                                <span style="color:#75715e">//Do your logic here
+</span><span style="color:#75715e"></span>                             
+                            <span style="color:#f92672">}</span>
+                        <span style="color:#f92672">}</span>
+                    <span style="color:#f92672">}</span>
+            <span style="color:#f92672">);</span>
+        <span style="color:#f92672">}</span> <span style="color:#66d9ef">else</span> <span style="color:#f92672">{</span>
+            Toast<span style="color:#f92672">.</span><span style="color:#a6e22e">makeText</span><span style="color:#f92672">(</span><span style="color:#66d9ef">this</span><span style="color:#f92672">,</span> <span style="color:#e6db74">&#34;Turn on your location service&#34;</span><span style="color:#f92672">,</span> Toast<span style="color:#f92672">.</span><span style="color:#a6e22e">LENGTH_LONG</span><span style="color:#f92672">).</span><span style="color:#a6e22e">show</span><span style="color:#f92672">();</span>
+            Intent MyIntent <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> Intent<span style="color:#f92672">(</span>Settings<span style="color:#f92672">.</span><span style="color:#a6e22e">ACTION_LOCATION_SOURCE_SETTINGS</span><span style="color:#f92672">);</span>
+            startActivity<span style="color:#f92672">(</span>MyIntent<span style="color:#f92672">);</span>
+        <span style="color:#f92672">}</span>
+    <span style="color:#f92672">}</span> <span style="color:#66d9ef">else</span> <span style="color:#f92672">{</span>
+        requestPermissions<span style="color:#f92672">();</span>
+    <span style="color:#f92672">}</span>
+<span style="color:#f92672">}</span>
+</code></pre></div><p>When you read the code you will notice that I wrote “Do your logic here”, it means that you need to write a code to define what you do with both longitude and latitude there, for example, you may want to create an intent there and put those longitude and latitude values inside this intent to pass them to another activity where you will use them. You can do what ever you want.</p>
+<p>At this point we can say that our job is finished, but we have one case left to handle it…</p>
+<p>In some devices, the previous recorded location information will be cleared if you turn off the location and switch on again so the location can be null. Also, if the user never turned on the location before using the app, your data will be null too. In order to prevent those cases from happening, we’ll make a new method which saves the location information, this method called <code>requestNewData()</code></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Java" data-lang="Java"><span style="color:#a6e22e">@SuppressLint</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;MissingPermission&#34;</span><span style="color:#f92672">)</span>
+<span style="color:#66d9ef">private</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">requestNewData</span><span style="color:#f92672">(){</span>
+
+    LocationRequest Request <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> LocationRequest<span style="color:#f92672">();</span>
+    Request<span style="color:#f92672">.</span><span style="color:#a6e22e">setPriority</span><span style="color:#f92672">(</span>LocationRequest<span style="color:#f92672">.</span><span style="color:#a6e22e">PRIORITY_HIGH_ACCURACY</span><span style="color:#f92672">);</span>
+    Request<span style="color:#f92672">.</span><span style="color:#a6e22e">setInterval</span><span style="color:#f92672">(</span>0<span style="color:#f92672">);</span>
+    Request<span style="color:#f92672">.</span><span style="color:#a6e22e">setFastestInterval</span><span style="color:#f92672">(</span>0<span style="color:#f92672">);</span>
+    Request<span style="color:#f92672">.</span><span style="color:#a6e22e">setNumUpdates</span><span style="color:#f92672">(</span>1<span style="color:#f92672">);</span>
+
+    mFusedLocationClient <span style="color:#f92672">=</span> LocationServices<span style="color:#f92672">.</span><span style="color:#a6e22e">getFusedLocationProviderClient</span><span style="color:#f92672">(</span><span style="color:#66d9ef">this</span><span style="color:#f92672">);</span>
+    mFusedLocationClient<span style="color:#f92672">.</span><span style="color:#a6e22e">requestLocationUpdates</span><span style="color:#f92672">(</span>
+            Request<span style="color:#f92672">,</span> mLocationCallback<span style="color:#f92672">,</span>
+            Looper<span style="color:#f92672">.</span><span style="color:#a6e22e">myLooper</span><span style="color:#f92672">()</span>
+    <span style="color:#f92672">);</span>
+
+<span style="color:#f92672">}</span>
+</code></pre></div><p>And we should not forget our <strong>callBack</strong> method</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Java" data-lang="Java"><span style="color:#66d9ef">private</span> LocationCallback mLocationCallback <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> LocationCallback<span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+    <span style="color:#a6e22e">@Override</span>
+    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">onLocationResult</span><span style="color:#f92672">(</span>LocationResult locationResult<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+        Location mLastLocation <span style="color:#f92672">=</span> locationResult<span style="color:#f92672">.</span><span style="color:#a6e22e">getLastLocation</span><span style="color:#f92672">();</span>
+        <span style="color:#75715e">//Do your logic here.
+</span><span style="color:#75715e"></span>    <span style="color:#f92672">}</span>
+<span style="color:#f92672">};</span>
+</code></pre></div><p>Finally, we call the <strong>getLastLocation()</strong> method from <strong>onCreate()</strong> method.</p>
+<p>Main Activity</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Java" data-lang="Java"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">MainActivity</span> <span style="color:#66d9ef">extends</span> AppCompatActivity <span style="color:#f92672">{</span>
+
+    <span style="color:#66d9ef">int</span> PERMISSION_ID <span style="color:#f92672">=</span> 75<span style="color:#f92672">;</span>
+    FusedLocationProviderClient mFusedLocationClient<span style="color:#f92672">;</span>
+    
+
+    <span style="color:#a6e22e">@Override</span>
+    <span style="color:#66d9ef">protected</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">onCreate</span><span style="color:#f92672">(</span>Bundle savedInstanceState<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+        <span style="color:#66d9ef">super</span><span style="color:#f92672">.</span><span style="color:#a6e22e">onCreate</span><span style="color:#f92672">(</span>savedInstanceState<span style="color:#f92672">);</span>
+        setContentView<span style="color:#f92672">(</span>R<span style="color:#f92672">.</span><span style="color:#a6e22e">layout</span><span style="color:#f92672">.</span><span style="color:#a6e22e">activity_main</span><span style="color:#f92672">);</span>
+
+
+        mFusedLocationClient <span style="color:#f92672">=</span> LocationServices<span style="color:#f92672">.</span><span style="color:#a6e22e">getFusedLocationProviderClient</span><span style="color:#f92672">(</span><span style="color:#66d9ef">this</span><span style="color:#f92672">);</span>
+
+        getLastLocation<span style="color:#f92672">();</span>
+    <span style="color:#f92672">}</span>
+
+    <span style="color:#a6e22e">@SuppressLint</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;MissingPermission&#34;</span><span style="color:#f92672">)</span>
+    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">getLastLocation</span><span style="color:#f92672">(){</span>
+        <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>checkPermissions<span style="color:#f92672">())</span> <span style="color:#f92672">{</span>
+            <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>isLocationEnabled<span style="color:#f92672">())</span> <span style="color:#f92672">{</span>
+                mFusedLocationClient<span style="color:#f92672">.</span><span style="color:#a6e22e">getLastLocation</span><span style="color:#f92672">().</span><span style="color:#a6e22e">addOnCompleteListener</span><span style="color:#f92672">(</span>
+                        <span style="color:#66d9ef">new</span> OnCompleteListener<span style="color:#f92672">&lt;</span>Location<span style="color:#f92672">&gt;()</span> <span style="color:#f92672">{</span>
+                            <span style="color:#a6e22e">@Override</span>
+                            <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">onComplete</span><span style="color:#f92672">(</span><span style="color:#a6e22e">@NonNull</span> Task<span style="color:#f92672">&lt;</span>Location<span style="color:#f92672">&gt;</span> task<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+                                Location location <span style="color:#f92672">=</span> task<span style="color:#f92672">.</span><span style="color:#a6e22e">getResult</span><span style="color:#f92672">();</span>
+                                <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>location <span style="color:#f92672">==</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+                                    requestNewData<span style="color:#f92672">();</span>
+                                <span style="color:#f92672">}</span> <span style="color:#66d9ef">else</span> <span style="color:#f92672">{</span>
+                                    <span style="color:#75715e">//Do your logic here.
+</span><span style="color:#75715e"></span>                                <span style="color:#f92672">}</span>
+                            <span style="color:#f92672">}</span>
+                        <span style="color:#f92672">}</span>
+                <span style="color:#f92672">);</span>
+            <span style="color:#f92672">}</span> <span style="color:#66d9ef">else</span> <span style="color:#f92672">{</span>
+                Toast<span style="color:#f92672">.</span><span style="color:#a6e22e">makeText</span><span style="color:#f92672">(</span><span style="color:#66d9ef">this</span><span style="color:#f92672">,</span> <span style="color:#e6db74">&#34;Turn on your location service&#34;</span><span style="color:#f92672">,</span> Toast<span style="color:#f92672">.</span><span style="color:#a6e22e">LENGTH_LONG</span><span style="color:#f92672">).</span><span style="color:#a6e22e">show</span><span style="color:#f92672">();</span>
+                Intent MyIntent <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> Intent<span style="color:#f92672">(</span>Settings<span style="color:#f92672">.</span><span style="color:#a6e22e">ACTION_LOCATION_SOURCE_SETTINGS</span><span style="color:#f92672">);</span>
+                startActivity<span style="color:#f92672">(</span>MyIntent<span style="color:#f92672">);</span>
+            <span style="color:#f92672">}</span>
+        <span style="color:#f92672">}</span> <span style="color:#66d9ef">else</span> <span style="color:#f92672">{</span>
+            requestPermissions<span style="color:#f92672">();</span>
+        <span style="color:#f92672">}</span>
+    <span style="color:#f92672">}</span>
+
+
+    <span style="color:#a6e22e">@SuppressLint</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;MissingPermission&#34;</span><span style="color:#f92672">)</span>
+    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">requestNewData</span><span style="color:#f92672">(){</span>
+
+        LocationRequest Request <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> LocationRequest<span style="color:#f92672">();</span>
+        Request<span style="color:#f92672">.</span><span style="color:#a6e22e">setPriority</span><span style="color:#f92672">(</span>LocationRequest<span style="color:#f92672">.</span><span style="color:#a6e22e">PRIORITY_HIGH_ACCURACY</span><span style="color:#f92672">);</span>
+        Request<span style="color:#f92672">.</span><span style="color:#a6e22e">setInterval</span><span style="color:#f92672">(</span>0<span style="color:#f92672">);</span>
+        Request<span style="color:#f92672">.</span><span style="color:#a6e22e">setFastestInterval</span><span style="color:#f92672">(</span>0<span style="color:#f92672">);</span>
+        Request<span style="color:#f92672">.</span><span style="color:#a6e22e">setNumUpdates</span><span style="color:#f92672">(</span>1<span style="color:#f92672">);</span>
+
+        mFusedLocationClient <span style="color:#f92672">=</span> LocationServices<span style="color:#f92672">.</span><span style="color:#a6e22e">getFusedLocationProviderClient</span><span style="color:#f92672">(</span><span style="color:#66d9ef">this</span><span style="color:#f92672">);</span>
+        mFusedLocationClient<span style="color:#f92672">.</span><span style="color:#a6e22e">requestLocationUpdates</span><span style="color:#f92672">(</span>
+                mLocationRequest<span style="color:#f92672">,</span> mLocationCallback<span style="color:#f92672">,</span>
+                Looper<span style="color:#f92672">.</span><span style="color:#a6e22e">myLooper</span><span style="color:#f92672">()</span>
+        <span style="color:#f92672">);</span>
+
+    <span style="color:#f92672">}</span>
+
+    <span style="color:#66d9ef">private</span> LocationCallback mLocationCallback <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> LocationCallback<span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+        <span style="color:#a6e22e">@Override</span>
+        <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">onLocationResult</span><span style="color:#f92672">(</span>LocationResult locationResult<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+            Location mLastLocation <span style="color:#f92672">=</span> locationResult<span style="color:#f92672">.</span><span style="color:#a6e22e">getLastLocation</span><span style="color:#f92672">();</span>
+            <span style="color:#75715e">//Do your logic here.
+</span><span style="color:#75715e"></span>        <span style="color:#f92672">}</span>
+    <span style="color:#f92672">};</span>
+
+    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">boolean</span> <span style="color:#a6e22e">checkPermissions</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+        <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>ActivityCompat<span style="color:#f92672">.</span><span style="color:#a6e22e">checkSelfPermission</span><span style="color:#f92672">(</span><span style="color:#66d9ef">this</span><span style="color:#f92672">,</span> Manifest<span style="color:#f92672">.</span><span style="color:#a6e22e">permission</span><span style="color:#f92672">.</span><span style="color:#a6e22e">ACCESS_COARSE_LOCATION</span><span style="color:#f92672">)</span> <span style="color:#f92672">==</span> PackageManager<span style="color:#f92672">.</span><span style="color:#a6e22e">PERMISSION_GRANTED</span> <span style="color:#f92672">&amp;&amp;</span>
+                ActivityCompat<span style="color:#f92672">.</span><span style="color:#a6e22e">checkSelfPermission</span><span style="color:#f92672">(</span><span style="color:#66d9ef">this</span><span style="color:#f92672">,</span> Manifest<span style="color:#f92672">.</span><span style="color:#a6e22e">permission</span><span style="color:#f92672">.</span><span style="color:#a6e22e">ACCESS_FINE_LOCATION</span><span style="color:#f92672">)</span> <span style="color:#f92672">==</span> PackageManager<span style="color:#f92672">.</span><span style="color:#a6e22e">PERMISSION_GRANTED</span><span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+            <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">true</span><span style="color:#f92672">;</span>
+        <span style="color:#f92672">}</span>
+        <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">false</span><span style="color:#f92672">;</span>
+    <span style="color:#f92672">}</span>
+
+    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">requestPermissions</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+        ActivityCompat<span style="color:#f92672">.</span><span style="color:#a6e22e">requestPermissions</span><span style="color:#f92672">(</span>
+                <span style="color:#66d9ef">this</span><span style="color:#f92672">,</span>
+                <span style="color:#66d9ef">new</span> String<span style="color:#f92672">[]{</span>Manifest<span style="color:#f92672">.</span><span style="color:#a6e22e">permission</span><span style="color:#f92672">.</span><span style="color:#a6e22e">ACCESS_COARSE_LOCATION</span><span style="color:#f92672">,</span> Manifest<span style="color:#f92672">.</span><span style="color:#a6e22e">permission</span><span style="color:#f92672">.</span><span style="color:#a6e22e">ACCESS_FINE_LOCATION</span><span style="color:#f92672">},</span>
+                PERMISSION_ID
+        <span style="color:#f92672">);</span>
+    <span style="color:#f92672">}</span>
+
+    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">boolean</span> <span style="color:#a6e22e">isLocationEnabled</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+        LocationManager Manager <span style="color:#f92672">=</span> <span style="color:#f92672">(</span>LocationManager<span style="color:#f92672">)</span> getSystemService<span style="color:#f92672">(</span>Context<span style="color:#f92672">.</span><span style="color:#a6e22e">LOCATION_SERVICE</span><span style="color:#f92672">);</span>
+        <span style="color:#66d9ef">return</span> Manager<span style="color:#f92672">.</span><span style="color:#a6e22e">isProviderEnabled</span><span style="color:#f92672">(</span>LocationManager<span style="color:#f92672">.</span><span style="color:#a6e22e">GPS_PROVIDER</span><span style="color:#f92672">)</span> <span style="color:#f92672">||</span> Manager<span style="color:#f92672">.</span><span style="color:#a6e22e">isProviderEnabled</span><span style="color:#f92672">(</span>
+                LocationManager<span style="color:#f92672">.</span><span style="color:#a6e22e">NETWORK_PROVIDER</span>
+        <span style="color:#f92672">);</span>
+    <span style="color:#f92672">}</span>
+
+    <span style="color:#a6e22e">@Override</span>
+    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">onRequestPermissionsResult</span><span style="color:#f92672">(</span><span style="color:#66d9ef">int</span> requestCode<span style="color:#f92672">,</span> String<span style="color:#f92672">[]</span> permissions<span style="color:#f92672">,</span> <span style="color:#66d9ef">int</span><span style="color:#f92672">[]</span> grantResults<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+        <span style="color:#66d9ef">super</span><span style="color:#f92672">.</span><span style="color:#a6e22e">onRequestPermissionsResult</span><span style="color:#f92672">(</span>requestCode<span style="color:#f92672">,</span> permissions<span style="color:#f92672">,</span> grantResults<span style="color:#f92672">);</span>
+        <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>requestCode <span style="color:#f92672">==</span> PERMISSION_ID<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+            <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>grantResults<span style="color:#f92672">.</span><span style="color:#a6e22e">length</span> <span style="color:#f92672">&gt;</span> 0 <span style="color:#f92672">&amp;&amp;</span> grantResults<span style="color:#f92672">[</span>0<span style="color:#f92672">]</span> <span style="color:#f92672">==</span> PackageManager<span style="color:#f92672">.</span><span style="color:#a6e22e">PERMISSION_GRANTED</span><span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+                getLastLocation<span style="color:#f92672">();</span>
+            <span style="color:#f92672">}</span>
+        <span style="color:#f92672">}</span>
+    <span style="color:#f92672">}</span>
+
+    <span style="color:#a6e22e">@Override</span>
+    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">onResume</span><span style="color:#f92672">(){</span>
+        <span style="color:#66d9ef">super</span><span style="color:#f92672">.</span><span style="color:#a6e22e">onResume</span><span style="color:#f92672">();</span>
+        <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>checkPermissions<span style="color:#f92672">())</span> <span style="color:#f92672">{</span>
+            getLastLocation<span style="color:#f92672">();</span>
+        <span style="color:#f92672">}</span>
+
+    <span style="color:#f92672">}</span>
+<span style="color:#f92672">}</span>
+</code></pre></div><h3 id="summary">Summary</h3>
+<p>In this post you discovered how to get the current location of users with high accuracy, if you want to contact me, this my <a href="https://www.linkedin.com/in/younes-belouche-641bb3197/"><em>LinkedIn</em></a> profile, I hope you enjoyed. Credits goes to Mr. Ferdousur Rahman Sarker for his wonderful tutorials.</p>
+<p>By <a href="https://medium.com/@younes_belouche">Younes Belouche</a> on <a href="https://medium.com/p/c23b2ae9d380">May 20, 2020</a>.</p>
+<p><a href="https://medium.com/@younes_belouche/how-to-get-the-current-location-latitude-longitude-in-android-c23b2ae9d380">Medium Link</a></p>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="copyright-box">
+                    <p class="copyright">&copy; Copyright <strong>DevFolio</strong>. All Rights Reserved</p>
+                    <div class="credits">
+                        Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+
+
+<script src="/vendor/purecounter/purecounter_vanilla.js"></script>
+<script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="/vendor/glightbox/js/glightbox.min.js"></script>
+<script src="/vendor/swiper/swiper-bundle.min.js"></script>
+<script src="/vendor/typed.js/typed.min.js"></script>
+<script src="/vendor/php-email-form/validate.js"></script>
+<script src="/js/main.js"></script>
+
+</body>
+</html>

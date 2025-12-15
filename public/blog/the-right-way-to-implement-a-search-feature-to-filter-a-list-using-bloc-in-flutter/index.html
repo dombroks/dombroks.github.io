@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+    <title>The right way to implement a search feature to filter a list using BLOC in Flutter</title>
+    <meta content="" name="description">
+    <meta content="" name="keywords">
+
+    
+    <link href="/img/me.jpg" rel="icon">
+    <link href="/img/apple-touch-icon.png" rel="apple-touch-icon">
+
+    
+    <link href="/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+    <link href="/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
+    <link href="/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+
+    
+    <link href="/css/style.css" rel="stylesheet">
+
+    <style>
+        .post-thumb img,
+        .article-content img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .container {
+            max-width: 1200px;
+        }
+
+        .col-md-8 {
+            flex: 0 0 100%;
+            max-width: 100%;
+        }
+    </style>
+</head>
+
+<body>
+
+
+<header id="header" class="fixed-top">
+    <div class="container d-flex align-items-center justify-content-between">
+        <h1 class="logo"><a href="/">Younes Belouche</a></h1>
+
+        <nav id="navbar" class="navbar">
+            <ul>
+                <li><a class="nav-link scrollto" href="/">Home</a></li>
+                <li><a class="nav-link scrollto" href="/#about">About</a></li>
+                <li><a class="nav-link scrollto" href="/#services">Services</a></li>
+                <li><a class="nav-link scrollto" href="/#work">Projects</a></li>
+                <li><a class="nav-link scrollto" href="/#blog">Blog</a></li>
+                <li><a class="nav-link scrollto" href="/#contact">Contact</a></li>
+            </ul>
+            <i class="bi bi-list mobile-nav-toggle"></i>
+        </nav>
+    </div>
+</header>
+
+<div class="hero hero-single route bg-image">
+    <div class="overlay-mf"></div>
+    <div class="hero-content display-table">
+        <div class="table-cell">
+            <div class="container">
+                <h2 class="hero-title mb-4">The right way to implement a search feature to filter a list using BLOC in Flutter</h2>
+            </div>
+        </div>
+    </div>
+</div>
+
+<main id="main">
+    
+    <section class="blog-wrapper sect-pt4" id="blog">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="post-box">
+                        <div class="post-thumb">
+                            <img src="/img/bloc.webp" class="img-fluid" alt="">
+                        </div>
+                        <div class="post-meta">
+                            <h1 class="article-title">The right way to implement a search feature to filter a list using BLOC in Flutter</h1>
+                            <ul>
+                                <li><span class="bi bi-person"></span> Younes Belouche</li>
+                                <li><span class="bi bi-tag"></span> Flutter | BloC</li>
+                            </ul>
+                        </div>
+                        <div class="article-content">
+                            <p>Hi there, in this post, you will learn how Flutter Bloc could play a huge role in optimizing our ressources consumption so that we can have a better user experience and a better rationalization of how to use what we have.</p>
+<p>This post will also teaches you the difference between bloc and cubit, and will answer more of your questions, questions like why the two come in one library that called Bloc and when to use each one of them.</p>
+<p>I will be straightforward, so, I will start directly with an example. Lets say you want to build a page that contains a text field and a button, the page allows the user to enter a text and click a button to perform a search operation. When the user clickes the button, a GET request containing the entered keyword will be sent to the server and this last one will filter the complete list of items and returns a response that contains list items that correspond to what the user wants to see.</p>
+<p>Lets say you chose to implement this whole thing using cubit, you create a cubit and you put inside it a method called search that takes a string and sends a request to receive a response that contains a list and finally emits a state that contains the data that we want to display to our user. The UI part is much simpler, you call the search method from the search button’s onPressed callback and pass the search keyword that we got from the text field assingned controller. Till now, everything is simple, we just created a cubit that has a method in which the user can invoke and pass some inputs in order to receive a state. States are transmitted inside a stream which considred as a flow of data.</p>
+<p>In order to display the data we got from the server, we create a listview and wrapped inside a blocBuilder widget, this widget enables us to subscribe to a stream and wait for states which we need to update our UI. Congratulations, you have finished implementing the search feature.</p>
+<p>One day, you felt the need of removing the search button, the idea came when you were using Facebook and you discovred that removing the search button will make the user more comfortable. So, you removed it, and you tweaked the text field code a little bit so that cubit’s search method will be called when the entered keyword changes and of course you will use the onChanged callback like this:</p>
+<p><img src="https://cdn-images-1.medium.com/max/800/1*v0S9HojszdIoPRx-lEcXgQ.png" alt=""></p>
+<p>You felt good and you thought everything is working perfectly and suddenly your back-end guy has called, he told you that he found a big issue, he noticed a lot of unnecessary requests that come from the app related to the search feature. Your friend grab a piece of paper and started explaning the problem to you, he directly put an example into action and Elon musk in involved :).</p>
+<p>The example was about entering “Elon musk” as a search word, he typed “Elon” and you noticed the app has sent 4 requests to the server, one request for each of these strings: “E”, “El”, “Elo” and “Elon”. Also, this problem happens when you remove a letter, you will see that the app will sends another request, for example, if you remove “n” from “Elon”, then another request to the server will be send and you get new data as response to the word “Elo”, imagine if you are using Firebase Firestore where you will be charged by how much requests you performed :).</p>
+<p>This is where Bloc comes handy, unlike cubit, Bloc recieves events as input and not functions and these events will be transmitted in a events stream, this way we can controll the execution time of our functions because we controll events sending in the stream.</p>
+<p>How we fix this? the first thing you do is to convert you cubit to a bloc and make a new event called searchEvent, this way your text field onChanged callback will be like this :</p>
+<p><img src="https://cdn-images-1.medium.com/max/800/1*_Xef7dy4LY_UcNIFGj-1wg.png" alt=""></p>
+<p>after that, you set your bloc to execute the search function when the search event comes, it could be done like this:</p>
+<p><img src="https://cdn-images-1.medium.com/max/800/1*DbuNDXUvPVMEFRDl17u5NA.png" alt=""></p>
+<p>One last thing and you finish, you use the power of RxDart by applying the depounceTime so that you ignore any events that happen between a time range we define. The code will be something like this:</p>
+<p><img src="https://cdn-images-1.medium.com/max/800/1*T33kql3micqfBfYOVvBAIg.png" alt=""></p>
+<p>You can modify the code to add more constraints. and this is it.</p>
+<p>I like to conclude this article by answering some questions, such as:</p>
+<ul>
+<li>Why Bloc and Cubit come in one library?</li>
+<li>Could we use the two in the same project?</li>
+<li>When to use what?</li>
+</ul>
+<p>The answers are:</p>
+<ul>
+<li>They come in one library because they share almost the same work mechanism, they share streams to update the UI.</li>
+<li>Yes, we can use the two in the same project, but we apply them depending on the usecases.</li>
+<li>We can use cubit when we have screens that don’t require a lot of events, this is up to the developer to choose what suits him/her better.</li>
+</ul>
+<p>Thanks for reading this article ❤</p>
+<p>Connect with me on <a href="https://www.linkedin.com/in/younes-belouche-641bb3197/">Linkedin</a>, <a href="https://www.instagram.com/younes_belouche/">Instagram</a> and <a href="https://github.com/dombroks">Github</a>.</p>
+<p>By <a href="https://medium.com/@younes_belouche">Younes Belouche</a> on <a href="https://medium.com/p/799969781fdb">April 25, 2022</a>.</p>
+<p><a href="https://medium.com/@younes_belouche/the-right-way-to-implement-a-search-feature-to-filter-a-list-using-bloc-in-flutter-799969781fdb">Medium link</a></p>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="copyright-box">
+                    <p class="copyright">&copy; Copyright <strong>DevFolio</strong>. All Rights Reserved</p>
+                    <div class="credits">
+                        Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+
+
+<script src="/vendor/purecounter/purecounter_vanilla.js"></script>
+<script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="/vendor/glightbox/js/glightbox.min.js"></script>
+<script src="/vendor/swiper/swiper-bundle.min.js"></script>
+<script src="/vendor/typed.js/typed.min.js"></script>
+<script src="/vendor/php-email-form/validate.js"></script>
+<script src="/js/main.js"></script>
+
+</body>
+</html>
