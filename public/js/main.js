@@ -8,6 +8,31 @@
   "use strict";
 
   /**
+   * Early Preloader removal: try to remove the preloader as soon as DOM is ready.
+   * This runs before other code so a missing vendor script won't block the UI.
+   */
+  const earlyRemovePreloader = () => {
+    try {
+      const preloaderEl = document.querySelector('#preloader');
+      if (preloaderEl) {
+        preloaderEl.style.opacity = '0';
+        setTimeout(() => {
+          preloaderEl.remove();
+        }, 300);
+      }
+    } catch (e) {
+      // swallow errors to avoid blocking the rest of the script
+      console.warn('Preloader removal failed', e);
+    }
+  };
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', earlyRemovePreloader);
+  } else {
+    earlyRemovePreloader();
+  }
+
+  /**
    * Easy selector helper function
    */
   const select = (el, all = false) => {
@@ -159,87 +184,96 @@
   });
 
   /**
-   * Intro type effect
+   * Intro type effect (guarded)
    */
   const typed = select('.typed')
-  if (typed) {
-    let typed_strings = typed.getAttribute('data-typed-items')
-    typed_strings = typed_strings.split(',')
-    new Typed('.typed', {
-      strings: typed_strings,
-      loop: true,
-      typeSpeed: 100,
-      backSpeed: 50,
-      backDelay: 2000
-    });
-  }
-
-  /**
-   * Initiate portfolio lightbox 
-   */
-  const portfolioLightbox = GLightbox({
-    selector: '.portfolio-lightbox'
-  });
-
-  /**
-   * Testimonials slider
-   */
-  new Swiper('.testimonials-slider', {
-    speed: 600,
-    loop: true,
-    autoplay: {
-      delay: 5000,
-      disableOnInteraction: false
-    },
-    slidesPerView: 'auto',
-    pagination: {
-      el: '.swiper-pagination',
-      type: 'bullets',
-      clickable: true
-    }
-  });
-
-  /**
-   * Portfolio details slider
-   */
-  new Swiper('.portfolio-details-slider', {
-    speed: 400,
-    loop: true,
-    autoplay: {
-      delay: 5000,
-      disableOnInteraction: false
-    },
-    pagination: {
-      el: '.swiper-pagination',
-      type: 'bullets',
-      clickable: true
-    }
-  });
-
-  /**
-   * Preloader
-   */
-  let preloader = select('#preloader');
-  if (preloader) {
-    // Remove preloader as soon as DOM is ready, don't wait for all resources
-    const removePreloader = () => {
-      preloader.style.opacity = '0';
-      setTimeout(() => {
-        preloader.remove();
-      }, 300);
-    };
-
-    // Remove on DOM ready instead of full load
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', removePreloader);
-    } else {
-      removePreloader();
+  if (typed && typeof Typed !== 'undefined') {
+    try {
+      let typed_strings = typed.getAttribute('data-typed-items')
+      typed_strings = typed_strings.split(',')
+      new Typed('.typed', {
+        strings: typed_strings,
+        loop: true,
+        typeSpeed: 100,
+        backSpeed: 50,
+        backDelay: 2000
+      });
+    } catch (e) {
+      console.warn('Typed init failed', e);
     }
   }
 
   /**
-   * Initiate Pure Counter 
+   * Initiate portfolio lightbox (guarded)
    */
-  new PureCounter();
+  let portfolioLightbox = null;
+  if (typeof GLightbox !== 'undefined') {
+    try {
+      portfolioLightbox = GLightbox({
+        selector: '.portfolio-lightbox'
+      });
+    } catch (e) {
+      console.warn('GLightbox init failed', e);
+    }
+  }
+
+  /**
+   * Testimonials slider (guarded)
+   */
+  if (typeof Swiper !== 'undefined') {
+    try {
+      new Swiper('.testimonials-slider', {
+        speed: 600,
+        loop: true,
+        autoplay: {
+          delay: 5000,
+          disableOnInteraction: false
+        },
+        slidesPerView: 'auto',
+        pagination: {
+          el: '.swiper-pagination',
+          type: 'bullets',
+          clickable: true
+        }
+      });
+    } catch (e) {
+      console.warn('Testimonials Swiper init failed', e);
+    }
+
+    /**
+     * Portfolio details slider (guarded)
+     */
+    try {
+      new Swiper('.portfolio-details-slider', {
+        speed: 400,
+        loop: true,
+        autoplay: {
+          delay: 5000,
+          disableOnInteraction: false
+        },
+        pagination: {
+          el: '.swiper-pagination',
+          type: 'bullets',
+          clickable: true
+        }
+      });
+    } catch (e) {
+      console.warn('Portfolio details Swiper init failed', e);
+    }
+  }
+
+  /**
+   * Initiate Pure Counter (guarded)
+   */
+  if (typeof PureCounter !== 'undefined') {
+    try {
+      new PureCounter();
+    } catch (e) {
+      console.warn('PureCounter init failed', e);
+    }
+  }
+
+
+  // The rest of the original code (scroll handlers, mobile nav, etc.) remains unchanged and follows here.
 
 })()

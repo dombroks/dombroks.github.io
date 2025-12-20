@@ -1,9 +1,9 @@
 baseURL = "/"
 languageCode = "en-us"
 title = "My Personal Website"
+relativeURLs = true
+canonifyURLs = false
 
 
 [permalinks]
   articles = "/blog/:slug/"
-
-

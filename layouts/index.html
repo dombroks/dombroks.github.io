@@ -310,9 +310,9 @@
                 {{ range where .Site.RegularPages "Section" "projects" }}
                 <div class="col-12 col-sm-6 col-md-4">
                     <div class="work-box">
-                        <a href="{{ .Permalink }}">
+                        <a href="{{ .RelPermalink }}">
                             <div class="work-img">
-                                <img src="{{ .Params.image | relURL }}" alt="{{ .Title }}" class="img-fluid" loading="lazy">
+                                <img src="{{ .Params.image | absURL }}" alt="{{ .Title }}" class="img-fluid" loading="lazy">
                             </div>
                         
                             <div class="work-content">

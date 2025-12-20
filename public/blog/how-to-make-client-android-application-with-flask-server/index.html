@@ -1,282 +1,106 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html><html lang=en><head><meta charset=utf-8><meta content="width=device-width,initial-scale=1" name=viewport><title>How to make client android application with Flask server</title><meta content name=description><meta content name=keywords><link href=../../img/me.jpg rel=icon><link href=../../img/apple-touch-icon.png rel=apple-touch-icon><link href=../../vendor/bootstrap/css/bootstrap.min.css rel=stylesheet><link href=../../vendor/bootstrap-icons/bootstrap-icons.css rel=stylesheet><link href=../../vendor/glightbox/css/glightbox.min.css rel=stylesheet><link href=../../vendor/swiper/swiper-bundle.min.css rel=stylesheet><link href=../../css/style.css rel=stylesheet><style>.post-thumb img,.article-content img{max-width:100%;height:auto;display:block}.container{max-width:1200px}.col-md-8{flex:0 0 100%;max-width:100%}</style></head><body><header id=header class=fixed-top><div class="container d-flex align-items-center justify-content-between"><h1 class=logo><a href=../../>Younes Belouche</a></h1><nav id=navbar class=navbar><ul><li><a class="nav-link scrollto" href=../../>Home</a></li><li><a class="nav-link scrollto" href=../../#about>About</a></li><li><a class="nav-link scrollto" href=../../#services>Services</a></li><li><a class="nav-link scrollto" href=../../#work>Projects</a></li><li><a class="nav-link scrollto" href=../../#blog>Blog</a></li><li><a class="nav-link scrollto" href=../../#contact>Contact</a></li></ul><i class="bi bi-list mobile-nav-toggle"></i></nav></div></header><div class="hero hero-single route bg-image"><div class=overlay-mf></div><div class="hero-content display-table"><div class=table-cell><div class=container><h2 class="hero-title mb-4">How to make client android application with Flask server</h2></div></div></div></div><main id=main><section class="blog-wrapper sect-pt4" id=blog><div class=container><div class=row><div class=col-md-8><div class=post-box><div class=post-thumb><img src=../../img/android_flask.webp class=img-fluid alt></div><div class=post-meta><h1 class=article-title>How to make client android application with Flask server</h1><ul><li><span class="bi bi-person"></span>Younes Belouche</li><li><span class="bi bi-tag"></span>Android | Flask</li></ul></div><div class=article-content><hr><p>You will learn how to connect android studio with flask server.</p><p>We all know that mobile devices are not powerful compared to PCs, we can do a lot of things with our smart phones but with limited resources, most of us consider that like a weakness point.</p><p>So, from the previous paragraph, we can conclude that mobile devices are not the best choice for many things such as machine learning.When we say machine learning we must also mention deep learning, because this last one is included in it, and for the record, deep neural network needs a lot of samples to be trained with so we need a lot of resources On the other hand.</p><p>Today, we will learn how to connect a simple android client side application made with java to python flask server, after reading this article you will be able to deploy you machine learning models.You will need Android studio, The HTTP requests and responses are handled in Android using <a href=https://square.github.io/okhttp/>OkHttp</a> and Pycharm IDE for python coding.</p><p>This tutorial will show you how to send a simple text in which the Android app just makes an HTTP POST message for sending it, in the other hand, the flask app will return a simple message to confirm that the connection is successful.</p><p>The implementation of this project is available on GitHub: <a href=https://github.com/dombroks/Android_client-Flask_server/>Click here</a>.</p><p>Enough talking, let’s get started…</p><hr><p><img src=https://cdn-images-1.medium.com/max/800/0*N4a0py813N5deD1o alt></p><p>Credit to Hal Gatewood from unsplash</p><h3 id=building-the-layout-of-the-androidapp>Building the Layout of the Android App</h3><p>Our app is designed to be simple, but this will not prevent you form improving it in the future.So I decided to make one button in the main UI, after you click this button, it will test the connection between the android app and the flask app, the message returned from the flask app will displayed as Toast notification.</p><p>You can see that we used only one button with ID = connect.</p><p>After building the app user interface (UI), the next step is to implement the postRequest<code>()</code> method, which is responsible for message sending.</p><p>But, for doing that we must go through a small process…</p><p><img src=https://cdn-images-1.medium.com/max/800/0*PBftIsvvZZBZNw-V.png alt></p><p>By <a href=https://medium.com/u/a4963fa09f17>Sylvain Saurel</a></p><p>First, before using OkHttp, the project must support using it.You can do that by including one line to the dependencies section of the build.gradle (app module), the line is:</p><p>implementation &lsquo;com.squareup.okhttp3:okhttp:4.5.0&rsquo;</p><p>Second, you must activate the using of clear text traffic in your app, in you can do that by inserting a this line to your application section in the manifest file:</p><p>android:usesCleartextTraffic="true&rdquo;</p><p>It will be like this:</p><p><img src=https://cdn-images-1.medium.com/max/800/1*ep1PqFJFW9nv8ZqUaK1W6w.png alt></p><p>But we don’t forget to add the next permission in the manifest file:</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-XML data-lang=XML><span style=color:#f92672>&lt;uses-permission</span> <span style=color:#a6e22e>android:name=</span><span style=color:#e6db74>&#34;android.permission.INTERNET&#34;</span> <span style=color:#f92672>/&gt;</span>
+</code></pre></div><p>without it, you application will crash.</p><h3 id=writing-the-java-code-of-the-androidapp>Writing the java code of the Android App</h3><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-Java data-lang=Java><span style=color:#f92672>package</span> com.dombroks.android_flask<span style=color:#f92672>;</span>
 
-<head>
-    <meta charset="utf-8">
-    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+<span style=color:#f92672>import</span> android.os.Bundle<span style=color:#f92672>;</span>
+<span style=color:#f92672>import</span> android.view.View<span style=color:#f92672>;</span>
+<span style=color:#f92672>import</span> android.widget.Button<span style=color:#f92672>;</span>
+<span style=color:#f92672>import</span> android.widget.Toast<span style=color:#f92672>;</span>
 
-    <title>How to make client android application with Flask server</title>
-    <meta content="" name="description">
-    <meta content="" name="keywords">
+<span style=color:#f92672>import</span> androidx.appcompat.app.AppCompatActivity<span style=color:#f92672>;</span>
 
-    
-    <link href="/img/me.jpg" rel="icon">
-    <link href="/img/apple-touch-icon.png" rel="apple-touch-icon">
+<span style=color:#f92672>import</span> java.io.IOException<span style=color:#f92672>;</span>
 
-    
-    <link href="/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <link href="/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
-    <link href="/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
-    <link href="/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+<span style=color:#f92672>import</span> okhttp3.Call<span style=color:#f92672>;</span>
+<span style=color:#f92672>import</span> okhttp3.Callback<span style=color:#f92672>;</span>
+<span style=color:#f92672>import</span> okhttp3.MediaType<span style=color:#f92672>;</span>
+<span style=color:#f92672>import</span> okhttp3.OkHttpClient<span style=color:#f92672>;</span>
+<span style=color:#f92672>import</span> okhttp3.Request<span style=color:#f92672>;</span>
+<span style=color:#f92672>import</span> okhttp3.RequestBody<span style=color:#f92672>;</span>
+<span style=color:#f92672>import</span> okhttp3.Response<span style=color:#f92672>;</span>
 
-    
-    <link href="/css/style.css" rel="stylesheet">
+<span style=color:#66d9ef>public</span> <span style=color:#66d9ef>class</span> <span style=color:#a6e22e>MainActivity</span> <span style=color:#66d9ef>extends</span> AppCompatActivity <span style=color:#f92672>{</span>
+    <span style=color:#66d9ef>private</span> String url <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;http://&#34;</span> <span style=color:#f92672>+</span> <span style=color:#e6db74>&#34;10.0.2.2&#34;</span> <span style=color:#f92672>+</span> <span style=color:#e6db74>&#34;:&#34;</span> <span style=color:#f92672>+</span> 5000 <span style=color:#f92672>+</span> <span style=color:#e6db74>&#34;/&#34;</span><span style=color:#f92672>;</span>
+    <span style=color:#66d9ef>private</span> String postBodyString<span style=color:#f92672>;</span>
+    <span style=color:#66d9ef>private</span> MediaType mediaType<span style=color:#f92672>;</span>
+    <span style=color:#66d9ef>private</span> RequestBody requestBody<span style=color:#f92672>;</span>
+    <span style=color:#66d9ef>private</span> Button connect<span style=color:#f92672>;</span>
 
-    <style>
-        .post-thumb img,
-        .article-content img {
-            max-width: 100%;
-            height: auto;
-            display: block;
-        }
+    <span style=color:#a6e22e>@Override</span>
+    <span style=color:#66d9ef>protected</span> <span style=color:#66d9ef>void</span> <span style=color:#a6e22e>onCreate</span><span style=color:#f92672>(</span>Bundle savedInstanceState<span style=color:#f92672>)</span> <span style=color:#f92672>{</span>
+        <span style=color:#66d9ef>super</span><span style=color:#f92672>.</span><span style=color:#a6e22e>onCreate</span><span style=color:#f92672>(</span>savedInstanceState<span style=color:#f92672>);</span>
+        setContentView<span style=color:#f92672>(</span>R<span style=color:#f92672>.</span><span style=color:#a6e22e>layout</span><span style=color:#f92672>.</span><span style=color:#a6e22e>activity_main</span><span style=color:#f92672>);</span>
+        connect <span style=color:#f92672>=</span> findViewById<span style=color:#f92672>(</span>R<span style=color:#f92672>.</span><span style=color:#a6e22e>id</span><span style=color:#f92672>.</span><span style=color:#a6e22e>connect</span><span style=color:#f92672>);</span>
+        connect<span style=color:#f92672>.</span><span style=color:#a6e22e>setOnClickListener</span><span style=color:#f92672>(</span><span style=color:#66d9ef>new</span> View<span style=color:#f92672>.</span><span style=color:#a6e22e>OnClickListener</span><span style=color:#f92672>()</span> <span style=color:#f92672>{</span>
+            <span style=color:#a6e22e>@Override</span>
+            <span style=color:#66d9ef>public</span> <span style=color:#66d9ef>void</span> <span style=color:#a6e22e>onClick</span><span style=color:#f92672>(</span>View v<span style=color:#f92672>)</span> <span style=color:#f92672>{</span>
+                postRequest<span style=color:#f92672>(</span><span style=color:#e6db74>&#34;your message here&#34;</span><span style=color:#f92672>,</span> url<span style=color:#f92672>);</span>
 
-        .container {
-            max-width: 1200px;
-        }
-
-        .col-md-8 {
-            flex: 0 0 100%;
-            max-width: 100%;
-        }
-    </style>
-</head>
-
-<body>
+            <span style=color:#f92672>}</span>
+        <span style=color:#f92672>});</span>
 
 
-<header id="header" class="fixed-top">
-    <div class="container d-flex align-items-center justify-content-between">
-        <h1 class="logo"><a href="/">Younes Belouche</a></h1>
+    <span style=color:#f92672>}</span>
 
-        <nav id="navbar" class="navbar">
-            <ul>
-                <li><a class="nav-link scrollto" href="/">Home</a></li>
-                <li><a class="nav-link scrollto" href="/#about">About</a></li>
-                <li><a class="nav-link scrollto" href="/#services">Services</a></li>
-                <li><a class="nav-link scrollto" href="/#work">Projects</a></li>
-                <li><a class="nav-link scrollto" href="/#blog">Blog</a></li>
-                <li><a class="nav-link scrollto" href="/#contact">Contact</a></li>
-            </ul>
-            <i class="bi bi-list mobile-nav-toggle"></i>
-        </nav>
-    </div>
-</header>
-
-<div class="hero hero-single route bg-image">
-    <div class="overlay-mf"></div>
-    <div class="hero-content display-table">
-        <div class="table-cell">
-            <div class="container">
-                <h2 class="hero-title mb-4">How to make client android application with Flask server</h2>
-            </div>
-        </div>
-    </div>
-</div>
-
-<main id="main">
-    
-    <section class="blog-wrapper sect-pt4" id="blog">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-8">
-                    <div class="post-box">
-                        <div class="post-thumb">
-                            <img src="/img/android_flask.webp" class="img-fluid" alt="">
-                        </div>
-                        <div class="post-meta">
-                            <h1 class="article-title">How to make client android application with Flask server</h1>
-                            <ul>
-                                <li><span class="bi bi-person"></span> Younes Belouche</li>
-                                <li><span class="bi bi-tag"></span> Android | Flask</li>
-                            </ul>
-                        </div>
-                        <div class="article-content">
-                            <hr>
-<p>You will learn how to connect android studio with flask server.</p>
-<p>We all know that mobile devices are not powerful compared to PCs, we can do a lot of things with our smart phones but with limited resources, most of us consider that like a weakness point.</p>
-<p>So, from the previous paragraph, we can conclude that mobile devices are not the best choice for many things such as machine learning.When we say machine learning we must also mention deep learning, because this last one is included in it, and for the record, deep neural network needs a lot of samples to be trained with so we need a lot of resources On the other hand.</p>
-<p>Today, we will learn how to connect a simple android client side application made with java to python flask server, after reading this article you will be able to deploy you machine learning models.You will need Android studio, The HTTP requests and responses are handled in Android using <a href="https://square.github.io/okhttp/">OkHttp</a> and Pycharm IDE for python coding.</p>
-<p>This tutorial will show you how to send a simple text in which the Android app just makes an HTTP POST message for sending it, in the other hand, the flask app will return a simple message to confirm that the connection is successful.</p>
-<p>The implementation of this project is available on GitHub: <a href="https://github.com/dombroks/Android_client-Flask_server/">Click here</a>.</p>
-<p>Enough talking, let’s get started…</p>
-<hr>
-<p><img src="https://cdn-images-1.medium.com/max/800/0*N4a0py813N5deD1o" alt=""></p>
-<p>Credit to Hal Gatewood from unsplash</p>
-<h3 id="building-the-layout-of-the-androidapp">Building the Layout of the Android App</h3>
-<p>Our app is designed to be simple, but this will not prevent you form improving it in the future.So I decided to make one button in the main UI, after you click this button, it will test the connection between the android app and the flask app, the message returned from the flask app will displayed as Toast notification.</p>
-<p>You can see that we used only one button with ID = connect.</p>
-<p>After building the app user interface (UI), the next step is to implement the postRequest<code>()</code> method, which is responsible for message sending.</p>
-<p>But, for doing that we must go through a small process…</p>
-<p><img src="https://cdn-images-1.medium.com/max/800/0*PBftIsvvZZBZNw-V.png" alt=""></p>
-<p>By <a href="https://medium.com/u/a4963fa09f17">Sylvain Saurel</a></p>
-<p>First, before using OkHttp, the project must support using it.You can do that by including one line to the dependencies section of the build.gradle (app module), the line is:</p>
-<p>implementation &lsquo;com.squareup.okhttp3:okhttp:4.5.0&rsquo;</p>
-<p>Second, you must activate the using of clear text traffic in your app, in you can do that by inserting a this line to your application section in the manifest file:</p>
-<p>android:usesCleartextTraffic=&quot;true&rdquo;</p>
-<p>It will be like this:</p>
-<p><img src="https://cdn-images-1.medium.com/max/800/1*ep1PqFJFW9nv8ZqUaK1W6w.png" alt=""></p>
-<p>But we don’t forget to add the next permission in the manifest file:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-XML" data-lang="XML"><span style="color:#f92672">&lt;uses-permission</span> <span style="color:#a6e22e">android:name=</span><span style="color:#e6db74">&#34;android.permission.INTERNET&#34;</span> <span style="color:#f92672">/&gt;</span>
-</code></pre></div><p>without it, you application will crash.</p>
-<h3 id="writing-the-java-code-of-the-androidapp">Writing the java code of the Android App</h3>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Java" data-lang="Java"><span style="color:#f92672">package</span> com.dombroks.android_flask<span style="color:#f92672">;</span>
-
-<span style="color:#f92672">import</span> android.os.Bundle<span style="color:#f92672">;</span>
-<span style="color:#f92672">import</span> android.view.View<span style="color:#f92672">;</span>
-<span style="color:#f92672">import</span> android.widget.Button<span style="color:#f92672">;</span>
-<span style="color:#f92672">import</span> android.widget.Toast<span style="color:#f92672">;</span>
-
-<span style="color:#f92672">import</span> androidx.appcompat.app.AppCompatActivity<span style="color:#f92672">;</span>
-
-<span style="color:#f92672">import</span> java.io.IOException<span style="color:#f92672">;</span>
-
-<span style="color:#f92672">import</span> okhttp3.Call<span style="color:#f92672">;</span>
-<span style="color:#f92672">import</span> okhttp3.Callback<span style="color:#f92672">;</span>
-<span style="color:#f92672">import</span> okhttp3.MediaType<span style="color:#f92672">;</span>
-<span style="color:#f92672">import</span> okhttp3.OkHttpClient<span style="color:#f92672">;</span>
-<span style="color:#f92672">import</span> okhttp3.Request<span style="color:#f92672">;</span>
-<span style="color:#f92672">import</span> okhttp3.RequestBody<span style="color:#f92672">;</span>
-<span style="color:#f92672">import</span> okhttp3.Response<span style="color:#f92672">;</span>
-
-<span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">MainActivity</span> <span style="color:#66d9ef">extends</span> AppCompatActivity <span style="color:#f92672">{</span>
-    <span style="color:#66d9ef">private</span> String url <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;http://&#34;</span> <span style="color:#f92672">+</span> <span style="color:#e6db74">&#34;10.0.2.2&#34;</span> <span style="color:#f92672">+</span> <span style="color:#e6db74">&#34;:&#34;</span> <span style="color:#f92672">+</span> 5000 <span style="color:#f92672">+</span> <span style="color:#e6db74">&#34;/&#34;</span><span style="color:#f92672">;</span>
-    <span style="color:#66d9ef">private</span> String postBodyString<span style="color:#f92672">;</span>
-    <span style="color:#66d9ef">private</span> MediaType mediaType<span style="color:#f92672">;</span>
-    <span style="color:#66d9ef">private</span> RequestBody requestBody<span style="color:#f92672">;</span>
-    <span style="color:#66d9ef">private</span> Button connect<span style="color:#f92672">;</span>
-
-    <span style="color:#a6e22e">@Override</span>
-    <span style="color:#66d9ef">protected</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">onCreate</span><span style="color:#f92672">(</span>Bundle savedInstanceState<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
-        <span style="color:#66d9ef">super</span><span style="color:#f92672">.</span><span style="color:#a6e22e">onCreate</span><span style="color:#f92672">(</span>savedInstanceState<span style="color:#f92672">);</span>
-        setContentView<span style="color:#f92672">(</span>R<span style="color:#f92672">.</span><span style="color:#a6e22e">layout</span><span style="color:#f92672">.</span><span style="color:#a6e22e">activity_main</span><span style="color:#f92672">);</span>
-        connect <span style="color:#f92672">=</span> findViewById<span style="color:#f92672">(</span>R<span style="color:#f92672">.</span><span style="color:#a6e22e">id</span><span style="color:#f92672">.</span><span style="color:#a6e22e">connect</span><span style="color:#f92672">);</span>
-        connect<span style="color:#f92672">.</span><span style="color:#a6e22e">setOnClickListener</span><span style="color:#f92672">(</span><span style="color:#66d9ef">new</span> View<span style="color:#f92672">.</span><span style="color:#a6e22e">OnClickListener</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
-            <span style="color:#a6e22e">@Override</span>
-            <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">onClick</span><span style="color:#f92672">(</span>View v<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
-                postRequest<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;your message here&#34;</span><span style="color:#f92672">,</span> url<span style="color:#f92672">);</span>
-
-            <span style="color:#f92672">}</span>
-        <span style="color:#f92672">});</span>
+    <span style=color:#66d9ef>private</span> RequestBody <span style=color:#a6e22e>buildRequestBody</span><span style=color:#f92672>(</span>String msg<span style=color:#f92672>)</span> <span style=color:#f92672>{</span>
+        postBodyString <span style=color:#f92672>=</span> msg<span style=color:#f92672>;</span>
+        mediaType <span style=color:#f92672>=</span> MediaType<span style=color:#f92672>.</span><span style=color:#a6e22e>parse</span><span style=color:#f92672>(</span><span style=color:#e6db74>&#34;text/plain&#34;</span><span style=color:#f92672>);</span>
+        requestBody <span style=color:#f92672>=</span> RequestBody<span style=color:#f92672>.</span><span style=color:#a6e22e>create</span><span style=color:#f92672>(</span>postBodyString<span style=color:#f92672>,</span> mediaType<span style=color:#f92672>);</span>
+        <span style=color:#66d9ef>return</span> requestBody<span style=color:#f92672>;</span>
+    <span style=color:#f92672>}</span>
 
 
-    <span style="color:#f92672">}</span>
-
-    <span style="color:#66d9ef">private</span> RequestBody <span style="color:#a6e22e">buildRequestBody</span><span style="color:#f92672">(</span>String msg<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
-        postBodyString <span style="color:#f92672">=</span> msg<span style="color:#f92672">;</span>
-        mediaType <span style="color:#f92672">=</span> MediaType<span style="color:#f92672">.</span><span style="color:#a6e22e">parse</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;text/plain&#34;</span><span style="color:#f92672">);</span>
-        requestBody <span style="color:#f92672">=</span> RequestBody<span style="color:#f92672">.</span><span style="color:#a6e22e">create</span><span style="color:#f92672">(</span>postBodyString<span style="color:#f92672">,</span> mediaType<span style="color:#f92672">);</span>
-        <span style="color:#66d9ef">return</span> requestBody<span style="color:#f92672">;</span>
-    <span style="color:#f92672">}</span>
-
-
-    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">postRequest</span><span style="color:#f92672">(</span>String message<span style="color:#f92672">,</span> String URL<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
-        RequestBody requestBody <span style="color:#f92672">=</span> buildRequestBody<span style="color:#f92672">(</span>message<span style="color:#f92672">);</span>
-        OkHttpClient okHttpClient <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> OkHttpClient<span style="color:#f92672">();</span>
-        Request request <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> Request
-                <span style="color:#f92672">.</span><span style="color:#a6e22e">Builder</span><span style="color:#f92672">()</span>
-                <span style="color:#f92672">.</span><span style="color:#a6e22e">post</span><span style="color:#f92672">(</span>requestBody<span style="color:#f92672">)</span>
-                <span style="color:#f92672">.</span><span style="color:#a6e22e">url</span><span style="color:#f92672">(</span>URL<span style="color:#f92672">)</span>
-                <span style="color:#f92672">.</span><span style="color:#a6e22e">build</span><span style="color:#f92672">();</span>
-        okHttpClient<span style="color:#f92672">.</span><span style="color:#a6e22e">newCall</span><span style="color:#f92672">(</span>request<span style="color:#f92672">).</span><span style="color:#a6e22e">enqueue</span><span style="color:#f92672">(</span><span style="color:#66d9ef">new</span> Callback<span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
-            <span style="color:#a6e22e">@Override</span>
-            <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">onFailure</span><span style="color:#f92672">(</span><span style="color:#66d9ef">final</span> Call call<span style="color:#f92672">,</span> <span style="color:#66d9ef">final</span> IOException e<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
-                runOnUiThread<span style="color:#f92672">(</span><span style="color:#66d9ef">new</span> Runnable<span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
-                    <span style="color:#a6e22e">@Override</span>
-                    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">run</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+    <span style=color:#66d9ef>private</span> <span style=color:#66d9ef>void</span> <span style=color:#a6e22e>postRequest</span><span style=color:#f92672>(</span>String message<span style=color:#f92672>,</span> String URL<span style=color:#f92672>)</span> <span style=color:#f92672>{</span>
+        RequestBody requestBody <span style=color:#f92672>=</span> buildRequestBody<span style=color:#f92672>(</span>message<span style=color:#f92672>);</span>
+        OkHttpClient okHttpClient <span style=color:#f92672>=</span> <span style=color:#66d9ef>new</span> OkHttpClient<span style=color:#f92672>();</span>
+        Request request <span style=color:#f92672>=</span> <span style=color:#66d9ef>new</span> Request
+                <span style=color:#f92672>.</span><span style=color:#a6e22e>Builder</span><span style=color:#f92672>()</span>
+                <span style=color:#f92672>.</span><span style=color:#a6e22e>post</span><span style=color:#f92672>(</span>requestBody<span style=color:#f92672>)</span>
+                <span style=color:#f92672>.</span><span style=color:#a6e22e>url</span><span style=color:#f92672>(</span>URL<span style=color:#f92672>)</span>
+                <span style=color:#f92672>.</span><span style=color:#a6e22e>build</span><span style=color:#f92672>();</span>
+        okHttpClient<span style=color:#f92672>.</span><span style=color:#a6e22e>newCall</span><span style=color:#f92672>(</span>request<span style=color:#f92672>).</span><span style=color:#a6e22e>enqueue</span><span style=color:#f92672>(</span><span style=color:#66d9ef>new</span> Callback<span style=color:#f92672>()</span> <span style=color:#f92672>{</span>
+            <span style=color:#a6e22e>@Override</span>
+            <span style=color:#66d9ef>public</span> <span style=color:#66d9ef>void</span> <span style=color:#a6e22e>onFailure</span><span style=color:#f92672>(</span><span style=color:#66d9ef>final</span> Call call<span style=color:#f92672>,</span> <span style=color:#66d9ef>final</span> IOException e<span style=color:#f92672>)</span> <span style=color:#f92672>{</span>
+                runOnUiThread<span style=color:#f92672>(</span><span style=color:#66d9ef>new</span> Runnable<span style=color:#f92672>()</span> <span style=color:#f92672>{</span>
+                    <span style=color:#a6e22e>@Override</span>
+                    <span style=color:#66d9ef>public</span> <span style=color:#66d9ef>void</span> <span style=color:#a6e22e>run</span><span style=color:#f92672>()</span> <span style=color:#f92672>{</span>
 
 
-                        Toast<span style="color:#f92672">.</span><span style="color:#a6e22e">makeText</span><span style="color:#f92672">(</span>MainActivity<span style="color:#f92672">.</span><span style="color:#a6e22e">this</span><span style="color:#f92672">,</span> <span style="color:#e6db74">&#34;Something went wrong:&#34;</span> <span style="color:#f92672">+</span> <span style="color:#e6db74">&#34; &#34;</span> <span style="color:#f92672">+</span> e<span style="color:#f92672">.</span><span style="color:#a6e22e">getMessage</span><span style="color:#f92672">(),</span> Toast<span style="color:#f92672">.</span><span style="color:#a6e22e">LENGTH_SHORT</span><span style="color:#f92672">).</span><span style="color:#a6e22e">show</span><span style="color:#f92672">();</span>
-                        call<span style="color:#f92672">.</span><span style="color:#a6e22e">cancel</span><span style="color:#f92672">();</span>
+                        Toast<span style=color:#f92672>.</span><span style=color:#a6e22e>makeText</span><span style=color:#f92672>(</span>MainActivity<span style=color:#f92672>.</span><span style=color:#a6e22e>this</span><span style=color:#f92672>,</span> <span style=color:#e6db74>&#34;Something went wrong:&#34;</span> <span style=color:#f92672>+</span> <span style=color:#e6db74>&#34; &#34;</span> <span style=color:#f92672>+</span> e<span style=color:#f92672>.</span><span style=color:#a6e22e>getMessage</span><span style=color:#f92672>(),</span> Toast<span style=color:#f92672>.</span><span style=color:#a6e22e>LENGTH_SHORT</span><span style=color:#f92672>).</span><span style=color:#a6e22e>show</span><span style=color:#f92672>();</span>
+                        call<span style=color:#f92672>.</span><span style=color:#a6e22e>cancel</span><span style=color:#f92672>();</span>
 
 
-                    <span style="color:#f92672">}</span>
-                <span style="color:#f92672">});</span>
+                    <span style=color:#f92672>}</span>
+                <span style=color:#f92672>});</span>
 
-            <span style="color:#f92672">}</span>
+            <span style=color:#f92672>}</span>
 
-            <span style="color:#a6e22e">@Override</span>
-            <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">onResponse</span><span style="color:#f92672">(</span>Call call<span style="color:#f92672">,</span> <span style="color:#66d9ef">final</span> Response response<span style="color:#f92672">)</span> <span style="color:#66d9ef">throws</span> IOException <span style="color:#f92672">{</span>
-                runOnUiThread<span style="color:#f92672">(</span><span style="color:#66d9ef">new</span> Runnable<span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
-                    <span style="color:#a6e22e">@Override</span>
-                    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">run</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
-                        <span style="color:#66d9ef">try</span> <span style="color:#f92672">{</span>
-                            Toast<span style="color:#f92672">.</span><span style="color:#a6e22e">makeText</span><span style="color:#f92672">(</span>MainActivity<span style="color:#f92672">.</span><span style="color:#a6e22e">this</span><span style="color:#f92672">,</span> response<span style="color:#f92672">.</span><span style="color:#a6e22e">body</span><span style="color:#f92672">().</span><span style="color:#a6e22e">string</span><span style="color:#f92672">(),</span> Toast<span style="color:#f92672">.</span><span style="color:#a6e22e">LENGTH_LONG</span><span style="color:#f92672">).</span><span style="color:#a6e22e">show</span><span style="color:#f92672">();</span>
-                        <span style="color:#f92672">}</span> <span style="color:#66d9ef">catch</span> <span style="color:#f92672">(</span>IOException e<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
-                            e<span style="color:#f92672">.</span><span style="color:#a6e22e">printStackTrace</span><span style="color:#f92672">();</span>
-                        <span style="color:#f92672">}</span>
-                    <span style="color:#f92672">}</span>
-                <span style="color:#f92672">});</span>
-
-
-            <span style="color:#f92672">}</span>
-        <span style="color:#f92672">});</span>
-    <span style="color:#f92672">}</span>
-<span style="color:#f92672">}</span>
-</code></pre></div><p>Now, we will move to java code.</p>
-<p>When you start reading the code, you will notice that we use the IP@ 10.0.2.2, this is just the default local address of the android emulator, and 5000 is the port number that we will use with it.You will some words like mediaType and requestBody, mediaType is just type the data that we will send such as text or image…etc, requestBody is the object that holds our message.These are some methods in the code that you must understand them:</p>
-<ol>
-<li><code>onFailure()</code>: Called when the request couldn’t be executed due to cancellation, a connectivity problem, or timeout.</li>
-<li><code>onResponse()</code>: Called when the HTTP response is successfully returned by the remote server.</li>
-</ol>
-<p>The rest of the code will be easy to understand, But if you run into some problems, you can always go back to the OkHttp documentation from <a href="https://square.github.io/okhttp/">here</a>.</p>
-<p>Now, you can test the app but it will show an error message because the server is off.While we mentioned the server, let’s continue building the Python HTTP server using Flask.</p>
-<h3 id="building-the-server-side-usingflask">Building the server-side using Flask</h3>
-<p><strong>Flask</strong> is a micro <a href="https://en.wikipedia.org/wiki/Web_framework" title="Web framework">web framework</a> written in <a href="https://en.wikipedia.org/wiki/Python_%28programming_language%29" title="Python (programming language)">Python</a>. It is classified as a <a href="https://en.wikipedia.org/wiki/Microframework" title="Microframework">microframework</a> because it does not require particular tools or libraries.It has no database abstraction layer, form validation, or any other components where pre-existing third-party libraries provide common functions. However, Flask supports extensions that can add application features as if they were implemented in Flask itself.<a href="https://en.wikipedia.org/wiki/Flask_%28web_framework%29"><em>From Wikipedia, the free encyclopedia</em></a><em>.</em></p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Python" data-lang="Python"><span style="color:#f92672">import</span> flask
+            <span style=color:#a6e22e>@Override</span>
+            <span style=color:#66d9ef>public</span> <span style=color:#66d9ef>void</span> <span style=color:#a6e22e>onResponse</span><span style=color:#f92672>(</span>Call call<span style=color:#f92672>,</span> <span style=color:#66d9ef>final</span> Response response<span style=color:#f92672>)</span> <span style=color:#66d9ef>throws</span> IOException <span style=color:#f92672>{</span>
+                runOnUiThread<span style=color:#f92672>(</span><span style=color:#66d9ef>new</span> Runnable<span style=color:#f92672>()</span> <span style=color:#f92672>{</span>
+                    <span style=color:#a6e22e>@Override</span>
+                    <span style=color:#66d9ef>public</span> <span style=color:#66d9ef>void</span> <span style=color:#a6e22e>run</span><span style=color:#f92672>()</span> <span style=color:#f92672>{</span>
+                        <span style=color:#66d9ef>try</span> <span style=color:#f92672>{</span>
+                            Toast<span style=color:#f92672>.</span><span style=color:#a6e22e>makeText</span><span style=color:#f92672>(</span>MainActivity<span style=color:#f92672>.</span><span style=color:#a6e22e>this</span><span style=color:#f92672>,</span> response<span style=color:#f92672>.</span><span style=color:#a6e22e>body</span><span style=color:#f92672>().</span><span style=color:#a6e22e>string</span><span style=color:#f92672>(),</span> Toast<span style=color:#f92672>.</span><span style=color:#a6e22e>LENGTH_LONG</span><span style=color:#f92672>).</span><span style=color:#a6e22e>show</span><span style=color:#f92672>();</span>
+                        <span style=color:#f92672>}</span> <span style=color:#66d9ef>catch</span> <span style=color:#f92672>(</span>IOException e<span style=color:#f92672>)</span> <span style=color:#f92672>{</span>
+                            e<span style=color:#f92672>.</span><span style=color:#a6e22e>printStackTrace</span><span style=color:#f92672>();</span>
+                        <span style=color:#f92672>}</span>
+                    <span style=color:#f92672>}</span>
+                <span style=color:#f92672>});</span>
 
 
-app <span style="color:#f92672">=</span> flask<span style="color:#f92672">.</span>Flask(__name__)
+            <span style=color:#f92672>}</span>
+        <span style=color:#f92672>});</span>
+    <span style=color:#f92672>}</span>
+<span style=color:#f92672>}</span>
+</code></pre></div><p>Now, we will move to java code.</p><p>When you start reading the code, you will notice that we use the IP@ 10.0.2.2, this is just the default local address of the android emulator, and 5000 is the port number that we will use with it.You will some words like mediaType and requestBody, mediaType is just type the data that we will send such as text or image…etc, requestBody is the object that holds our message.These are some methods in the code that you must understand them:</p><ol><li><code>onFailure()</code>: Called when the request couldn’t be executed due to cancellation, a connectivity problem, or timeout.</li><li><code>onResponse()</code>: Called when the HTTP response is successfully returned by the remote server.</li></ol><p>The rest of the code will be easy to understand, But if you run into some problems, you can always go back to the OkHttp documentation from <a href=https://square.github.io/okhttp/>here</a>.</p><p>Now, you can test the app but it will show an error message because the server is off.While we mentioned the server, let’s continue building the Python HTTP server using Flask.</p><h3 id=building-the-server-side-usingflask>Building the server-side using Flask</h3><p><strong>Flask</strong> is a micro <a href=https://en.wikipedia.org/wiki/Web_framework title="Web framework">web framework</a> written in <a href=https://en.wikipedia.org/wiki/Python_%28programming_language%29 title="Python (programming language)">Python</a>. It is classified as a <a href=https://en.wikipedia.org/wiki/Microframework title=Microframework>microframework</a> because it does not require particular tools or libraries.It has no database abstraction layer, form validation, or any other components where pre-existing third-party libraries provide common functions. However, Flask supports extensions that can add application features as if they were implemented in Flask itself.<a href=https://en.wikipedia.org/wiki/Flask_%28web_framework%29><em>From Wikipedia, the free encyclopedia</em></a><em>.</em></p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-Python data-lang=Python><span style=color:#f92672>import</span> flask
 
 
-<span style="color:#a6e22e">@app.route</span>(<span style="color:#e6db74">&#39;/&#39;</span>, methods<span style="color:#f92672">=</span>[<span style="color:#e6db74">&#39;GET&#39;</span>, <span style="color:#e6db74">&#39;POST&#39;</span>])
-<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">handle_request</span>():
-    <span style="color:#66d9ef">return</span> <span style="color:#e6db74">&#34;Successful Connection&#34;</span>
-
-app<span style="color:#f92672">.</span>run(host<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;0.0.0.0&#34;</span>, port<span style="color:#f92672">=</span><span style="color:#ae81ff">5000</span>, debug<span style="color:#f92672">=</span>True)
-</code></pre></div><p>From the picture above, you see that we created a flask app as an instance of the <code>Flask()</code> class, The <code>app.route()</code> decorator function associates a URL with a callback function.The <code>/</code>indicates the homepage of the server because the Android app requests will be sent to there.</p>
-<p>The <code>handle_request()</code> method is responsible for return a message that confirms the connection between the client and the server.</p>
-<p>the <code>run()</code> method uses the <code>host</code> argument for specifying the IP address. When the <code>host</code> is set to <code>“0.0.0.0”</code>, this means use the current IPv4 address. And of course, <code>5000</code>as port number.</p>
-<p>The <code>debug</code> argument is for giving the permission to server for restarting itself if the code changed, otherwise you will be obligated to restart it manually to apply the new changes.</p>
-<h3 id="the-last-steptesting">The last step: Testing</h3>
-<p>You will need an internet connection.</p>
-<p>Now you will be able to test you app, you have to run the android app and also the python code, clicking the connect button and then you will see that it will return “Successful Connection”.</p>
-<h3 id="summary">Summary</h3>
-<p>In this post you discovered how to build a client android application with python flask server.You can read an article to learn how to save your machine learning model to deploy it later, you just have to click here, if you want to contact me, this my <a href="https://www.linkedin.com/in/younes-belouche-641bb3197/"><em>LinkedIn</em></a> account, I hope you enjoyed, don’t for forget to hit Clap to encourage me :)</p>
-<p>By <a href="https://medium.com/@younes_belouche">Younes Belouche</a> on <a href="https://medium.com/p/8b1d5c55446e">May 10, 2020</a>.</p>
-<p><a href="https://medium.com/@younes_belouche/how-to-make-client-android-application-with-flask-for-server-side-8b1d5c55446e">Medium Link</a></p>
-
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-</main>
+app <span style=color:#f92672>=</span> flask<span style=color:#f92672>.</span>Flask(__name__)
 
 
-<footer>
-    <div class="container">
-        <div class="row">
-            <div class="col-sm-12">
-                <div class="copyright-box">
-                    <p class="copyright">&copy; Copyright <strong>DevFolio</strong>. All Rights Reserved</p>
-                    <div class="credits">
-                        Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</footer>
+<span style=color:#a6e22e>@app.route</span>(<span style=color:#e6db74>&#39;/&#39;</span>, methods<span style=color:#f92672>=</span>[<span style=color:#e6db74>&#39;GET&#39;</span>, <span style=color:#e6db74>&#39;POST&#39;</span>])
+<span style=color:#66d9ef>def</span> <span style=color:#a6e22e>handle_request</span>():
+    <span style=color:#66d9ef>return</span> <span style=color:#e6db74>&#34;Successful Connection&#34;</span>
 
-
-<script src="/vendor/purecounter/purecounter_vanilla.js"></script>
-<script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-<script src="/vendor/glightbox/js/glightbox.min.js"></script>
-<script src="/vendor/swiper/swiper-bundle.min.js"></script>
-<script src="/vendor/typed.js/typed.min.js"></script>
-<script src="/vendor/php-email-form/validate.js"></script>
-<script src="/js/main.js"></script>
-
-</body>
-</html>
+app<span style=color:#f92672>.</span>run(host<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;0.0.0.0&#34;</span>, port<span style=color:#f92672>=</span><span style=color:#ae81ff>5000</span>, debug<span style=color:#f92672>=</span>True)
+</code></pre></div><p>From the picture above, you see that we created a flask app as an instance of the <code>Flask()</code> class, The <code>app.route()</code> decorator function associates a URL with a callback function.The <code>/</code>indicates the homepage of the server because the Android app requests will be sent to there.</p><p>The <code>handle_request()</code> method is responsible for return a message that confirms the connection between the client and the server.</p><p>the <code>run()</code> method uses the <code>host</code> argument for specifying the IP address. When the <code>host</code> is set to <code>“0.0.0.0”</code>, this means use the current IPv4 address. And of course, <code>5000</code>as port number.</p><p>The <code>debug</code> argument is for giving the permission to server for restarting itself if the code changed, otherwise you will be obligated to restart it manually to apply the new changes.</p><h3 id=the-last-steptesting>The last step: Testing</h3><p>You will need an internet connection.</p><p>Now you will be able to test you app, you have to run the android app and also the python code, clicking the connect button and then you will see that it will return “Successful Connection”.</p><h3 id=summary>Summary</h3><p>In this post you discovered how to build a client android application with python flask server.You can read an article to learn how to save your machine learning model to deploy it later, you just have to click here, if you want to contact me, this my <a href=https://www.linkedin.com/in/younes-belouche-641bb3197/><em>LinkedIn</em></a> account, I hope you enjoyed, don’t for forget to hit Clap to encourage me :)</p><p>By <a href=https://medium.com/@younes_belouche>Younes Belouche</a> on <a href=https://medium.com/p/8b1d5c55446e>May 10, 2020</a>.</p><p><a href=https://medium.com/@younes_belouche/how-to-make-client-android-application-with-flask-for-server-side-8b1d5c55446e>Medium Link</a></p></div></div></div></div></div></section></main><footer><div class=container><div class=row><div class=col-sm-12><div class=copyright-box><p class=copyright>&copy; Copyright <strong>DevFolio</strong>. All Rights Reserved</p><div class=credits>Designed by <a href=https://bootstrapmade.com/>BootstrapMade</a></div></div></div></div></div></footer><script src=../../vendor/purecounter/purecounter_vanilla.js></script><script src=../../vendor/bootstrap/js/bootstrap.bundle.min.js></script><script src=../../vendor/glightbox/js/glightbox.min.js></script><script src=../../vendor/swiper/swiper-bundle.min.js></script><script src=../../vendor/typed.js/typed.min.js></script><script src=../../vendor/php-email-form/validate.js></script><script src=../../js/main.js></script></body></html>

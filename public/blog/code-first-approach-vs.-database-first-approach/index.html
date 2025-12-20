@@ -1,201 +1,24 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="utf-8">
-    <meta content="width=device-width, initial-scale=1.0" name="viewport">
-
-    <title>Code First Approach vs. Database First Approach</title>
-    <meta content="" name="description">
-    <meta content="" name="keywords">
-
-    
-    <link href="/img/me.jpg" rel="icon">
-    <link href="/img/apple-touch-icon.png" rel="apple-touch-icon">
-
-    
-    <link href="/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <link href="/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
-    <link href="/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
-    <link href="/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
-
-    
-    <link href="/css/style.css" rel="stylesheet">
-
-    <style>
-        .post-thumb img,
-        .article-content img {
-            max-width: 100%;
-            height: auto;
-            display: block;
-        }
-
-        .container {
-            max-width: 1200px;
-        }
-
-        .col-md-8 {
-            flex: 0 0 100%;
-            max-width: 100%;
-        }
-    </style>
-</head>
-
-<body>
-
-
-<header id="header" class="fixed-top">
-    <div class="container d-flex align-items-center justify-content-between">
-        <h1 class="logo"><a href="/">Younes Belouche</a></h1>
-
-        <nav id="navbar" class="navbar">
-            <ul>
-                <li><a class="nav-link scrollto" href="/">Home</a></li>
-                <li><a class="nav-link scrollto" href="/#about">About</a></li>
-                <li><a class="nav-link scrollto" href="/#services">Services</a></li>
-                <li><a class="nav-link scrollto" href="/#work">Projects</a></li>
-                <li><a class="nav-link scrollto" href="/#blog">Blog</a></li>
-                <li><a class="nav-link scrollto" href="/#contact">Contact</a></li>
-            </ul>
-            <i class="bi bi-list mobile-nav-toggle"></i>
-        </nav>
-    </div>
-</header>
-
-<div class="hero hero-single route bg-image">
-    <div class="overlay-mf"></div>
-    <div class="hero-content display-table">
-        <div class="table-cell">
-            <div class="container">
-                <h2 class="hero-title mb-4">Code First Approach vs. Database First Approach</h2>
-            </div>
-        </div>
-    </div>
-</div>
-
-<main id="main">
-    
-    <section class="blog-wrapper sect-pt4" id="blog">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-8">
-                    <div class="post-box">
-                        <div class="post-thumb">
-                            <img src="/img/code_vs_db.webp" class="img-fluid" alt="">
-                        </div>
-                        <div class="post-meta">
-                            <h1 class="article-title">Code First Approach vs. Database First Approach</h1>
-                            <ul>
-                                <li><span class="bi bi-person"></span> Younes Belouche</li>
-                                <li><span class="bi bi-tag"></span> Coding | Database</li>
-                            </ul>
-                        </div>
-                        <div class="article-content">
-                            <p><a href="https://unsplash.com/photos/pKeF6Tt3c08">Image Source</a></p>
-<p>We were working on a project for a big company using C# as a programming language and Entity framework as an ORM, both of these technologies are supported by Microsoft.</p>
-<p>Entity Framework is an open-source object-relational mapping framework for ADO .NET, which is a data access technology, this means that you can use this technology to access data in the database. For C#, we all know what C# is.</p>
-<p>As a team, we were discussing whether we choose the code-first approach or the database-first approach. So, what are these approaches?</p>
-<p>Let me explain some things to you before we go to the code-first and the database-first approaches, <strong>DbContext</strong> and <strong>DbSet.</strong> A DbContext is a class that act as a bridge between your data models and the database, it is responsible for maintaining the state of the database and providing a way to interact with it through the application. It is also responsible for tracking changes in the database and saving them to the database. It contains the configuration information that defines how the entities are mapped to the database schema. This configuration includes entity types, mapping between entities and tables, relationships between entities, and any constraints or validations. A DbSet property represents each table or a view in the database, these properties are used to query, update, insert, or delete data from a specific database table.</p>
-<h3 id="code-firstapproach"><strong>Code first approach</strong></h3>
-<p>The code-first approach is a way to design your application’s data models by creating them as C# classes for your models and then you use them to create your database. This way, you can focus on designing your domain models and the entity framework will handle the database creation.</p>
-<p>As we said, the entity framework will handle the creation of your database or the mapping to an existing database starting from the models you created.</p>
-<p>In order to apply the code-first approach, you need to follow these steps:</p>
-<ul>
-<li>Define your model classes, each class corresponds to a table in your database.</li>
-<li>Create a DbContext class that inherits from the DbContext class provided by Entity Framework.</li>
-<li>Enable migrations, this way you can update the database schema so that the database and your models are still in sync. Use the package manager console to enable the migrations, use the <strong>Enable-Migrations</strong> command to do that, and create a migration with the <strong>Add-Migration <!-- raw HTML omitted --></strong> command.</li>
-<li>Create the database, through the package manager console, use the entity framework to create the database and the table. Also, you need to write a command for that which is the <strong>Update-Database</strong> command.</li>
-</ul>
-<p>Note: to open the package manager console in the visual studio, go to <code>Tools</code> &gt; <code>NuGet Package Manager</code> &gt; <code>Package Manager Console</code>.</p>
-<p>As a simple example, we will create a Person model class and a DbContext class:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-C#" data-lang="C#"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Person</span>  
+<!doctype html><html lang=en><head><meta charset=utf-8><meta content="width=device-width,initial-scale=1" name=viewport><title>Code First Approach vs. Database First Approach</title><meta content name=description><meta content name=keywords><link href=../../img/me.jpg rel=icon><link href=../../img/apple-touch-icon.png rel=apple-touch-icon><link href=../../vendor/bootstrap/css/bootstrap.min.css rel=stylesheet><link href=../../vendor/bootstrap-icons/bootstrap-icons.css rel=stylesheet><link href=../../vendor/glightbox/css/glightbox.min.css rel=stylesheet><link href=../../vendor/swiper/swiper-bundle.min.css rel=stylesheet><link href=../../css/style.css rel=stylesheet><style>.post-thumb img,.article-content img{max-width:100%;height:auto;display:block}.container{max-width:1200px}.col-md-8{flex:0 0 100%;max-width:100%}</style></head><body><header id=header class=fixed-top><div class="container d-flex align-items-center justify-content-between"><h1 class=logo><a href=../../>Younes Belouche</a></h1><nav id=navbar class=navbar><ul><li><a class="nav-link scrollto" href=../../>Home</a></li><li><a class="nav-link scrollto" href=../../#about>About</a></li><li><a class="nav-link scrollto" href=../../#services>Services</a></li><li><a class="nav-link scrollto" href=../../#work>Projects</a></li><li><a class="nav-link scrollto" href=../../#blog>Blog</a></li><li><a class="nav-link scrollto" href=../../#contact>Contact</a></li></ul><i class="bi bi-list mobile-nav-toggle"></i></nav></div></header><div class="hero hero-single route bg-image"><div class=overlay-mf></div><div class="hero-content display-table"><div class=table-cell><div class=container><h2 class="hero-title mb-4">Code First Approach vs. Database First Approach</h2></div></div></div></div><main id=main><section class="blog-wrapper sect-pt4" id=blog><div class=container><div class=row><div class=col-md-8><div class=post-box><div class=post-thumb><img src=../../img/code_vs_db.webp class=img-fluid alt></div><div class=post-meta><h1 class=article-title>Code First Approach vs. Database First Approach</h1><ul><li><span class="bi bi-person"></span>Younes Belouche</li><li><span class="bi bi-tag"></span>Coding | Database</li></ul></div><div class=article-content><p><a href=https://unsplash.com/photos/pKeF6Tt3c08>Image Source</a></p><p>We were working on a project for a big company using C# as a programming language and Entity framework as an ORM, both of these technologies are supported by Microsoft.</p><p>Entity Framework is an open-source object-relational mapping framework for ADO .NET, which is a data access technology, this means that you can use this technology to access data in the database. For C#, we all know what C# is.</p><p>As a team, we were discussing whether we choose the code-first approach or the database-first approach. So, what are these approaches?</p><p>Let me explain some things to you before we go to the code-first and the database-first approaches, <strong>DbContext</strong> and <strong>DbSet.</strong> A DbContext is a class that act as a bridge between your data models and the database, it is responsible for maintaining the state of the database and providing a way to interact with it through the application. It is also responsible for tracking changes in the database and saving them to the database. It contains the configuration information that defines how the entities are mapped to the database schema. This configuration includes entity types, mapping between entities and tables, relationships between entities, and any constraints or validations. A DbSet property represents each table or a view in the database, these properties are used to query, update, insert, or delete data from a specific database table.</p><h3 id=code-firstapproach><strong>Code first approach</strong></h3><p>The code-first approach is a way to design your application’s data models by creating them as C# classes for your models and then you use them to create your database. This way, you can focus on designing your domain models and the entity framework will handle the database creation.</p><p>As we said, the entity framework will handle the creation of your database or the mapping to an existing database starting from the models you created.</p><p>In order to apply the code-first approach, you need to follow these steps:</p><ul><li>Define your model classes, each class corresponds to a table in your database.</li><li>Create a DbContext class that inherits from the DbContext class provided by Entity Framework.</li><li>Enable migrations, this way you can update the database schema so that the database and your models are still in sync. Use the package manager console to enable the migrations, use the <strong>Enable-Migrations</strong> command to do that, and create a migration with the <strong>Add-Migration</strong> command.</li><li>Create the database, through the package manager console, use the entity framework to create the database and the table. Also, you need to write a command for that which is the <strong>Update-Database</strong> command.</li></ul><p>Note: to open the package manager console in the visual studio, go to <code>Tools</code> > <code>NuGet Package Manager</code> > <code>Package Manager Console</code>.</p><p>As a simple example, we will create a Person model class and a DbContext class:</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-C# data-lang=C#><span style=color:#66d9ef>public</span> <span style=color:#66d9ef>class</span> <span style=color:#a6e22e>Person</span>  
 {  
-    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">int</span> Id { <span style="color:#66d9ef">get</span>; <span style="color:#66d9ef">set</span>; }  
-    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">string</span> FullName { <span style="color:#66d9ef">get</span>; <span style="color:#66d9ef">set</span>; }  
-    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">int</span> Age { <span style="color:#66d9ef">get</span>; <span style="color:#66d9ef">set</span>; }  
+    <span style=color:#66d9ef>public</span> <span style=color:#66d9ef>int</span> Id { <span style=color:#66d9ef>get</span>; <span style=color:#66d9ef>set</span>; }  
+    <span style=color:#66d9ef>public</span> <span style=color:#66d9ef>string</span> FullName { <span style=color:#66d9ef>get</span>; <span style=color:#66d9ef>set</span>; }  
+    <span style=color:#66d9ef>public</span> <span style=color:#66d9ef>int</span> Age { <span style=color:#66d9ef>get</span>; <span style=color:#66d9ef>set</span>; }  
 }
 
-<span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">MyDbContext</span> : DbContext  
+<span style=color:#66d9ef>public</span> <span style=color:#66d9ef>class</span> <span style=color:#a6e22e>MyDbContext</span> : DbContext  
 {  
-    <span style="color:#66d9ef">public</span> DbSet&lt;Person&gt; Persons { <span style="color:#66d9ef">get</span>; <span style="color:#66d9ef">set</span>; }  
+    <span style=color:#66d9ef>public</span> DbSet&lt;Person&gt; Persons { <span style=color:#66d9ef>get</span>; <span style=color:#66d9ef>set</span>; }  
   
-    <span style="color:#66d9ef">public</span> MyDbContext() : <span style="color:#66d9ef">base</span>(<span style="color:#e6db74">&#34;TheConnectionString&#34;</span>)  
+    <span style=color:#66d9ef>public</span> MyDbContext() : <span style=color:#66d9ef>base</span>(<span style=color:#e6db74>&#34;TheConnectionString&#34;</span>)  
     {  
     }  
 }
-</code></pre></div><p>Here, you might notice that we have passed a string called the connectionString, it is a string of parameters that provides the necessary information to establish a connection to a data source. It contains information about the data source, such as the server&rsquo;s name, database name, and authentication credentials.</p>
-<p>An example of a connection string would be:</p>
-<p>Data Source=myServerAddress;Initial Catalog=myDataBase;User ID=myUsername;Password=myPassword;</p>
-<ul>
-<li><code>Data Source</code>: The name or network address of the instance of SQL Server to connect to.</li>
-<li><code>Initial Catalog</code>: The name of the database to connect to.</li>
-<li><code>User ID</code>: The user ID to use when connecting to the data source.</li>
-<li><code>Password</code>: The password to use when connecting to the data source.</li>
-</ul>
-<p>What code first approach brings to the table?</p>
-<ul>
-<li>It adds more speed to the development process. Devs can focus on the business logic and modeling data and then automatically generate the database schema.</li>
-<li>You don’t have to edit the database after you made a change to your model since they are in sync with each other, and every change is tracked.</li>
-<li>It aligns well with Agile development.</li>
-</ul>
-<h3 id="database-firstapproach">Database First approach</h3>
-<p>The database first approach is a way to create the data models starting from an existing database. We generate our data models and the DbContext class based on an existing database schema. You start by creating a database including the tables, their properties, and the relations between them. To create a database, you can use the Microsoft SQL Server Studio (I love that tool).</p>
-<p>In order to apply the database first approach, you need to follow these steps:</p>
-<ul>
-<li>Create/Attach your database.</li>
-<li>Use the entity framework to generate the necessary files for you.</li>
-<li>Use the generate files (Entity and DbContext classes).</li>
-</ul>
-<p>An example of how to query data using the DbContext would be like this:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-C#" data-lang="C#"><span style="color:#66d9ef">public</span> IEnumerable&lt;Person&gt; GetPersons()  
+</code></pre></div><p>Here, you might notice that we have passed a string called the connectionString, it is a string of parameters that provides the necessary information to establish a connection to a data source. It contains information about the data source, such as the server&rsquo;s name, database name, and authentication credentials.</p><p>An example of a connection string would be:</p><p>Data Source=myServerAddress;Initial Catalog=myDataBase;User ID=myUsername;Password=myPassword;</p><ul><li><code>Data Source</code>: The name or network address of the instance of SQL Server to connect to.</li><li><code>Initial Catalog</code>: The name of the database to connect to.</li><li><code>User ID</code>: The user ID to use when connecting to the data source.</li><li><code>Password</code>: The password to use when connecting to the data source.</li></ul><p>What code first approach brings to the table?</p><ul><li>It adds more speed to the development process. Devs can focus on the business logic and modeling data and then automatically generate the database schema.</li><li>You don’t have to edit the database after you made a change to your model since they are in sync with each other, and every change is tracked.</li><li>It aligns well with Agile development.</li></ul><h3 id=database-firstapproach>Database First approach</h3><p>The database first approach is a way to create the data models starting from an existing database. We generate our data models and the DbContext class based on an existing database schema. You start by creating a database including the tables, their properties, and the relations between them. To create a database, you can use the Microsoft SQL Server Studio (I love that tool).</p><p>In order to apply the database first approach, you need to follow these steps:</p><ul><li>Create/Attach your database.</li><li>Use the entity framework to generate the necessary files for you.</li><li>Use the generate files (Entity and DbContext classes).</li></ul><p>An example of how to query data using the DbContext would be like this:</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-C# data-lang=C#><span style=color:#66d9ef>public</span> IEnumerable&lt;Person&gt; GetPersons()  
         {  
-            <span style="color:#66d9ef">using</span> (myDBContext con = <span style="color:#66d9ef">new</span> MyDBContext())  
+            <span style=color:#66d9ef>using</span> (myDBContext con = <span style=color:#66d9ef>new</span> MyDBContext())  
             {  
                 con.Persons.Load();  
-                <span style="color:#66d9ef">return</span> con.Persons.Local.ToList();  
+                <span style=color:#66d9ef>return</span> con.Persons.Local.ToList();  
             }  
         }
-</code></pre></div><p>What database first approach brings to the table?</p>
-<ul>
-<li>It helps you when you have a complex database schema.</li>
-<li>It gives the ability to use an existing database schema.</li>
-<li>You will be supported by tools like the Microsoft SQL Server Studio which I like to use.</li>
-</ul>
-<p>By <a href="https://medium.com/@younes_belouche">Younes Belouche</a> on <a href="https://medium.com/p/a3830c0cc9b6">May 20, 2023</a>.</p>
-<p><a href="https://medium.com/@younes_belouche/code-first-approach-vs-database-first-approach-a3830c0cc9b6">Medium link</a></p>
-
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-</main>
-
-
-<footer>
-    <div class="container">
-        <div class="row">
-            <div class="col-sm-12">
-                <div class="copyright-box">
-                    <p class="copyright">&copy; Copyright <strong>DevFolio</strong>. All Rights Reserved</p>
-                    <div class="credits">
-                        Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</footer>
-
-
-<script src="/vendor/purecounter/purecounter_vanilla.js"></script>
-<script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-<script src="/vendor/glightbox/js/glightbox.min.js"></script>
-<script src="/vendor/swiper/swiper-bundle.min.js"></script>
-<script src="/vendor/typed.js/typed.min.js"></script>
-<script src="/vendor/php-email-form/validate.js"></script>
-<script src="/js/main.js"></script>
-
-</body>
-</html>
+</code></pre></div><p>What database first approach brings to the table?</p><ul><li>It helps you when you have a complex database schema.</li><li>It gives the ability to use an existing database schema.</li><li>You will be supported by tools like the Microsoft SQL Server Studio which I like to use.</li></ul><p>By <a href=https://medium.com/@younes_belouche>Younes Belouche</a> on <a href=https://medium.com/p/a3830c0cc9b6>May 20, 2023</a>.</p><p><a href=https://medium.com/@younes_belouche/code-first-approach-vs-database-first-approach-a3830c0cc9b6>Medium link</a></p></div></div></div></div></div></section></main><footer><div class=container><div class=row><div class=col-sm-12><div class=copyright-box><p class=copyright>&copy; Copyright <strong>DevFolio</strong>. All Rights Reserved</p><div class=credits>Designed by <a href=https://bootstrapmade.com/>BootstrapMade</a></div></div></div></div></div></footer><script src=../../vendor/purecounter/purecounter_vanilla.js></script><script src=../../vendor/bootstrap/js/bootstrap.bundle.min.js></script><script src=../../vendor/glightbox/js/glightbox.min.js></script><script src=../../vendor/swiper/swiper-bundle.min.js></script><script src=../../vendor/typed.js/typed.min.js></script><script src=../../vendor/php-email-form/validate.js></script><script src=../../js/main.js></script></body></html>
