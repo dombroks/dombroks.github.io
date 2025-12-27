@@ -1,35 +1,217 @@
-<!doctype html><html lang=en><head><meta charset=utf-8><meta content="width=device-width,initial-scale=1" name=viewport><title>Building a REST API for a Machine Learning Model and Mobile App Integration: Part2</title><meta content name=description><meta content name=keywords><link href=../../img/me.jpg rel=icon><link href=../../img/apple-touch-icon.png rel=apple-touch-icon><link href=../../vendor/bootstrap/css/bootstrap.min.css rel=stylesheet><link href=../../vendor/bootstrap-icons/bootstrap-icons.css rel=stylesheet><link href=../../vendor/glightbox/css/glightbox.min.css rel=stylesheet><link href=../../vendor/swiper/swiper-bundle.min.css rel=stylesheet><link href=../../css/style.css rel=stylesheet><style>.post-thumb img,.article-content img{max-width:100%;height:auto;display:block}.container{max-width:1200px}.col-md-8{flex:0 0 100%;max-width:100%}</style></head><body><header id=header class=fixed-top><div class="container d-flex align-items-center justify-content-between"><h1 class=logo><a href=../../>Younes Belouche</a></h1><nav id=navbar class=navbar><ul><li><a class="nav-link scrollto" href=../../>Home</a></li><li><a class="nav-link scrollto" href=../../#about>About</a></li><li><a class="nav-link scrollto" href=../../#services>Services</a></li><li><a class="nav-link scrollto" href=../../#work>Projects</a></li><li><a class="nav-link scrollto" href=../../#blog>Blog</a></li><li><a class="nav-link scrollto" href=../../#contact>Contact</a></li></ul><i class="bi bi-list mobile-nav-toggle"></i></nav></div></header><div class="hero hero-single route bg-image"><div class=overlay-mf></div><div class="hero-content display-table"><div class=table-cell><div class=container><h2 class="hero-title mb-4">Building a REST API for a Machine Learning Model and Mobile App Integration: Part2</h2></div></div></div></div><main id=main><section class="blog-wrapper sect-pt4" id=blog><div class=container><div class=row><div class=col-md-8><div class=post-box><div class=post-thumb><img src=../../img/ml_flutter_api.webp class=img-fluid alt></div><div class=post-meta><h1 class=article-title>Building a REST API for a Machine Learning Model and Mobile App Integration: Part2</h1><ul><li><span class="bi bi-person"></span>Younes Belouche</li><li><span class="bi bi-tag"></span>Machine learning | Flutter | API</li></ul></div><div class=article-content><p>Post&rsquo;s image designed by the author.</p><p><strong>Introduction</strong></p><p>In the previous post, we introduced the tech stack for our journey. Now, it’s time to delve into the process of preparing the machine learning model for seamless integration with Django. We’ll focus on three critical aspects:</p><ol><li><strong>Overview of the Pre-trained Machine Learning Model</strong>: Understand what pre-trained models are and why they are a game-changer in the field of machine learning.</li><li><strong>Introduction to the Model’s Architecture and Purpose:</strong> Dive into the fascinating world of ResNet-50, a pre-trained deep learning model with a remarkable architecture, and discover its primary use cases.</li><li><strong>Loading and Preparing the Model for Integration with Django</strong>: Learn how to write the code that initializes the model and prepares it for use in Python.</li></ol><p>Let’s embark on this journey of understanding and preparation.</p><p><strong>Overview of the pre-trained machine learning model</strong></p><p>A fundamental question to address is: what exactly is a pre-trained model, and why is it such a valuable asset in machine learning?</p><p>I got the answers for you, a pre-trained model has already been trained on a dataset and contains the weights and biases that represent the features of the dataset on which it was trained. Learned characteristics are frequently transferable to new data. A model trained on a big dataset of bird photos, for example, will contain learned features such as edges or horizontal lines that are transferable to your dataset. We benefit from pre-trained models for a variety of reasons. You save time by employing a pre-trained model. Someone else has already invested time and compute resources in learning a large number of features, and your model will most likely profit from it.</p><p>What does ResNet stand for? ResNet stands for Residual Network which is a specific type of CNN (Convolutional Neural Network). It was introduced in the 2015 paper “Deep Residual Learning for Image Recognition” by He Kaiming, Zhang Xiangyu, Ren Shaoqing, and Sun Jian. CNNs are commonly used to power computer vision applications.</p><p>ResNet-50 is a pre-trained deep learning model that consists of 50 layers and is trained on large-scale datasets. It has gained immense popularity in the computer vision community due to its exceptional performance in various tasks, including image classification and object detection. To save valuable time, computing resources, and effort, I chose to use this deep learning model to avoid creating one from scratch.</p><p><strong>Introduction to the Model’s Architecture and Purpose</strong></p><p>Before we explore the ResNet-50 architecture, let’s acquaint ourselves with its precursor, ResNet-34. ResNet-34 is a version of the original ResNet design, consisted of 34 weighted layers. By exploiting the idea of shortcut connections, it offered a creative solution to the vanishing gradient problem while adding more convolutional layers to a CNN. A residual network is created when a shortcut connection “Skips over” some levels of a conventional network.</p><p><img src=https://cdn-images-1.medium.com/max/800/1*JEGNYy9rXMj_XN7W1Qjo9g.png alt></p><p>Image source: <a href=https://www.kaggle.com/datasets/pytorch/resnet34>ResNet-34 | Kaggle</a></p><p>ResNet-50’s architecture is similar to the model shown above, but with one significant difference. The bottleneck design is used for the building block in the 50-layer ResNet. A bottleneck residual block employs 11 convolutions to limit the number of parameters and matrix multiplications. This allows for significantly faster layer training. It employs a three-layer stack rather than two levels.</p><p>The 50-layer ResNet architecture includes the following elements:</p><ul><li><strong>A 7×7 kernel convolution</strong> alongside 64 other kernels with a 2-sized stride.</li><li><strong>A max pooling layer</strong> with a 2-sized stride.</li><li><strong>9 more layers</strong> 3×3,64 kernel convolution, another with 1×1,64 kernels, and a third with 1×1,256 kernels. These 3 layers are repeated 3 times.</li><li><strong>12 more layers</strong> with 1×1,128 kernels, 3×3,128 kernels, and 1×1,512 kernels, iterated 4 times.</li><li><strong>18 more layers</strong> with 1×1,256 cores, and 2 cores 3×3,256 and 1×1,1024, iterated 6 times.</li><li><strong>9 more layers</strong> with 1×1,512 cores, 3×3,512 cores, and 1×1,2048 cores iterated 3 times.</li></ul><p>(Up to this point the network has 50 layers)</p><ul><li><strong>Average pooling</strong>, followed by a fully connected layer with 1000 nodes, using the softmax activation function.</li></ul><p><img src=https://cdn-images-1.medium.com/max/800/1*9SrzCTHIVgxzPu3VmvWmVw.png alt></p><p>Despite the use cases of ResNet-50, we are going to use it for <strong><em>Image Classification</em></strong>.</p><p>Image classification is the task of providing a label or class to a complete image is known as image classification. Images are expected to have no more than one class. Image classification models accept an image as input and estimate which class the image belongs to.</p><p><img src=https://cdn-images-1.medium.com/max/800/1*UkmLk__zZW1Wte80e4byhg.png alt></p><p><a href=https://raw.githubusercontent.com/floydhub/image-classification-template/master/images/classification.png>Source</a></p><p><strong>Loading and Preparing the Model for Integration with Django</strong></p><p>Now it is time to write some code and open your favourite IDE (I prefer Pycharm), then create an empty Python file and start coding.</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-Python data-lang=Python><span style=color:#f92672>import</span> tensorflow <span style=color:#f92672>as</span> tf
-<span style=color:#f92672>from</span> keras.applications.resnet50 <span style=color:#f92672>import</span> ResNet50, preprocess_input, decode_predictions
-<span style=color:#f92672>from</span> keras.preprocessing <span style=color:#f92672>import</span> image
-<span style=color:#f92672>import</span> numpy <span style=color:#f92672>as</span> np
+<!DOCTYPE html>
+<html lang="en">
 
-<span style=color:#66d9ef>def</span> <span style=color:#a6e22e>initialize_model</span>():
-    <span style=color:#75715e># Initialize the model</span>
-    <span style=color:#66d9ef>return</span> tf<span style=color:#f92672>.</span>keras<span style=color:#f92672>.</span>applications<span style=color:#f92672>.</span>resnet50<span style=color:#f92672>.</span>ResNet50(
-        include_top<span style=color:#f92672>=</span>True, weights<span style=color:#f92672>=</span><span style=color:#e6db74>&#39;imagenet&#39;</span>, input_tensor<span style=color:#f92672>=</span>None,
-        input_shape<span style=color:#f92672>=</span>None, pooling<span style=color:#f92672>=</span>None, classes<span style=color:#f92672>=</span><span style=color:#ae81ff>1000</span>
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+    <title>Building a REST API for a Machine Learning Model and Mobile App Integration: Part2</title>
+    <meta content="" name="description">
+    <meta content="" name="keywords">
+
+    
+    <link href="../../img/me.jpg" rel="icon">
+    <link href="../../img/apple-touch-icon.png" rel="apple-touch-icon">
+
+    
+    <link href="../../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../../vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+    <link href="../../vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
+    <link href="../../vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+
+    
+    <link href="../../css/style.css" rel="stylesheet">
+
+    <style>
+        .post-thumb img,
+        .article-content img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .container {
+            max-width: 1200px;
+        }
+
+        .col-md-8 {
+            flex: 0 0 100%;
+            max-width: 100%;
+        }
+    </style>
+</head>
+
+<body>
+
+
+<header id="header" class="fixed-top">
+    <div class="container d-flex align-items-center justify-content-between">
+        <h1 class="logo"><a href="../../">Younes Belouche</a></h1>
+
+        <nav id="navbar" class="navbar">
+            <ul>
+                <li><a class="nav-link scrollto" href="../../">Home</a></li>
+                <li><a class="nav-link scrollto" href="../../#about">About</a></li>
+                <li><a class="nav-link scrollto" href="../../#services">Services</a></li>
+                <li><a class="nav-link scrollto" href="../../#work">Projects</a></li>
+                <li><a class="nav-link scrollto" href="../../#blog">Blog</a></li>
+                <li><a class="nav-link scrollto" href="../../#contact">Contact</a></li>
+            </ul>
+            <i class="bi bi-list mobile-nav-toggle"></i>
+        </nav>
+    </div>
+</header>
+
+<div class="hero hero-single route bg-image">
+    <div class="overlay-mf"></div>
+    <div class="hero-content display-table">
+        <div class="table-cell">
+            <div class="container">
+                <h2 class="hero-title mb-4">Building a REST API for a Machine Learning Model and Mobile App Integration: Part2</h2>
+            </div>
+        </div>
+    </div>
+</div>
+
+<main id="main">
+    
+    <section class="blog-wrapper sect-pt4" id="blog">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="post-box">
+                        <div class="post-thumb">
+                            <img src="../../img/ml_flutter_api.webp" class="img-fluid" alt="">
+                        </div>
+                        <div class="post-meta">
+                            <h1 class="article-title">Building a REST API for a Machine Learning Model and Mobile App Integration: Part2</h1>
+                            <ul>
+                                <li><span class="bi bi-person"></span> Younes Belouche</li>
+                                <li><span class="bi bi-tag"></span> Machine learning | Flutter | API</li>
+                            </ul>
+                        </div>
+                        <div class="article-content">
+                            <p>Post&rsquo;s image designed by the author.</p>
+<p><strong>Introduction</strong></p>
+<p>In the previous post, we introduced the tech stack for our journey. Now, it’s time to delve into the process of preparing the machine learning model for seamless integration with Django. We’ll focus on three critical aspects:</p>
+<ol>
+<li><strong>Overview of the Pre-trained Machine Learning Model</strong>: Understand what pre-trained models are and why they are a game-changer in the field of machine learning.</li>
+<li><strong>Introduction to the Model’s Architecture and Purpose:</strong> Dive into the fascinating world of ResNet-50, a pre-trained deep learning model with a remarkable architecture, and discover its primary use cases.</li>
+<li><strong>Loading and Preparing the Model for Integration with Django</strong>: Learn how to write the code that initializes the model and prepares it for use in Python.</li>
+</ol>
+<p>Let’s embark on this journey of understanding and preparation.</p>
+<p><strong>Overview of the pre-trained machine learning model</strong></p>
+<p>A fundamental question to address is: what exactly is a pre-trained model, and why is it such a valuable asset in machine learning?</p>
+<p>I got the answers for you, a pre-trained model has already been trained on a dataset and contains the weights and biases that represent the features of the dataset on which it was trained. Learned characteristics are frequently transferable to new data. A model trained on a big dataset of bird photos, for example, will contain learned features such as edges or horizontal lines that are transferable to your dataset. We benefit from pre-trained models for a variety of reasons. You save time by employing a pre-trained model. Someone else has already invested time and compute resources in learning a large number of features, and your model will most likely profit from it.</p>
+<p>What does ResNet stand for? ResNet stands for Residual Network which is a specific type of CNN (Convolutional Neural Network). It was introduced in the 2015 paper “Deep Residual Learning for Image Recognition” by He Kaiming, Zhang Xiangyu, Ren Shaoqing, and Sun Jian. CNNs are commonly used to power computer vision applications.</p>
+<p>ResNet-50 is a pre-trained deep learning model that consists of 50 layers and is trained on large-scale datasets. It has gained immense popularity in the computer vision community due to its exceptional performance in various tasks, including image classification and object detection. To save valuable time, computing resources, and effort, I chose to use this deep learning model to avoid creating one from scratch.</p>
+<p><strong>Introduction to the Model’s Architecture and Purpose</strong></p>
+<p>Before we explore the ResNet-50 architecture, let’s acquaint ourselves with its precursor, ResNet-34. ResNet-34 is a version of the original ResNet design, consisted of 34 weighted layers. By exploiting the idea of shortcut connections, it offered a creative solution to the vanishing gradient problem while adding more convolutional layers to a CNN. A residual network is created when a shortcut connection “Skips over” some levels of a conventional network.</p>
+<p><img src="https://cdn-images-1.medium.com/max/800/1*JEGNYy9rXMj_XN7W1Qjo9g.png" alt=""></p>
+<p>Image source: <a href="https://www.kaggle.com/datasets/pytorch/resnet34">ResNet-34 | Kaggle</a></p>
+<p>ResNet-50’s architecture is similar to the model shown above, but with one significant difference. The bottleneck design is used for the building block in the 50-layer ResNet. A bottleneck residual block employs 11 convolutions to limit the number of parameters and matrix multiplications. This allows for significantly faster layer training. It employs a three-layer stack rather than two levels.</p>
+<p>The 50-layer ResNet architecture includes the following elements:</p>
+<ul>
+<li><strong>A 7×7 kernel convolution</strong> alongside 64 other kernels with a 2-sized stride.</li>
+<li><strong>A max pooling layer</strong> with a 2-sized stride.</li>
+<li><strong>9 more layers</strong> 3×3,64 kernel convolution, another with 1×1,64 kernels, and a third with 1×1,256 kernels. These 3 layers are repeated 3 times.</li>
+<li><strong>12 more layers</strong> with 1×1,128 kernels, 3×3,128 kernels, and 1×1,512 kernels, iterated 4 times.</li>
+<li><strong>18 more layers</strong> with 1×1,256 cores, and 2 cores 3×3,256 and 1×1,1024, iterated 6 times.</li>
+<li><strong>9 more layers</strong> with 1×1,512 cores, 3×3,512 cores, and 1×1,2048 cores iterated 3 times.</li>
+</ul>
+<p>(Up to this point the network has 50 layers)</p>
+<ul>
+<li><strong>Average pooling</strong>, followed by a fully connected layer with 1000 nodes, using the softmax activation function.</li>
+</ul>
+<p><img src="https://cdn-images-1.medium.com/max/800/1*9SrzCTHIVgxzPu3VmvWmVw.png" alt=""></p>
+<p>Despite the use cases of ResNet-50, we are going to use it for <strong><em>Image Classification</em></strong>.</p>
+<p>Image classification is the task of providing a label or class to a complete image is known as image classification. Images are expected to have no more than one class. Image classification models accept an image as input and estimate which class the image belongs to.</p>
+<p><img src="https://cdn-images-1.medium.com/max/800/1*UkmLk__zZW1Wte80e4byhg.png" alt=""></p>
+<p><a href="https://raw.githubusercontent.com/floydhub/image-classification-template/master/images/classification.png">Source</a></p>
+<p><strong>Loading and Preparing the Model for Integration with Django</strong></p>
+<p>Now it is time to write some code and open your favourite IDE (I prefer Pycharm), then create an empty Python file and start coding.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Python" data-lang="Python"><span style="color:#f92672">import</span> tensorflow <span style="color:#f92672">as</span> tf
+<span style="color:#f92672">from</span> keras.applications.resnet50 <span style="color:#f92672">import</span> ResNet50, preprocess_input, decode_predictions
+<span style="color:#f92672">from</span> keras.preprocessing <span style="color:#f92672">import</span> image
+<span style="color:#f92672">import</span> numpy <span style="color:#f92672">as</span> np
+
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">initialize_model</span>():
+    <span style="color:#75715e"># Initialize the model</span>
+    <span style="color:#66d9ef">return</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>applications<span style="color:#f92672">.</span>resnet50<span style="color:#f92672">.</span>ResNet50(
+        include_top<span style="color:#f92672">=</span>True, weights<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;imagenet&#39;</span>, input_tensor<span style="color:#f92672">=</span>None,
+        input_shape<span style="color:#f92672">=</span>None, pooling<span style="color:#f92672">=</span>None, classes<span style="color:#f92672">=</span><span style="color:#ae81ff">1000</span>
     )
-<span style=color:#66d9ef>def</span> <span style=color:#a6e22e>preprocess_image</span>(image_sample):
-    <span style=color:#75715e># Convert image into array</span>
-    transformed_image <span style=color:#f92672>=</span> image<span style=color:#f92672>.</span>img_to_array(image_sample)
-    <span style=color:#75715e># Expand the dimension</span>
-    transformed_image <span style=color:#f92672>=</span> np<span style=color:#f92672>.</span>expand_dims(transformed_image, axis<span style=color:#f92672>=</span><span style=color:#ae81ff>0</span>)
-    <span style=color:#75715e># Preprocess the image</span>
-    transformed_image <span style=color:#f92672>=</span> preprocess_input(transformed_image)
-    <span style=color:#66d9ef>return</span> transformed_image
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">preprocess_image</span>(image_sample):
+    <span style="color:#75715e"># Convert image into array</span>
+    transformed_image <span style="color:#f92672">=</span> image<span style="color:#f92672">.</span>img_to_array(image_sample)
+    <span style="color:#75715e"># Expand the dimension</span>
+    transformed_image <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>expand_dims(transformed_image, axis<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>)
+    <span style="color:#75715e"># Preprocess the image</span>
+    transformed_image <span style="color:#f92672">=</span> preprocess_input(transformed_image)
+    <span style="color:#66d9ef">return</span> transformed_image
 
-<span style=color:#66d9ef>def</span> <span style=color:#a6e22e>decode_prediction</span>(prediction):
-    prediction_label <span style=color:#f92672>=</span> decode_predictions(prediction, top<span style=color:#f92672>=</span><span style=color:#ae81ff>1</span>)
-    <span style=color:#66d9ef>return</span> prediction_label[<span style=color:#ae81ff>0</span>][<span style=color:#ae81ff>0</span>][<span style=color:#ae81ff>1</span>], prediction_label[<span style=color:#ae81ff>0</span>][<span style=color:#ae81ff>0</span>][<span style=color:#ae81ff>2</span>] <span style=color:#f92672>*</span> <span style=color:#ae81ff>100</span>
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">decode_prediction</span>(prediction):
+    prediction_label <span style="color:#f92672">=</span> decode_predictions(prediction, top<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>)
+    <span style="color:#66d9ef">return</span> prediction_label[<span style="color:#ae81ff">0</span>][<span style="color:#ae81ff">0</span>][<span style="color:#ae81ff">1</span>], prediction_label[<span style="color:#ae81ff">0</span>][<span style="color:#ae81ff">0</span>][<span style="color:#ae81ff">2</span>] <span style="color:#f92672">*</span> <span style="color:#ae81ff">100</span>
 
-<span style=color:#66d9ef>def</span> <span style=color:#a6e22e>predict</span>(image1):
-    <span style=color:#75715e># Load the model</span>
-    model <span style=color:#f92672>=</span> initialize_model()
-    <span style=color:#75715e># Process image</span>
-    transformed_image <span style=color:#f92672>=</span> preprocess_image(image1)
-    <span style=color:#75715e># Predict and print the result</span>
-    prediction <span style=color:#f92672>=</span> model<span style=color:#f92672>.</span>predict(transformed_image)
-    decoded_prediction, score <span style=color:#f92672>=</span> decode_prediction(prediction)
-    <span style=color:#66d9ef>print</span>(<span style=color:#e6db74>&#39;</span><span style=color:#e6db74>%s</span><span style=color:#e6db74> (</span><span style=color:#e6db74>%.2f%%</span><span style=color:#e6db74>)&#39;</span> <span style=color:#f92672>%</span> (decoded_prediction, score))
-    <span style=color:#66d9ef>return</span> decoded_prediction, score
-</code></pre></div><p>As you can see, we have four functions, <strong>initialize_model</strong>, <strong>preprocess_image</strong>, <strong>decode_prediction</strong>, and <strong>predict</strong>. The initialize_model function Instantiates the ResNet50 architecture with the following arguments:</p><p><strong><em>include_top:</em></strong> decides whether to use the fully-connected layer at the top of the network.</p><p><strong><em>weights</em></strong>: path to the weights file to be loaded.</p><p><strong><em>input_tensor</em></strong>: optional Keras tensor (i.e. output of layers.Input()) to use as image input for the model.</p><p><strong><em>input_shape</em></strong>: optional shape tuple, only to be specified if include_top is set to False.</p><p><strong><em>pooling</em></strong>: optional pooling mode for feature extraction when include_top is set to False.</p><p><strong><em>classes</em></strong>: optional number of classes to classify images into, only to be specified if include_top is set to True and if no weights argument is specified.</p><p>After that, the preprocess_image function preprocesses a tensor or Numpy array encoding a batch of images. It takes an image and makes it ready for our model. If you want more details, check the documentation <a href=https://www.tensorflow.org/api_docs/python/tf/keras/applications/resnet50/preprocess_input>here</a>.</p><p>Now the rest is simple, the decode_prediction function decodes the prediction for us and the predict function is the one that we are going to use to make the prediction.</p><p><strong>Conclusion</strong></p><p>In this post, we explored the pre-trained ResNet-50 model, discussed its architecture and purpose, and learned how to load and prepare the model for integration with Django. With the model ready, we can now proceed to the next part of the series, where we’ll focus on building the API endpoints in Django to expose the machine learning capabilities.</p><p><strong>Resources</strong></p><p><a href="https://datagen.tech/guides/computer-vision/resnet-50/#:~:text=ResNet-50%20is%20a%2050,networks%20by%20stacking%20residual%20blocks.%29">ResNet-50: The Basics and a Quick Tutorial</a></p><p>By <a href=https://medium.com/@younes_belouche>Younes Belouche</a> on <a href=https://medium.com/p/fd40927fcdc2>February 11, 2024</a>.</p><p><a href=https://medium.com/@younes_belouche/building-a-rest-api-for-a-machine-learning-model-and-mobile-app-integration-part-2-fd40927fcdc2>Medium link</a></p></div></div></div></div></div></section></main><footer><div class=container><div class=row><div class=col-sm-12><div class=copyright-box><p class=copyright>&copy; Copyright <strong>DevFolio</strong>. All Rights Reserved</p><div class=credits>Designed by <a href=https://bootstrapmade.com/>BootstrapMade</a></div></div></div></div></div></footer><script src=../../vendor/purecounter/purecounter_vanilla.js></script><script src=../../vendor/bootstrap/js/bootstrap.bundle.min.js></script><script src=../../vendor/glightbox/js/glightbox.min.js></script><script src=../../vendor/swiper/swiper-bundle.min.js></script><script src=../../vendor/typed.js/typed.min.js></script><script src=../../vendor/php-email-form/validate.js></script><script src=../../js/main.js></script></body></html>
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">predict</span>(image1):
+    <span style="color:#75715e"># Load the model</span>
+    model <span style="color:#f92672">=</span> initialize_model()
+    <span style="color:#75715e"># Process image</span>
+    transformed_image <span style="color:#f92672">=</span> preprocess_image(image1)
+    <span style="color:#75715e"># Predict and print the result</span>
+    prediction <span style="color:#f92672">=</span> model<span style="color:#f92672">.</span>predict(transformed_image)
+    decoded_prediction, score <span style="color:#f92672">=</span> decode_prediction(prediction)
+    <span style="color:#66d9ef">print</span>(<span style="color:#e6db74">&#39;</span><span style="color:#e6db74">%s</span><span style="color:#e6db74"> (</span><span style="color:#e6db74">%.2f%%</span><span style="color:#e6db74">)&#39;</span> <span style="color:#f92672">%</span> (decoded_prediction, score))
+    <span style="color:#66d9ef">return</span> decoded_prediction, score
+</code></pre></div><p>As you can see, we have four functions, <strong>initialize_model</strong>, <strong>preprocess_image</strong>, <strong>decode_prediction</strong>, and <strong>predict</strong>. The initialize_model function Instantiates the ResNet50 architecture with the following arguments:</p>
+<p><strong><em>include_top:</em></strong> decides whether to use the fully-connected layer at the top of the network.</p>
+<p><strong><em>weights</em></strong>: path to the weights file to be loaded.</p>
+<p><strong><em>input_tensor</em></strong>: optional Keras tensor (i.e. output of layers.Input()) to use as image input for the model.</p>
+<p><strong><em>input_shape</em></strong>: optional shape tuple, only to be specified if include_top is set to False.</p>
+<p><strong><em>pooling</em></strong>: optional pooling mode for feature extraction when include_top is set to False.</p>
+<p><strong><em>classes</em></strong>: optional number of classes to classify images into, only to be specified if include_top is set to True and if no weights argument is specified.</p>
+<p>After that, the preprocess_image function preprocesses a tensor or Numpy array encoding a batch of images. It takes an image and makes it ready for our model. If you want more details, check the documentation <a href="https://www.tensorflow.org/api_docs/python/tf/keras/applications/resnet50/preprocess_input">here</a>.</p>
+<p>Now the rest is simple, the decode_prediction function decodes the prediction for us and the predict function is the one that we are going to use to make the prediction.</p>
+<p><strong>Conclusion</strong></p>
+<p>In this post, we explored the pre-trained ResNet-50 model, discussed its architecture and purpose, and learned how to load and prepare the model for integration with Django. With the model ready, we can now proceed to the next part of the series, where we’ll focus on building the API endpoints in Django to expose the machine learning capabilities.</p>
+<p><strong>Resources</strong></p>
+<p><a href="https://datagen.tech/guides/computer-vision/resnet-50/#:~:text=ResNet-50%20is%20a%2050,networks%20by%20stacking%20residual%20blocks.%29">ResNet-50: The Basics and a Quick Tutorial</a></p>
+<p>By <a href="https://medium.com/@younes_belouche">Younes Belouche</a> on <a href="https://medium.com/p/fd40927fcdc2">February 11, 2024</a>.</p>
+<p><a href="https://medium.com/@younes_belouche/building-a-rest-api-for-a-machine-learning-model-and-mobile-app-integration-part-2-fd40927fcdc2">Medium link</a></p>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="copyright-box">
+                    <p class="copyright">&copy; Copyright <strong>DevFolio</strong>. All Rights Reserved</p>
+                    <div class="credits">
+                        Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+
+
+<script src="../../vendor/purecounter/purecounter_vanilla.js"></script>
+<script src="../../vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="../../vendor/glightbox/js/glightbox.min.js"></script>
+<script src="../../vendor/swiper/swiper-bundle.min.js"></script>
+<script src="../../vendor/typed.js/typed.min.js"></script>
+<script src="../../vendor/php-email-form/validate.js"></script>
+<script src="../../js/main.js"></script>
+
+</body>
+</html>

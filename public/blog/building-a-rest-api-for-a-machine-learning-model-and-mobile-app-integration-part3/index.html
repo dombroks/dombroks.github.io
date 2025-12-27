@@ -1,56 +1,262 @@
-<!doctype html><html lang=en><head><meta charset=utf-8><meta content="width=device-width,initial-scale=1" name=viewport><title>Building a REST API for a Machine Learning Model and Mobile App Integration: Part3</title><meta content name=description><meta content name=keywords><link href=../../img/me.jpg rel=icon><link href=../../img/apple-touch-icon.png rel=apple-touch-icon><link href=../../vendor/bootstrap/css/bootstrap.min.css rel=stylesheet><link href=../../vendor/bootstrap-icons/bootstrap-icons.css rel=stylesheet><link href=../../vendor/glightbox/css/glightbox.min.css rel=stylesheet><link href=../../vendor/swiper/swiper-bundle.min.css rel=stylesheet><link href=../../css/style.css rel=stylesheet><style>.post-thumb img,.article-content img{max-width:100%;height:auto;display:block}.container{max-width:1200px}.col-md-8{flex:0 0 100%;max-width:100%}</style></head><body><header id=header class=fixed-top><div class="container d-flex align-items-center justify-content-between"><h1 class=logo><a href=../../>Younes Belouche</a></h1><nav id=navbar class=navbar><ul><li><a class="nav-link scrollto" href=../../>Home</a></li><li><a class="nav-link scrollto" href=../../#about>About</a></li><li><a class="nav-link scrollto" href=../../#services>Services</a></li><li><a class="nav-link scrollto" href=../../#work>Projects</a></li><li><a class="nav-link scrollto" href=../../#blog>Blog</a></li><li><a class="nav-link scrollto" href=../../#contact>Contact</a></li></ul><i class="bi bi-list mobile-nav-toggle"></i></nav></div></header><div class="hero hero-single route bg-image"><div class=overlay-mf></div><div class="hero-content display-table"><div class=table-cell><div class=container><h2 class="hero-title mb-4">Building a REST API for a Machine Learning Model and Mobile App Integration: Part3</h2></div></div></div></div><main id=main><section class="blog-wrapper sect-pt4" id=blog><div class=container><div class=row><div class=col-md-8><div class=post-box><div class=post-thumb><img src=../../img/ml_flutter_api.webp class=img-fluid alt></div><div class=post-meta><h1 class=article-title>Building a REST API for a Machine Learning Model and Mobile App Integration: Part3</h1><ul><li><span class="bi bi-person"></span>Younes Belouche</li><li><span class="bi bi-tag"></span>Machine learning | Flutter | API</li></ul></div><div class=article-content><p>Post&rsquo;s image designed by the author.</p><p>Now, after we made our model ready, it is time to build a REST API for it.</p><p><strong>Understanding APIs and REST</strong></p><p>An API (Application Programming Interface) acts as a bridge, facilitating communication between different software components through well-defined definitions and protocols. APIs come in various styles, and one of the most prevalent is the REST (Representational State Transfer) style, which we’ll focus on here.</p><p>REST is an architectural style for building services with specific constraints and agreements. A RESTful system comprises two key components:</p><ul><li>Client: sends a request.</li><li>Server: replies with a response.</li></ul><p><img src=https://cdn-images-1.medium.com/max/800/1*c_pW_DyWWFOlDc1xKkpQgg.png alt></p><p><a href=https://luxorcode.hashnode.dev/graphql-vs-rest-api-how-graphql-outperforms-the-traditional-restful-approach>Source</a></p><p><strong>REST architectural constraints</strong></p><ul><li><strong>Uniform interface:</strong> this suggests that there should be a uniform way to interact with a server.</li><li><strong>Stateless:</strong> it means the server does not store any state about the client session on the server-side and the client includes all information necessary for the server to fulfill the request. Also, the server never relies on information from previous requests from the client. If any such information is important then the client will send that as part of the current request.</li><li><strong>Cacheable:</strong> every response should include whether the response is cacheable or not and for how much duration responses can be cached on the client side. The client will return the data from its cache for any subsequent request and there would be no need to send the request again to the server.</li><li><strong>Client-Server:</strong> RESTful applications apply the client-server architecture, the client requests the resource, and the server holds the resource. The client and the server can evolve independently.</li><li><strong>Layered system:</strong> this means that we can find other servers between the client who sends a request and the server who sends a response. These servers add layers to provide functionality like caching, security, load balancing…etc.</li><li><strong>Code on demand:</strong> this one is optional, and it means can send code to be executed by the client. For example, a JavaScript code that the server sends is to be executed on the browser.</li></ul><p><strong>REST best practices</strong></p><ul><li>Use the JSON format to send/receive data.</li><li>Use nouns instead of verbs in endpoints.</li><li>Name collections with plural nouns.</li><li>Use status codes in error handling.</li><li>Use nesting on endpoints to show relationships.</li><li>Use filtering, sorting, and pagination to retrieve the data.</li><li>Use SSL for security.</li><li>Apply versioning.</li></ul><p>Click <a href=https://www.freecodecamp.org/news/rest-api-best-practices-rest-endpoint-design-examples/><strong><em>here</em></strong></a> to see examples.</p><p>By now, you have an idea about what is API and REST API. Now let’s build a REST API for our machine learning model using Django.</p><p>The first thing you need to do is to create a Django project, but I should mention that you need Python installed on your machine, so, install Python and don’t forget about Pycharm also.</p><p>Now, open up Pycharm, and create a Django project with a name of your choice, for me, I called it ResNetApi. You will have a structure similar to the following:</p><p><img src=https://cdn-images-1.medium.com/max/800/1*tvTu0RwBZVSR25vKCf5aDw.png alt></p><p>Next, add the Python file that contains the model code to the project (for me it is <a href=http://resnet50.py>resnet50.py</a>)</p><p><img src=https://cdn-images-1.medium.com/max/800/1*8phzZdJRBwnNQjNtysIYcg.png alt></p><p>If you have noticed, I have a <a href=http://views.py><strong>views.py</strong></a> file and you don’t. This file will contain your views code, create one.</p><p>A view is a function that takes an HTTP request and returns an HTTP response, that is all.</p><p>For our case, we need a view that takes an HTTP request that contains image data so that we can pass it to our model’s prediction function to make the prediction.</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-Python data-lang=Python><span style=color:#f92672>from</span> rest_framework.views <span style=color:#f92672>import</span> APIView
-<span style=color:#f92672>from</span> rest_framework.response <span style=color:#f92672>import</span> Response
-<span style=color:#f92672>from</span> PIL <span style=color:#f92672>import</span> Image
-<span style=color:#f92672>from</span> ResNetApi <span style=color:#f92672>import</span> resnet50
-<span style=color:#f92672>import</span> base64py
-<span style=color:#f92672>from</span> io <span style=color:#f92672>import</span> BytesIO
+<!DOCTYPE html>
+<html lang="en">
 
-<span style=color:#66d9ef>class</span> <span style=color:#a6e22e>ImagePredictionAPIView</span>(APIView):
-    <span style=color:#66d9ef>def</span> <span style=color:#a6e22e>post</span>(self, request, format<span style=color:#f92672>=</span>None):
-        <span style=color:#75715e># Retrieve the base64-encoded image from the request data</span>
-        encoded_image <span style=color:#f92672>=</span> request<span style=color:#f92672>.</span>data<span style=color:#f92672>.</span>get(<span style=color:#e6db74>&#39;image&#39;</span>)
-        <span style=color:#66d9ef>if</span> encoded_image:
-            <span style=color:#75715e># Decode the base64-encoded image</span>
-            decoded_image <span style=color:#f92672>=</span> base64<span style=color:#f92672>.</span>b64decode(encoded_image<span style=color:#f92672>.</span>encode())
-            <span style=color:#75715e># Load the image using PIL</span>
-            image <span style=color:#f92672>=</span> Image<span style=color:#f92672>.</span>open(BytesIO(decoded_image))
-            <span style=color:#75715e># Resize the image to (224, 224)</span>
-            image <span style=color:#f92672>=</span> image<span style=color:#f92672>.</span>resize((<span style=color:#ae81ff>224</span>, <span style=color:#ae81ff>224</span>))
-            <span style=color:#75715e># Perform prediction and get the result</span>
-            decoded_prediction, score <span style=color:#f92672>=</span> resnet50<span style=color:#f92672>.</span>predict(image)
-            <span style=color:#75715e># Return the prediction result as a JSON response</span>
-            <span style=color:#66d9ef>return</span> Response({
-                <span style=color:#e6db74>&#39;prediction&#39;</span>: decoded_prediction,
-                <span style=color:#e6db74>&#39;score&#39;</span>: score
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+    <title>Building a REST API for a Machine Learning Model and Mobile App Integration: Part3</title>
+    <meta content="" name="description">
+    <meta content="" name="keywords">
+
+    
+    <link href="../../img/me.jpg" rel="icon">
+    <link href="../../img/apple-touch-icon.png" rel="apple-touch-icon">
+
+    
+    <link href="../../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../../vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+    <link href="../../vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
+    <link href="../../vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+
+    
+    <link href="../../css/style.css" rel="stylesheet">
+
+    <style>
+        .post-thumb img,
+        .article-content img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .container {
+            max-width: 1200px;
+        }
+
+        .col-md-8 {
+            flex: 0 0 100%;
+            max-width: 100%;
+        }
+    </style>
+</head>
+
+<body>
+
+
+<header id="header" class="fixed-top">
+    <div class="container d-flex align-items-center justify-content-between">
+        <h1 class="logo"><a href="../../">Younes Belouche</a></h1>
+
+        <nav id="navbar" class="navbar">
+            <ul>
+                <li><a class="nav-link scrollto" href="../../">Home</a></li>
+                <li><a class="nav-link scrollto" href="../../#about">About</a></li>
+                <li><a class="nav-link scrollto" href="../../#services">Services</a></li>
+                <li><a class="nav-link scrollto" href="../../#work">Projects</a></li>
+                <li><a class="nav-link scrollto" href="../../#blog">Blog</a></li>
+                <li><a class="nav-link scrollto" href="../../#contact">Contact</a></li>
+            </ul>
+            <i class="bi bi-list mobile-nav-toggle"></i>
+        </nav>
+    </div>
+</header>
+
+<div class="hero hero-single route bg-image">
+    <div class="overlay-mf"></div>
+    <div class="hero-content display-table">
+        <div class="table-cell">
+            <div class="container">
+                <h2 class="hero-title mb-4">Building a REST API for a Machine Learning Model and Mobile App Integration: Part3</h2>
+            </div>
+        </div>
+    </div>
+</div>
+
+<main id="main">
+    
+    <section class="blog-wrapper sect-pt4" id="blog">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="post-box">
+                        <div class="post-thumb">
+                            <img src="../../img/ml_flutter_api.webp" class="img-fluid" alt="">
+                        </div>
+                        <div class="post-meta">
+                            <h1 class="article-title">Building a REST API for a Machine Learning Model and Mobile App Integration: Part3</h1>
+                            <ul>
+                                <li><span class="bi bi-person"></span> Younes Belouche</li>
+                                <li><span class="bi bi-tag"></span> Machine learning | Flutter | API</li>
+                            </ul>
+                        </div>
+                        <div class="article-content">
+                            <p>Post&rsquo;s image designed by the author.</p>
+<p>Now, after we made our model ready, it is time to build a REST API for it.</p>
+<p><strong>Understanding APIs and REST</strong></p>
+<p>An API (Application Programming Interface) acts as a bridge, facilitating communication between different software components through well-defined definitions and protocols. APIs come in various styles, and one of the most prevalent is the REST (Representational State Transfer) style, which we’ll focus on here.</p>
+<p>REST is an architectural style for building services with specific constraints and agreements. A RESTful system comprises two key components:</p>
+<ul>
+<li>Client: sends a request.</li>
+<li>Server: replies with a response.</li>
+</ul>
+<p><img src="https://cdn-images-1.medium.com/max/800/1*c_pW_DyWWFOlDc1xKkpQgg.png" alt=""></p>
+<p><a href="https://luxorcode.hashnode.dev/graphql-vs-rest-api-how-graphql-outperforms-the-traditional-restful-approach">Source</a></p>
+<p><strong>REST architectural constraints</strong></p>
+<ul>
+<li><strong>Uniform interface:</strong> this suggests that there should be a uniform way to interact with a server.</li>
+<li><strong>Stateless:</strong> it means the server does not store any state about the client session on the server-side and the client includes all information necessary for the server to fulfill the request. Also, the server never relies on information from previous requests from the client. If any such information is important then the client will send that as part of the current request.</li>
+<li><strong>Cacheable:</strong> every response should include whether the response is cacheable or not and for how much duration responses can be cached on the client side. The client will return the data from its cache for any subsequent request and there would be no need to send the request again to the server.</li>
+<li><strong>Client-Server:</strong> RESTful applications apply the client-server architecture, the client requests the resource, and the server holds the resource. The client and the server can evolve independently.</li>
+<li><strong>Layered system:</strong> this means that we can find other servers between the client who sends a request and the server who sends a response. These servers add layers to provide functionality like caching, security, load balancing…etc.</li>
+<li><strong>Code on demand:</strong> this one is optional, and it means can send code to be executed by the client. For example, a JavaScript code that the server sends is to be executed on the browser.</li>
+</ul>
+<p><strong>REST best practices</strong></p>
+<ul>
+<li>Use the JSON format to send/receive data.</li>
+<li>Use nouns instead of verbs in endpoints.</li>
+<li>Name collections with plural nouns.</li>
+<li>Use status codes in error handling.</li>
+<li>Use nesting on endpoints to show relationships.</li>
+<li>Use filtering, sorting, and pagination to retrieve the data.</li>
+<li>Use SSL for security.</li>
+<li>Apply versioning.</li>
+</ul>
+<p>Click <a href="https://www.freecodecamp.org/news/rest-api-best-practices-rest-endpoint-design-examples/"><strong><em>here</em></strong></a> to see examples.</p>
+<p>By now, you have an idea about what is API and REST API. Now let’s build a REST API for our machine learning model using Django.</p>
+<p>The first thing you need to do is to create a Django project, but I should mention that you need Python installed on your machine, so, install Python and don’t forget about Pycharm also.</p>
+<p>Now, open up Pycharm, and create a Django project with a name of your choice, for me, I called it ResNetApi. You will have a structure similar to the following:</p>
+<p><img src="https://cdn-images-1.medium.com/max/800/1*tvTu0RwBZVSR25vKCf5aDw.png" alt=""></p>
+<p>Next, add the Python file that contains the model code to the project (for me it is <a href="http://resnet50.py">resnet50.py</a>)</p>
+<p><img src="https://cdn-images-1.medium.com/max/800/1*8phzZdJRBwnNQjNtysIYcg.png" alt=""></p>
+<p>If you have noticed, I have a <a href="http://views.py"><strong>views.py</strong></a> file and you don’t. This file will contain your views code, create one.</p>
+<p>A view is a function that takes an HTTP request and returns an HTTP response, that is all.</p>
+<p>For our case, we need a view that takes an HTTP request that contains image data so that we can pass it to our model’s prediction function to make the prediction.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Python" data-lang="Python"><span style="color:#f92672">from</span> rest_framework.views <span style="color:#f92672">import</span> APIView
+<span style="color:#f92672">from</span> rest_framework.response <span style="color:#f92672">import</span> Response
+<span style="color:#f92672">from</span> PIL <span style="color:#f92672">import</span> Image
+<span style="color:#f92672">from</span> ResNetApi <span style="color:#f92672">import</span> resnet50
+<span style="color:#f92672">import</span> base64py
+<span style="color:#f92672">from</span> io <span style="color:#f92672">import</span> BytesIO
+
+<span style="color:#66d9ef">class</span> <span style="color:#a6e22e">ImagePredictionAPIView</span>(APIView):
+    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">post</span>(self, request, format<span style="color:#f92672">=</span>None):
+        <span style="color:#75715e"># Retrieve the base64-encoded image from the request data</span>
+        encoded_image <span style="color:#f92672">=</span> request<span style="color:#f92672">.</span>data<span style="color:#f92672">.</span>get(<span style="color:#e6db74">&#39;image&#39;</span>)
+        <span style="color:#66d9ef">if</span> encoded_image:
+            <span style="color:#75715e"># Decode the base64-encoded image</span>
+            decoded_image <span style="color:#f92672">=</span> base64<span style="color:#f92672">.</span>b64decode(encoded_image<span style="color:#f92672">.</span>encode())
+            <span style="color:#75715e"># Load the image using PIL</span>
+            image <span style="color:#f92672">=</span> Image<span style="color:#f92672">.</span>open(BytesIO(decoded_image))
+            <span style="color:#75715e"># Resize the image to (224, 224)</span>
+            image <span style="color:#f92672">=</span> image<span style="color:#f92672">.</span>resize((<span style="color:#ae81ff">224</span>, <span style="color:#ae81ff">224</span>))
+            <span style="color:#75715e"># Perform prediction and get the result</span>
+            decoded_prediction, score <span style="color:#f92672">=</span> resnet50<span style="color:#f92672">.</span>predict(image)
+            <span style="color:#75715e"># Return the prediction result as a JSON response</span>
+            <span style="color:#66d9ef">return</span> Response({
+                <span style="color:#e6db74">&#39;prediction&#39;</span>: decoded_prediction,
+                <span style="color:#e6db74">&#39;score&#39;</span>: score
             })
-        <span style=color:#66d9ef>else</span>:
-            <span style=color:#66d9ef>return</span> Response({<span style=color:#e6db74>&#39;error&#39;</span>: <span style=color:#e6db74>&#39;Could not process the image&#39;</span>}, status<span style=color:#f92672>=</span><span style=color:#ae81ff>400</span>)
-</code></pre></div><p>Let me explain the import section for you and why we need to import those libraries.</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-Python data-lang=Python><span style=color:#f92672>from</span> rest_framework.views <span style=color:#f92672>import</span> APIView
-<span style=color:#f92672>from</span> rest_framework.response <span style=color:#f92672>import</span> Response
-<span style=color:#f92672>from</span> PIL <span style=color:#f92672>import</span> Image
-<span style=color:#f92672>from</span> ResNetApi <span style=color:#f92672>import</span> resnet50
-<span style=color:#f92672>import</span> base64
-<span style=color:#f92672>from</span> io <span style=color:#f92672>import</span> BytesIO
-</code></pre></div><ul><li><strong>rest_framework:</strong> the Django REST framework, which is a powerful and flexible toolkit for building Web APIs.</li><li><strong>PIL</strong>: python imaging library, it provides image processing capabilities.</li><li><strong>resnet50:</strong> our model file.</li><li><strong>base64:</strong> module used to encode and decode data.</li><li><strong>io:</strong> a module for performing file related I/O operations (eg. file reading/writing)</li><li><strong>BytesIO:</strong> io module that allows us to manage the file-related input and output operations.</li><li><strong>Image:</strong> a module that includes functions to load, open and create images.</li><li><strong>APIView:</strong> a subclass of Django’s view that handles incoming requests.</li><li><strong>Response:</strong> allows you to return content that can be rendered into multiple content types, depending on the client’s request.</li></ul><p>You need to install the above libraries. The IDE will put a red line under the uninstalled libraries telling you that you should install them, click on install and it will take care of that. After installing the necessary libraries, one extra step for the Django REST framework to be configured for the project is to add to the settings. Inside your project’s <a href=http://settings.py><strong>settings.py</strong></a> file, add <code>'rest_framework'</code> to INSTALLED_APPS list.</p><p><img src=https://cdn-images-1.medium.com/max/800/1*8u0StVzZ4g2rPT23YMJPug.png alt></p><p>The request holds a <strong>base64</strong> string that represents an image, the view accepts a <strong>POST</strong> request, decodes this base64 string, and uses PIL and BytesIO to load the image. After that, it reshapes the image to finally pass it to the prediction function and returns a response accordingly.</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-Python data-lang=Python><span style=color:#66d9ef>class</span> <span style=color:#a6e22e>ImagePredictionAPIView</span>(APIView):
-    <span style=color:#66d9ef>def</span> <span style=color:#a6e22e>post</span>(self, request, format<span style=color:#f92672>=</span>None):
-        <span style=color:#75715e># Retrieve the base64-encoded image from the request data</span>
-        encoded_image <span style=color:#f92672>=</span> request<span style=color:#f92672>.</span>data<span style=color:#f92672>.</span>get(<span style=color:#e6db74>&#39;image&#39;</span>)
-        <span style=color:#66d9ef>if</span> encoded_image:
-                    <span style=color:#75715e># Decode the base64-encoded image</span>
-                    decoded_image <span style=color:#f92672>=</span> base64<span style=color:#f92672>.</span>b64decode(encoded_image<span style=color:#f92672>.</span>encode())
-                    <span style=color:#75715e># Load the image using PIL</span>
-                    image <span style=color:#f92672>=</span> Image<span style=color:#f92672>.</span>open(BytesIO(decoded_image))
-                    <span style=color:#75715e># Resize the image to (224, 224)</span>
-                    image <span style=color:#f92672>=</span> image<span style=color:#f92672>.</span>resize((<span style=color:#ae81ff>224</span>, <span style=color:#ae81ff>224</span>))
-                    <span style=color:#75715e># Perform prediction and get the result</span>
-                    decoded_prediction, score <span style=color:#f92672>=</span> resnet50<span style=color:#f92672>.</span>predict(image)
-                    <span style=color:#75715e># Return the prediction result as a JSON response</span>
-                    <span style=color:#66d9ef>return</span> Response({
-                        <span style=color:#e6db74>&#39;prediction&#39;</span>: decoded_prediction,
-                        <span style=color:#e6db74>&#39;score&#39;</span>: score
+        <span style="color:#66d9ef">else</span>:
+            <span style="color:#66d9ef">return</span> Response({<span style="color:#e6db74">&#39;error&#39;</span>: <span style="color:#e6db74">&#39;Could not process the image&#39;</span>}, status<span style="color:#f92672">=</span><span style="color:#ae81ff">400</span>)
+</code></pre></div><p>Let me explain the import section for you and why we need to import those libraries.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Python" data-lang="Python"><span style="color:#f92672">from</span> rest_framework.views <span style="color:#f92672">import</span> APIView
+<span style="color:#f92672">from</span> rest_framework.response <span style="color:#f92672">import</span> Response
+<span style="color:#f92672">from</span> PIL <span style="color:#f92672">import</span> Image
+<span style="color:#f92672">from</span> ResNetApi <span style="color:#f92672">import</span> resnet50
+<span style="color:#f92672">import</span> base64
+<span style="color:#f92672">from</span> io <span style="color:#f92672">import</span> BytesIO
+</code></pre></div><ul>
+<li><strong>rest_framework:</strong> the Django REST framework, which is a powerful and flexible toolkit for building Web APIs.</li>
+<li><strong>PIL</strong>: python imaging library, it provides image processing capabilities.</li>
+<li><strong>resnet50:</strong> our model file.</li>
+<li><strong>base64:</strong> module used to encode and decode data.</li>
+<li><strong>io:</strong> a module for performing file related I/O operations (eg. file reading/writing)</li>
+<li><strong>BytesIO:</strong> io module that allows us to manage the file-related input and output operations.</li>
+<li><strong>Image:</strong> a module that includes functions to load, open and create images.</li>
+<li><strong>APIView:</strong> a subclass of Django’s view that handles incoming requests.</li>
+<li><strong>Response:</strong> allows you to return content that can be rendered into multiple content types, depending on the client’s request.</li>
+</ul>
+<p>You need to install the above libraries. The IDE will put a red line under the uninstalled libraries telling you that you should install them, click on install and it will take care of that. After installing the necessary libraries, one extra step for the Django REST framework to be configured for the project is to add to the settings. Inside your project’s <a href="http://settings.py"><strong>settings.py</strong></a> file, add <code>'rest_framework'</code> to INSTALLED_APPS list.</p>
+<p><img src="https://cdn-images-1.medium.com/max/800/1*8u0StVzZ4g2rPT23YMJPug.png" alt=""></p>
+<p>The request holds a <strong>base64</strong> string that represents an image, the view accepts a <strong>POST</strong> request, decodes this base64 string, and uses PIL and BytesIO to load the image. After that, it reshapes the image to finally pass it to the prediction function and returns a response accordingly.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Python" data-lang="Python"><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">ImagePredictionAPIView</span>(APIView):
+    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">post</span>(self, request, format<span style="color:#f92672">=</span>None):
+        <span style="color:#75715e"># Retrieve the base64-encoded image from the request data</span>
+        encoded_image <span style="color:#f92672">=</span> request<span style="color:#f92672">.</span>data<span style="color:#f92672">.</span>get(<span style="color:#e6db74">&#39;image&#39;</span>)
+        <span style="color:#66d9ef">if</span> encoded_image:
+                    <span style="color:#75715e"># Decode the base64-encoded image</span>
+                    decoded_image <span style="color:#f92672">=</span> base64<span style="color:#f92672">.</span>b64decode(encoded_image<span style="color:#f92672">.</span>encode())
+                    <span style="color:#75715e"># Load the image using PIL</span>
+                    image <span style="color:#f92672">=</span> Image<span style="color:#f92672">.</span>open(BytesIO(decoded_image))
+                    <span style="color:#75715e"># Resize the image to (224, 224)</span>
+                    image <span style="color:#f92672">=</span> image<span style="color:#f92672">.</span>resize((<span style="color:#ae81ff">224</span>, <span style="color:#ae81ff">224</span>))
+                    <span style="color:#75715e"># Perform prediction and get the result</span>
+                    decoded_prediction, score <span style="color:#f92672">=</span> resnet50<span style="color:#f92672">.</span>predict(image)
+                    <span style="color:#75715e"># Return the prediction result as a JSON response</span>
+                    <span style="color:#66d9ef">return</span> Response({
+                        <span style="color:#e6db74">&#39;prediction&#39;</span>: decoded_prediction,
+                        <span style="color:#e6db74">&#39;score&#39;</span>: score
                     })
-                <span style=color:#66d9ef>else</span>:
-                    <span style=color:#66d9ef>return</span> Response({<span style=color:#e6db74>&#39;error&#39;</span>: <span style=color:#e6db74>&#39;Could not process the image&#39;</span>}, status<span style=color:#f92672>=</span><span style=color:#ae81ff>400</span>)
-</code></pre></div><p>Now after we created the view responsible for handling the requests, we must map it to a URL. To achieve that we can use the Django URL dispatcher by creating a URL pattern in the <a href=http://url.py><strong>url.py</strong></a> file.</p><p><img src=https://cdn-images-1.medium.com/max/800/1*7hOdJmy0AdP1KWYwfdnamQ.png alt></p><p>Here, the URL pattern <code>api/predict/</code> is mapped to the <code>ImagePredictionAPIView</code> view. When a user makes a POST request to <code>api/predict/</code>, DRF (Django Rest Framework) will call the <code>ImagePredictionAPIView</code> view to handle the request and return a response. Mapping URLs to views is called <strong>Routing</strong>.</p><p>In order to test our API, we go to the terminal in the IDE and launch the following command:</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-Bash data-lang=Bash>python manage.py runserver
-</code></pre></div><p><img src=https://cdn-images-1.medium.com/max/800/1*FyWFLcdUq7k81BxlT1R0PQ.png alt></p><p>If the previous command didn’t work for you, try that:</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-Bash data-lang=Bash>python manage.py runserver 0.0.0.0:8000
-</code></pre></div><p>Next, go to your browser and search with the following link: <a href=http://127.0.0.1:8000/api/predict/><em>http://127.0.0.1:8000/api/predict/</em></a></p><p>You will see something like that:</p><p><img src=https://cdn-images-1.medium.com/max/800/1*woRz8-11muJ4DDSVggDn1g.png alt></p><p>Now, open a new tab, search for a dog image, and copy its link, I took the link to this <a href="https://t0.gstatic.com/licensed-image?q=tbn:ANd9GcQkrjYxSfSHeCEA7hkPy8e2JphDsfFHZVKqx-3t37E4XKr-AT7DML8IwtwY0TnZsUcQ">image</a>. After that, go to this <a href=https://base64.guru/converter/encode/image><strong><em>website</em></strong></a>, choose the remote URL instead of the local file, and convert the image to a base64 string. Copy the generated base64 string and copy it in the Content field of the DRF page.</p><p><img src=https://cdn-images-1.medium.com/max/800/1*tXciymQBc27RaxEqMJrI2A.png alt></p><p>Click POST and you should see something like the following:</p><p><img src=https://cdn-images-1.medium.com/max/800/1*5SRoFdatYKtmoDVTiu3Zdw.png alt></p><p>As you can see, the prediction is <strong>“Golden_retriever”</strong> (a type of dog) with <strong>96.97</strong> as the score.</p><p>For the Flutter app, it doesn’t need any explanation, I will just give you the repository link since what it does is just an HTTP request to the back end we made.</p><p><strong>GitHub repositories</strong></p><p><a href=https://github.com/dombroks/ResNetApp>Flutter app</a></p><p><a href=https://github.com/dombroks/ResNet>Back-end</a></p><p><strong>Conclusion</strong></p><p>In this post, we have seen how to build a back end for our machine learning model and tested it locally.</p><p>By <a href=https://medium.com/@younes_belouche>Younes Belouche</a> on <a href=https://medium.com/p/d2eeda72c0aa>February 11, 2024</a>.</p><p><a href=https://medium.com/@younes_belouche/building-a-rest-api-for-a-machine-learning-model-and-mobile-app-integration-part-3-d2eeda72c0aa>Medium link</a></p></div></div></div></div></div></section></main><footer><div class=container><div class=row><div class=col-sm-12><div class=copyright-box><p class=copyright>&copy; Copyright <strong>DevFolio</strong>. All Rights Reserved</p><div class=credits>Designed by <a href=https://bootstrapmade.com/>BootstrapMade</a></div></div></div></div></div></footer><script src=../../vendor/purecounter/purecounter_vanilla.js></script><script src=../../vendor/bootstrap/js/bootstrap.bundle.min.js></script><script src=../../vendor/glightbox/js/glightbox.min.js></script><script src=../../vendor/swiper/swiper-bundle.min.js></script><script src=../../vendor/typed.js/typed.min.js></script><script src=../../vendor/php-email-form/validate.js></script><script src=../../js/main.js></script></body></html>
+                <span style="color:#66d9ef">else</span>:
+                    <span style="color:#66d9ef">return</span> Response({<span style="color:#e6db74">&#39;error&#39;</span>: <span style="color:#e6db74">&#39;Could not process the image&#39;</span>}, status<span style="color:#f92672">=</span><span style="color:#ae81ff">400</span>)
+</code></pre></div><p>Now after we created the view responsible for handling the requests, we must map it to a URL. To achieve that we can use the Django URL dispatcher by creating a URL pattern in the <a href="http://url.py"><strong>url.py</strong></a> file.</p>
+<p><img src="https://cdn-images-1.medium.com/max/800/1*7hOdJmy0AdP1KWYwfdnamQ.png" alt=""></p>
+<p>Here, the URL pattern <code>api/predict/</code> is mapped to the <code>ImagePredictionAPIView</code> view. When a user makes a POST request to <code>api/predict/</code>, DRF (Django Rest Framework) will call the <code>ImagePredictionAPIView</code> view to handle the request and return a response. Mapping URLs to views is called <strong>Routing</strong>.</p>
+<p>In order to test our API, we go to the terminal in the IDE and launch the following command:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Bash" data-lang="Bash">python manage.py runserver
+</code></pre></div><p><img src="https://cdn-images-1.medium.com/max/800/1*FyWFLcdUq7k81BxlT1R0PQ.png" alt=""></p>
+<p>If the previous command didn’t work for you, try that:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Bash" data-lang="Bash">python manage.py runserver 0.0.0.0:8000
+</code></pre></div><p>Next, go to your browser and search with the following link: <a href="http://127.0.0.1:8000/api/predict/"><em>http://127.0.0.1:8000/api/predict/</em></a></p>
+<p>You will see something like that:</p>
+<p><img src="https://cdn-images-1.medium.com/max/800/1*woRz8-11muJ4DDSVggDn1g.png" alt=""></p>
+<p>Now, open a new tab, search for a dog image, and copy its link, I took the link to this <a href="https://t0.gstatic.com/licensed-image?q=tbn:ANd9GcQkrjYxSfSHeCEA7hkPy8e2JphDsfFHZVKqx-3t37E4XKr-AT7DML8IwtwY0TnZsUcQ">image</a>. After that, go to this <a href="https://base64.guru/converter/encode/image"><strong><em>website</em></strong></a>, choose the remote URL instead of the local file, and convert the image to a base64 string. Copy the generated base64 string and copy it in the Content field of the DRF page.</p>
+<p><img src="https://cdn-images-1.medium.com/max/800/1*tXciymQBc27RaxEqMJrI2A.png" alt=""></p>
+<p>Click POST and you should see something like the following:</p>
+<p><img src="https://cdn-images-1.medium.com/max/800/1*5SRoFdatYKtmoDVTiu3Zdw.png" alt=""></p>
+<p>As you can see, the prediction is <strong>“Golden_retriever”</strong> (a type of dog) with <strong>96.97</strong> as the score.</p>
+<p>For the Flutter app, it doesn’t need any explanation, I will just give you the repository link since what it does is just an HTTP request to the back end we made.</p>
+<p><strong>GitHub repositories</strong></p>
+<p><a href="https://github.com/dombroks/ResNetApp">Flutter app</a></p>
+<p><a href="https://github.com/dombroks/ResNet">Back-end</a></p>
+<p><strong>Conclusion</strong></p>
+<p>In this post, we have seen how to build a back end for our machine learning model and tested it locally.</p>
+<p>By <a href="https://medium.com/@younes_belouche">Younes Belouche</a> on <a href="https://medium.com/p/d2eeda72c0aa">February 11, 2024</a>.</p>
+<p><a href="https://medium.com/@younes_belouche/building-a-rest-api-for-a-machine-learning-model-and-mobile-app-integration-part-3-d2eeda72c0aa">Medium link</a></p>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="copyright-box">
+                    <p class="copyright">&copy; Copyright <strong>DevFolio</strong>. All Rights Reserved</p>
+                    <div class="credits">
+                        Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+
+
+<script src="../../vendor/purecounter/purecounter_vanilla.js"></script>
+<script src="../../vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="../../vendor/glightbox/js/glightbox.min.js"></script>
+<script src="../../vendor/swiper/swiper-bundle.min.js"></script>
+<script src="../../vendor/typed.js/typed.min.js"></script>
+<script src="../../vendor/php-email-form/validate.js"></script>
+<script src="../../js/main.js"></script>
+
+</body>
+</html>

@@ -1,27 +1,194 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>My Personal Website</title><link>/</link><description>Recent content on My Personal Website</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Sun, 11 Feb 2024 00:00:00 +0000</lastBuildDate><atom:link href="/index.xml" rel="self" type="application/rss+xml"/><item><title>Building a REST API for a Machine Learning Model and Mobile App Integration: Part1</title><link>/blog/building-a-rest-api-for-a-machine-learning-model-and-mobile-app-integration-part1/</link><pubDate>Sun, 11 Feb 2024 00:00:00 +0000</pubDate><guid>/blog/building-a-rest-api-for-a-machine-learning-model-and-mobile-app-integration-part1/</guid><description>Post&amp;rsquo;s image designed by the author.
-In 2020, I wrote two Medium posts about two important topics. The first one talks about how to save your trained machine learning model, in which you learn how to serialize/de-serialize your ML model so that you can load it whenever needed. The second post was about creating a simple Android application using Java that consumes a simple REST API built using Flask. These two posts complete each other because when you build an ML model, you need to deploy it and for that, you need to make it available by building an API for it so that users can use your model by consuming the API you built from a client whether it is mobile or web.</description></item><item><title>Building a REST API for a Machine Learning Model and Mobile App Integration: Part2</title><link>/blog/building-a-rest-api-for-a-machine-learning-model-and-mobile-app-integration-part2/</link><pubDate>Sun, 11 Feb 2024 00:00:00 +0000</pubDate><guid>/blog/building-a-rest-api-for-a-machine-learning-model-and-mobile-app-integration-part2/</guid><description>Post&amp;rsquo;s image designed by the author.
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>My Personal Website</title>
+    <link>/</link>
+    <description>Recent content on My Personal Website</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sun, 13 Jul 2025 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>School App</title>
+      <link>/projects/school_app/</link>
+      <pubDate>Sun, 13 Jul 2025 00:00:00 +0000</pubDate>
+      
+      <guid>/projects/school_app/</guid>
+      <description>An interview task School app UI built using Flutter</description>
+    </item>
+    
+    <item>
+      <title>Building a REST API for a Machine Learning Model and Mobile App Integration: Part1</title>
+      <link>/blog/building-a-rest-api-for-a-machine-learning-model-and-mobile-app-integration-part1/</link>
+      <pubDate>Sun, 11 Feb 2024 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/building-a-rest-api-for-a-machine-learning-model-and-mobile-app-integration-part1/</guid>
+      <description>Post&amp;rsquo;s image designed by the author.
+In 2020, I wrote two Medium posts about two important topics. The first one talks about how to save your trained machine learning model, in which you learn how to serialize/de-serialize your ML model so that you can load it whenever needed. The second post was about creating a simple Android application using Java that consumes a simple REST API built using Flask. These two posts complete each other because when you build an ML model, you need to deploy it and for that, you need to make it available by building an API for it so that users can use your model by consuming the API you built from a client whether it is mobile or web.</description>
+    </item>
+    
+    <item>
+      <title>Building a REST API for a Machine Learning Model and Mobile App Integration: Part2</title>
+      <link>/blog/building-a-rest-api-for-a-machine-learning-model-and-mobile-app-integration-part2/</link>
+      <pubDate>Sun, 11 Feb 2024 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/building-a-rest-api-for-a-machine-learning-model-and-mobile-app-integration-part2/</guid>
+      <description>Post&amp;rsquo;s image designed by the author.
 Introduction
 In the previous post, we introduced the tech stack for our journey. Now, it’s time to delve into the process of preparing the machine learning model for seamless integration with Django. We’ll focus on three critical aspects:
-Overview of the Pre-trained Machine Learning Model: Understand what pre-trained models are and why they are a game-changer in the field of machine learning. Introduction to the Model’s Architecture and Purpose: Dive into the fascinating world of ResNet-50, a pre-trained deep learning model with a remarkable architecture, and discover its primary use cases.</description></item><item><title>Building a REST API for a Machine Learning Model and Mobile App Integration: Part3</title><link>/blog/building-a-rest-api-for-a-machine-learning-model-and-mobile-app-integration-part3/</link><pubDate>Sun, 11 Feb 2024 00:00:00 +0000</pubDate><guid>/blog/building-a-rest-api-for-a-machine-learning-model-and-mobile-app-integration-part3/</guid><description>Post&amp;rsquo;s image designed by the author.
+ Overview of the Pre-trained Machine Learning Model: Understand what pre-trained models are and why they are a game-changer in the field of machine learning. Introduction to the Model’s Architecture and Purpose: Dive into the fascinating world of ResNet-50, a pre-trained deep learning model with a remarkable architecture, and discover its primary use cases.</description>
+    </item>
+    
+    <item>
+      <title>Building a REST API for a Machine Learning Model and Mobile App Integration: Part3</title>
+      <link>/blog/building-a-rest-api-for-a-machine-learning-model-and-mobile-app-integration-part3/</link>
+      <pubDate>Sun, 11 Feb 2024 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/building-a-rest-api-for-a-machine-learning-model-and-mobile-app-integration-part3/</guid>
+      <description>Post&amp;rsquo;s image designed by the author.
 Now, after we made our model ready, it is time to build a REST API for it.
 Understanding APIs and REST
-An API (Application Programming Interface) acts as a bridge, facilitating communication between different software components through well-defined definitions and protocols. APIs come in various styles, and one of the most prevalent is the REST (Representational State Transfer) style, which we’ll focus on here.</description></item><item><title>Code First Approach vs. Database First Approach</title><link>/blog/code-first-approach-vs.-database-first-approach/</link><pubDate>Sat, 20 May 2023 00:00:00 +0000</pubDate><guid>/blog/code-first-approach-vs.-database-first-approach/</guid><description>Image Source
+An API (Application Programming Interface) acts as a bridge, facilitating communication between different software components through well-defined definitions and protocols. APIs come in various styles, and one of the most prevalent is the REST (Representational State Transfer) style, which we’ll focus on here.</description>
+    </item>
+    
+    <item>
+      <title>Code First Approach vs. Database First Approach</title>
+      <link>/blog/code-first-approach-vs.-database-first-approach/</link>
+      <pubDate>Sat, 20 May 2023 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/code-first-approach-vs.-database-first-approach/</guid>
+      <description>Image Source
 We were working on a project for a big company using C# as a programming language and Entity framework as an ORM, both of these technologies are supported by Microsoft.
-Entity Framework is an open-source object-relational mapping framework for ADO .NET, which is a data access technology, this means that you can use this technology to access data in the database. For C#, we all know what C# is.</description></item><item><title>What You Need To Know As A CS Student</title><link>/blog/what-you-need-to-know-as-a-cs-student/</link><pubDate>Thu, 27 Apr 2023 00:00:00 +0000</pubDate><guid>/blog/what-you-need-to-know-as-a-cs-student/</guid><description>Image by matthew Feeney
+Entity Framework is an open-source object-relational mapping framework for ADO .NET, which is a data access technology, this means that you can use this technology to access data in the database. For C#, we all know what C# is.</description>
+    </item>
+    
+    <item>
+      <title>What You Need To Know As A CS Student</title>
+      <link>/blog/what-you-need-to-know-as-a-cs-student/</link>
+      <pubDate>Thu, 27 Apr 2023 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/what-you-need-to-know-as-a-cs-student/</guid>
+      <description>Image by matthew Feeney
 What every computer science student should know (most of this article’s content could apply to other fields).
-You need to explore When you are a CS student, one thing to keep in mind is that you need to explore different areas, why is that? it permits you to discover what you have passion for the most and what you are interested in. If you want to be a software engineer, you need to explore mobile development, backend development, and many other specialties.</description></item><item><title>N + 1 Queries Problem (A Django example)</title><link>/blog/n-1-queries-problem-a-django-example/</link><pubDate>Tue, 30 Aug 2022 00:00:00 +0000</pubDate><guid>/blog/n-1-queries-problem-a-django-example/</guid><description>Image from Unsplash by Markus Winkler
+You need to explore When you are a CS student, one thing to keep in mind is that you need to explore different areas, why is that? it permits you to discover what you have passion for the most and what you are interested in. If you want to be a software engineer, you need to explore mobile development, backend development, and many other specialties.</description>
+    </item>
+    
+    <item>
+      <title>N &#43; 1 Queries Problem (A Django example)</title>
+      <link>/blog/n-1-queries-problem-a-django-example/</link>
+      <pubDate>Tue, 30 Aug 2022 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/n-1-queries-problem-a-django-example/</guid>
+      <description>Image from Unsplash by Markus Winkler
 In this post, we will learn about N + 1 Queries Problem, what is it and how to solve it.
-What is the N + 1 Queries Problem? In short, the N + 1 Queries Problem is a performance anti-pattern that happens when a query is executed for every result you got from a previous query. N here is the number of queries for every result you got from the first query.</description></item><item><title>The right way to implement a search feature to filter a list using BLOC in Flutter</title><link>/blog/the-right-way-to-implement-a-search-feature-to-filter-a-list-using-bloc-in-flutter/</link><pubDate>Wed, 25 May 2022 00:00:00 +0000</pubDate><guid>/blog/the-right-way-to-implement-a-search-feature-to-filter-a-list-using-bloc-in-flutter/</guid><description>Hi there, in this post, you will learn how Flutter Bloc could play a huge role in optimizing our ressources consumption so that we can have a better user experience and a better rationalization of how to use what we have.
-This post will also teaches you the difference between bloc and cubit, and will answer more of your questions, questions like why the two come in one library that called Bloc and when to use each one of them.</description></item><item><title>Programmer’s burnout: reasons and solution</title><link>/blog/programmers-burnout-reasons-and-solution/</link><pubDate>Mon, 16 Aug 2021 00:00:00 +0000</pubDate><guid>/blog/programmers-burnout-reasons-and-solution/</guid><description>Image credit goes to Tengyart.
+What is the N + 1 Queries Problem? In short, the N + 1 Queries Problem is a performance anti-pattern that happens when a query is executed for every result you got from a previous query. N here is the number of queries for every result you got from the first query.</description>
+    </item>
+    
+    <item>
+      <title>The right way to implement a search feature to filter a list using BLOC in Flutter</title>
+      <link>/blog/the-right-way-to-implement-a-search-feature-to-filter-a-list-using-bloc-in-flutter/</link>
+      <pubDate>Wed, 25 May 2022 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/the-right-way-to-implement-a-search-feature-to-filter-a-list-using-bloc-in-flutter/</guid>
+      <description>Hi there, in this post, you will learn how Flutter Bloc could play a huge role in optimizing our ressources consumption so that we can have a better user experience and a better rationalization of how to use what we have.
+This post will also teaches you the difference between bloc and cubit, and will answer more of your questions, questions like why the two come in one library that called Bloc and when to use each one of them.</description>
+    </item>
+    
+    <item>
+      <title>Programmer’s burnout: reasons and solution</title>
+      <link>/blog/programmers-burnout-reasons-and-solution/</link>
+      <pubDate>Mon, 16 Aug 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/programmers-burnout-reasons-and-solution/</guid>
+      <description>Image credit goes to Tengyart.
 One of the things that most if we don’t say all the developers have experienced is burnout. In this short post, we will see what is it, reasons behind and the solution.
-Burnout happens when the programmer feels exhausted continuously, this feeling takes away the desire for working or learning new things and the person experiencing this will not even be able to look at his own computer.</description></item><item><title>3D Stereoscopic Reconstruction</title><link>/projects/master_pfe/</link><pubDate>Sun, 06 Jun 2021 00:00:00 +0000</pubDate><guid>/projects/master_pfe/</guid><description>Abstract Computer vision is a sub field of artificial intelligence (AI) that offers the computers
+Burnout happens when the programmer feels exhausted continuously, this feeling takes away the desire for working or learning new things and the person experiencing this will not even be able to look at his own computer.</description>
+    </item>
+    
+    <item>
+      <title>3D Stereoscopic Reconstruction</title>
+      <link>/projects/master_pfe/</link>
+      <pubDate>Sun, 06 Jun 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/projects/master_pfe/</guid>
+      <description>Abstract Computer vision is a sub field of artificial intelligence (AI) that offers the computers
 and systems the ability to extract meaningful information from digital images and videos,
 this way computers can take decisions or perform actions based on that information.
 Computers now can observe and see as if they have eyes.
 Stereoscopy, also called stereo imaging, creates the illusion of three-dimensional depth
-from given two-dimensional images. The human vision is a great example of stereoscopy,</description></item><item><title>Delivery App</title><link>/projects/delivery_app/</link><pubDate>Sat, 13 Mar 2021 00:00:00 +0000</pubDate><guid>/projects/delivery_app/</guid><description>Delivery app built using Flutter, Provider and MVVM</description></item><item><title>Grocery App</title><link>/projects/grocery_app/</link><pubDate>Sun, 26 Jul 2020 00:00:00 +0000</pubDate><guid>/projects/grocery_app/</guid><description>Grocery App 📱 Flutter application made for selling fruits and vegetables 🍓🍆 With a seamless user interface and a comprehensive list of features, this app is designed to make your grocery shopping experience a breeze. Browse thousands of grocery items from the comfort of your own home and add them to your shopping cart with just a few clicks. Enjoy the convenience of creating and managing your shopping list right from your phone, and receive personalized recommendations based on your previous purchases.</description></item><item><title>Hiring App</title><link>/projects/hiring_app/</link><pubDate>Thu, 02 Jul 2020 00:00:00 +0000</pubDate><guid>/projects/hiring_app/</guid><description>Jober is an Android app designed for tech professionals looking for employment. Users can create profiles, upload work experience and portfolios. Employers can search for candidates, view their profiles and contact them directly through the app. Employers can also post job offers, including job descriptions, work type (remote, in-office or hybrid) and office location on a map view. The app also provides a feature where users can share a link to their CV.</description></item><item><title>Islamic App</title><link>/projects/islamic_app/</link><pubDate>Thu, 25 Jun 2020 00:00:00 +0000</pubDate><guid>/projects/islamic_app/</guid><description>Rafiqi V1 Rafiqi is Android Application that aims to help muslims around the world to read,listen to Quran Al-karimk, it contains a lot of other nice features such us : Getting prayer times by location every time the user lunchs the app, if the user doesn&amp;rsquo;t have an internet connection , the app will automatically set location with it&amp;rsquo;s last record. There is also Tassbih , Douaa , Qibla &amp;hellip;etc. This project uses a prepopulated sqlite database that holds All the Quran with surrah number and juz.</description></item><item><title>How to save your trained machine learning model</title><link>/blog/how-to-save-your-trained-machine-learning-model/</link><pubDate>Sat, 30 May 2020 00:00:00 +0000</pubDate><guid>/blog/how-to-save-your-trained-machine-learning-model/</guid><description>Efficient Machine Learning Model Saving and Reloading in Python: A Guide to Pickle and Joblib for Machine Learning Save a trained model with ability to reload it
+from given two-dimensional images. The human vision is a great example of stereoscopy,</description>
+    </item>
+    
+    <item>
+      <title>Delivery App</title>
+      <link>/projects/delivery_app/</link>
+      <pubDate>Sat, 13 Mar 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/projects/delivery_app/</guid>
+      <description>Delivery app built using Flutter, Provider and MVVM</description>
+    </item>
+    
+    <item>
+      <title>Grocery App</title>
+      <link>/projects/grocery_app/</link>
+      <pubDate>Sun, 26 Jul 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/projects/grocery_app/</guid>
+      <description>Grocery App 📱 Flutter application made for selling fruits and vegetables 🍓🍆 With a seamless user interface and a comprehensive list of features, this app is designed to make your grocery shopping experience a breeze. Browse thousands of grocery items from the comfort of your own home and add them to your shopping cart with just a few clicks. Enjoy the convenience of creating and managing your shopping list right from your phone, and receive personalized recommendations based on your previous purchases.</description>
+    </item>
+    
+    <item>
+      <title>Hiring App</title>
+      <link>/projects/hiring_app/</link>
+      <pubDate>Thu, 02 Jul 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/projects/hiring_app/</guid>
+      <description>Jober is an Android app designed for tech professionals looking for employment. Users can create profiles, upload work experience and portfolios. Employers can search for candidates, view their profiles and contact them directly through the app. Employers can also post job offers, including job descriptions, work type (remote, in-office or hybrid) and office location on a map view. The app also provides a feature where users can share a link to their CV.</description>
+    </item>
+    
+    <item>
+      <title>Islamic App</title>
+      <link>/projects/islamic_app/</link>
+      <pubDate>Thu, 25 Jun 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/projects/islamic_app/</guid>
+      <description>Rafiqi V1 Rafiqi is Android Application that aims to help muslims around the world to read,listen to Quran Al-karimk, it contains a lot of other nice features such us : Getting prayer times by location every time the user lunchs the app, if the user doesn&amp;rsquo;t have an internet connection , the app will automatically set location with it&amp;rsquo;s last record. There is also Tassbih , Douaa , Qibla &amp;hellip;etc. This project uses a prepopulated sqlite database that holds All the Quran with surrah number and juz.</description>
+    </item>
+    
+    <item>
+      <title>How to save your trained machine learning model</title>
+      <link>/blog/how-to-save-your-trained-machine-learning-model/</link>
+      <pubDate>Sat, 30 May 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/how-to-save-your-trained-machine-learning-model/</guid>
+      <description>Efficient Machine Learning Model Saving and Reloading in Python: A Guide to Pickle and Joblib for Machine Learning Save a trained model with ability to reload it
 Article image by Zan on Unsplash
-We all know that training models process often takes the big part of our time. So, in this article we mention a way or two to save our trained model, therefore, you will save time by training the model once and reload it when you need it.</description></item><item><title>How to get your exact user location (latitude, longitude) in Android</title><link>/blog/how-to-get-your-exact-user-location-latitude-longitude-in-android/</link><pubDate>Wed, 20 May 2020 00:00:00 +0000</pubDate><guid>/blog/how-to-get-your-exact-user-location-latitude-longitude-in-android/</guid><description>Image Credit: Kelsey Knight in Unsplash
-We all know that getting the users current location is an important thing for apps that provide services that need location like pizza ordering, transportation, health care applications and a lot more. Location is based on two metrics, latitude and longitude, these are angles that uniquely define points on a sphere, from those values you can determine the exact user location, Google made it easy and clear for us by providing an API called Fused Location Provider.</description></item><item><title>How to make client android application with Flask server</title><link>/blog/how-to-make-client-android-application-with-flask-server/</link><pubDate>Sun, 10 May 2020 00:00:00 +0000</pubDate><guid>/blog/how-to-make-client-android-application-with-flask-server/</guid><description>You will learn how to connect android studio with flask server.
+We all know that training models process often takes the big part of our time. So, in this article we mention a way or two to save our trained model, therefore, you will save time by training the model once and reload it when you need it.</description>
+    </item>
+    
+    <item>
+      <title>How to get your exact user location (latitude, longitude) in Android</title>
+      <link>/blog/how-to-get-your-exact-user-location-latitude-longitude-in-android/</link>
+      <pubDate>Wed, 20 May 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/how-to-get-your-exact-user-location-latitude-longitude-in-android/</guid>
+      <description>Image Credit: Kelsey Knight in Unsplash
+We all know that getting the users current location is an important thing for apps that provide services that need location like pizza ordering, transportation, health care applications and a lot more. Location is based on two metrics, latitude and longitude, these are angles that uniquely define points on a sphere, from those values you can determine the exact user location, Google made it easy and clear for us by providing an API called Fused Location Provider.</description>
+    </item>
+    
+    <item>
+      <title>How to make client android application with Flask server</title>
+      <link>/blog/how-to-make-client-android-application-with-flask-server/</link>
+      <pubDate>Sun, 10 May 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/how-to-make-client-android-application-with-flask-server/</guid>
+      <description>You will learn how to connect android studio with flask server.
 We all know that mobile devices are not powerful compared to PCs, we can do a lot of things with our smart phones but with limited resources, most of us consider that like a weakness point.
-So, from the previous paragraph, we can conclude that mobile devices are not the best choice for many things such as machine learning.</description></item></channel></rss>
+So, from the previous paragraph, we can conclude that mobile devices are not the best choice for many things such as machine learning.</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,10 +1,165 @@
-<!doctype html><html lang=en><head><meta charset=utf-8><meta content="width=device-width,initial-scale=1" name=viewport><title>N + 1 Queries Problem (A Django example)</title><meta content name=description><meta content name=keywords><link href=../../img/me.jpg rel=icon><link href=../../img/apple-touch-icon.png rel=apple-touch-icon><link href=../../vendor/bootstrap/css/bootstrap.min.css rel=stylesheet><link href=../../vendor/bootstrap-icons/bootstrap-icons.css rel=stylesheet><link href=../../vendor/glightbox/css/glightbox.min.css rel=stylesheet><link href=../../vendor/swiper/swiper-bundle.min.css rel=stylesheet><link href=../../css/style.css rel=stylesheet><style>.post-thumb img,.article-content img{max-width:100%;height:auto;display:block}.container{max-width:1200px}.col-md-8{flex:0 0 100%;max-width:100%}</style></head><body><header id=header class=fixed-top><div class="container d-flex align-items-center justify-content-between"><h1 class=logo><a href=../../>Younes Belouche</a></h1><nav id=navbar class=navbar><ul><li><a class="nav-link scrollto" href=../../>Home</a></li><li><a class="nav-link scrollto" href=../../#about>About</a></li><li><a class="nav-link scrollto" href=../../#services>Services</a></li><li><a class="nav-link scrollto" href=../../#work>Projects</a></li><li><a class="nav-link scrollto" href=../../#blog>Blog</a></li><li><a class="nav-link scrollto" href=../../#contact>Contact</a></li></ul><i class="bi bi-list mobile-nav-toggle"></i></nav></div></header><div class="hero hero-single route bg-image"><div class=overlay-mf></div><div class="hero-content display-table"><div class=table-cell><div class=container><h2 class="hero-title mb-4">N + 1 Queries Problem (A Django example)</h2></div></div></div></div><main id=main><section class="blog-wrapper sect-pt4" id=blog><div class=container><div class=row><div class=col-md-8><div class=post-box><div class=post-thumb><img src=../../img/n+1.webp class=img-fluid alt></div><div class=post-meta><h1 class=article-title>N + 1 Queries Problem (A Django example)</h1><ul><li><span class="bi bi-person"></span>Younes Belouche</li><li><span class="bi bi-tag"></span>Performance | Django</li></ul></div><div class=article-content><p>Image from Unsplash by Markus Winkler</p><p>In this post, we will learn about N + 1 Queries Problem, what is it and how to solve it.</p><h3 id=what-is-the-n--1-queriesproblem><strong>What is the N + 1 Queries Problem?</strong></h3><p>In short, the N + 1 Queries Problem is a performance anti-pattern that happens when a query is executed for every result you got from a previous query. <strong>N</strong> here is the number of queries for every result you got from the first query. This means if we executed a query and we got 200 results, then N + 1 = 201 queries.</p><p>Let’s see an example to get familiar with the problem. Suppose we have this code:</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-Python data-lang=Python>posts <span style=color:#f92672>=</span> Post<span style=color:#f92672>.</span>objects<span style=color:#f92672>.</span>order_by(<span style=color:#e6db74>&#34;created_on&#34;</span>)
-<span style=color:#66d9ef>for</span> post <span style=color:#f92672>in</span> posts:
-  <span style=color:#66d9ef>print</span>(post<span style=color:#f92672>.</span>title, <span style=color:#e6db74>&#34;written by&#34;</span>, post<span style=color:#f92672>.</span>author)
-</code></pre></div><p>In this simple example, we have posts QuerySet and a for loop that iterates over it and prints the title and the author for every single post. By looking at the code, you figure out that we have a Post model and an Author model. This tells you that author attribute is a foreign key.</p><p>Let’s see how much query our code performs:</p><p>First, we’ve created the <strong>Post</strong> QuerySet, so till now, we have 0 queries executed. Why? because QuerySets are lazy. I quote from the Django documentation:</p><blockquote><p><em>“QuerySets are lazy – the act of creating a</em> <code>_QuerySet_</code> <em>doesn’t involve any database activity. You can stack filters together all day long, and Django won’t actually run the query until the</em> <code>_QuerySet_</code> <em>is evaluated.”</em></p></blockquote><p>You can read more about this form <a href=https://docs.djangoproject.com/en/4.1/topics/db/queries/#querysets-are-lazy>here</a>.</p><p>Then we iterate over the posts, this will lead the QuerySet to evaluate and fetch its results. Now, we have 1 query.</p><p>After that, we print the title and the author corresponding to the post. Since the title is a field on the Post itself, we will have no extra queries because it has been fetched in the first query. But what about the author? we remember that it is a foreign key, so Django didn’t fetch it. Therefore, Django will do extra work by executing another query to fetch the corresponding name for the given author_id (Obviously, the Author model contains a name field).</p><p>By now, we have executed <strong>1</strong> query to get the posts, and <strong>N</strong> queries to get the authors. <strong>N</strong> is the number of posts.</p><p>Imagine the case where we have 1 million posts 😆.</p><h3 id=how-to-tackle-thisproblem>How to tackle this problem?</h3><p><strong>select_related()</strong> and <strong>prefetch_related()</strong> are two QuerySet methods that provide a solution to tackle the N+1 Queries Problem.</p><p><a href=https://docs.djangoproject.com/en/4.1/ref/models/querysets/#django.db.models.query.QuerySet.select_related><strong>select_related()</strong></a> returns a QuerySet with selecting additional related-object data when it executes its query. After using this method, our previous code will be like this:</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-Python data-lang=Python>posts <span style=color:#f92672>=</span> Post<span style=color:#f92672>.</span>objects<span style=color:#f92672>.</span>order_by(<span style=color:#e6db74>&#34;created_on&#34;</span>)<span style=color:#f92672>.</span>select_related(<span style=color:#e6db74>&#34;author&#34;</span>)
-<span style=color:#66d9ef>for</span> post <span style=color:#f92672>in</span> posts:
-    <span style=color:#66d9ef>print</span>(post<span style=color:#f92672>.</span>title, <span style=color:#e6db74>&#34;written by&#34;</span>, post<span style=color:#f92672>.</span>author<span style=color:#f92672>.</span>name)
-</code></pre></div><p>Now we have only <strong>1</strong> query that selects both posts and their related authors.</p><p><a href=https://docs.djangoproject.com/en/4.1/ref/models/querysets/#django.db.models.query.QuerySet.prefetch_related><strong>prefetch_related</strong></a><strong>()</strong> returns a QuerySet that will automatically retrieve, in a single batch, related objects for each of the specified lookups. Now the code will look like this:</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-Python data-lang=Python>posts <span style=color:#f92672>=</span> Post<span style=color:#f92672>.</span>objects<span style=color:#f92672>.</span>order_by(<span style=color:#e6db74>&#34;created_on&#34;</span>)<span style=color:#f92672>.</span>prefetch_related(<span style=color:#e6db74>&#34;author&#34;</span>)
-<span style=color:#66d9ef>for</span> post <span style=color:#f92672>in</span> posts:
-    <span style=color:#66d9ef>print</span>(post<span style=color:#f92672>.</span>title, <span style=color:#e6db74>&#34;written by&#34;</span>, post<span style=color:#f92672>.</span>author<span style=color:#f92672>.</span>name)
-</code></pre></div><p>The difference between the two methods is that <strong>select_related()</strong> creates an SQL join and includes the related-object data in the SELECT statement. It is only suitable for foreign key and one-to-one relationships. On the other hand, <strong>prefetch_related()</strong> does a separate lookup for each relationship and uses Python to perform joins. This enables us to prefetch all kinds of relationship objects, which are: <em>many-to-many, many-to-one, foreign key, and one-to-one relationships.</em></p><p>There are tools that permit you to find N + 1 Queries Problem but I will not cover them for the sack of this post shortness.</p><p>Thanks for reading this article ❤</p><p>Connect with me on <a href=https://www.linkedin.com/in/younes-belouche-641bb3197/>Linkedin</a>, <a href=https://www.instagram.com/younes_belouche/>Instagram</a> and <a href=https://github.com/dombroks>Github</a>.</p><p>By <a href=https://medium.com/@younes_belouche>Younes Belouche</a> on <a href=https://medium.com/p/fd57e3a1761e>August 30, 2022</a>.</p><p><a href=https://medium.com/@younes_belouche/n-1-queries-problem-a-django-example-fd57e3a1761e>Medium link</a></p></div></div></div></div></div></section></main><footer><div class=container><div class=row><div class=col-sm-12><div class=copyright-box><p class=copyright>&copy; Copyright <strong>DevFolio</strong>. All Rights Reserved</p><div class=credits>Designed by <a href=https://bootstrapmade.com/>BootstrapMade</a></div></div></div></div></div></footer><script src=../../vendor/purecounter/purecounter_vanilla.js></script><script src=../../vendor/bootstrap/js/bootstrap.bundle.min.js></script><script src=../../vendor/glightbox/js/glightbox.min.js></script><script src=../../vendor/swiper/swiper-bundle.min.js></script><script src=../../vendor/typed.js/typed.min.js></script><script src=../../vendor/php-email-form/validate.js></script><script src=../../js/main.js></script></body></html>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+    <title>N &#43; 1 Queries Problem (A Django example)</title>
+    <meta content="" name="description">
+    <meta content="" name="keywords">
+
+    
+    <link href="../../img/me.jpg" rel="icon">
+    <link href="../../img/apple-touch-icon.png" rel="apple-touch-icon">
+
+    
+    <link href="../../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../../vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+    <link href="../../vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
+    <link href="../../vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+
+    
+    <link href="../../css/style.css" rel="stylesheet">
+
+    <style>
+        .post-thumb img,
+        .article-content img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .container {
+            max-width: 1200px;
+        }
+
+        .col-md-8 {
+            flex: 0 0 100%;
+            max-width: 100%;
+        }
+    </style>
+</head>
+
+<body>
+
+
+<header id="header" class="fixed-top">
+    <div class="container d-flex align-items-center justify-content-between">
+        <h1 class="logo"><a href="../../">Younes Belouche</a></h1>
+
+        <nav id="navbar" class="navbar">
+            <ul>
+                <li><a class="nav-link scrollto" href="../../">Home</a></li>
+                <li><a class="nav-link scrollto" href="../../#about">About</a></li>
+                <li><a class="nav-link scrollto" href="../../#services">Services</a></li>
+                <li><a class="nav-link scrollto" href="../../#work">Projects</a></li>
+                <li><a class="nav-link scrollto" href="../../#blog">Blog</a></li>
+                <li><a class="nav-link scrollto" href="../../#contact">Contact</a></li>
+            </ul>
+            <i class="bi bi-list mobile-nav-toggle"></i>
+        </nav>
+    </div>
+</header>
+
+<div class="hero hero-single route bg-image">
+    <div class="overlay-mf"></div>
+    <div class="hero-content display-table">
+        <div class="table-cell">
+            <div class="container">
+                <h2 class="hero-title mb-4">N &#43; 1 Queries Problem (A Django example)</h2>
+            </div>
+        </div>
+    </div>
+</div>
+
+<main id="main">
+    
+    <section class="blog-wrapper sect-pt4" id="blog">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="post-box">
+                        <div class="post-thumb">
+                            <img src="../../img/n&#43;1.webp" class="img-fluid" alt="">
+                        </div>
+                        <div class="post-meta">
+                            <h1 class="article-title">N &#43; 1 Queries Problem (A Django example)</h1>
+                            <ul>
+                                <li><span class="bi bi-person"></span> Younes Belouche</li>
+                                <li><span class="bi bi-tag"></span> Performance | Django</li>
+                            </ul>
+                        </div>
+                        <div class="article-content">
+                            <p>Image from Unsplash by Markus Winkler</p>
+<p>In this post, we will learn about N + 1 Queries Problem, what is it and how to solve it.</p>
+<h3 id="what-is-the-n--1-queriesproblem"><strong>What is the N + 1 Queries Problem?</strong></h3>
+<p>In short, the N + 1 Queries Problem is a performance anti-pattern that happens when a query is executed for every result you got from a previous query. <strong>N</strong> here is the number of queries for every result you got from the first query. This means if we executed a query and we got 200 results, then N + 1 = 201 queries.</p>
+<p>Let’s see an example to get familiar with the problem. Suppose we have this code:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Python" data-lang="Python">posts <span style="color:#f92672">=</span> Post<span style="color:#f92672">.</span>objects<span style="color:#f92672">.</span>order_by(<span style="color:#e6db74">&#34;created_on&#34;</span>)
+<span style="color:#66d9ef">for</span> post <span style="color:#f92672">in</span> posts:
+  <span style="color:#66d9ef">print</span>(post<span style="color:#f92672">.</span>title, <span style="color:#e6db74">&#34;written by&#34;</span>, post<span style="color:#f92672">.</span>author)
+</code></pre></div><p>In this simple example, we have posts QuerySet and a for loop that iterates over it and prints the title and the author for every single post. By looking at the code, you figure out that we have a Post model and an Author model. This tells you that author attribute is a foreign key.</p>
+<p>Let’s see how much query our code performs:</p>
+<p>First, we’ve created the <strong>Post</strong> QuerySet, so till now, we have 0 queries executed. Why? because QuerySets are lazy. I quote from the Django documentation:</p>
+<blockquote>
+<p><em>“QuerySets are lazy – the act of creating a</em> <code>_QuerySet_</code> <em>doesn’t involve any database activity. You can stack filters together all day long, and Django won’t actually run the query until the</em> <code>_QuerySet_</code> <em>is evaluated.”</em></p>
+</blockquote>
+<p>You can read more about this form <a href="https://docs.djangoproject.com/en/4.1/topics/db/queries/#querysets-are-lazy">here</a>.</p>
+<p>Then we iterate over the posts, this will lead the QuerySet to evaluate and fetch its results. Now, we have 1 query.</p>
+<p>After that, we print the title and the author corresponding to the post. Since the title is a field on the Post itself, we will have no extra queries because it has been fetched in the first query. But what about the author? we remember that it is a foreign key, so Django didn’t fetch it. Therefore, Django will do extra work by executing another query to fetch the corresponding name for the given author_id (Obviously, the Author model contains a name field).</p>
+<p>By now, we have executed <strong>1</strong> query to get the posts, and <strong>N</strong> queries to get the authors. <strong>N</strong> is the number of posts.</p>
+<p>Imagine the case where we have 1 million posts 😆.</p>
+<h3 id="how-to-tackle-thisproblem">How to tackle this problem?</h3>
+<p><strong>select_related()</strong> and <strong>prefetch_related()</strong> are two QuerySet methods that provide a solution to tackle the N+1 Queries Problem.</p>
+<p><a href="https://docs.djangoproject.com/en/4.1/ref/models/querysets/#django.db.models.query.QuerySet.select_related"><strong>select_related()</strong></a> returns a QuerySet with selecting additional related-object data when it executes its query. After using this method, our previous code will be like this:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Python" data-lang="Python">posts <span style="color:#f92672">=</span> Post<span style="color:#f92672">.</span>objects<span style="color:#f92672">.</span>order_by(<span style="color:#e6db74">&#34;created_on&#34;</span>)<span style="color:#f92672">.</span>select_related(<span style="color:#e6db74">&#34;author&#34;</span>)
+<span style="color:#66d9ef">for</span> post <span style="color:#f92672">in</span> posts:
+    <span style="color:#66d9ef">print</span>(post<span style="color:#f92672">.</span>title, <span style="color:#e6db74">&#34;written by&#34;</span>, post<span style="color:#f92672">.</span>author<span style="color:#f92672">.</span>name)
+</code></pre></div><p>Now we have only <strong>1</strong> query that selects both posts and their related authors.</p>
+<p><a href="https://docs.djangoproject.com/en/4.1/ref/models/querysets/#django.db.models.query.QuerySet.prefetch_related"><strong>prefetch_related</strong></a><strong>()</strong> returns a QuerySet that will automatically retrieve, in a single batch, related objects for each of the specified lookups. Now the code will look like this:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Python" data-lang="Python">posts <span style="color:#f92672">=</span> Post<span style="color:#f92672">.</span>objects<span style="color:#f92672">.</span>order_by(<span style="color:#e6db74">&#34;created_on&#34;</span>)<span style="color:#f92672">.</span>prefetch_related(<span style="color:#e6db74">&#34;author&#34;</span>)
+<span style="color:#66d9ef">for</span> post <span style="color:#f92672">in</span> posts:
+    <span style="color:#66d9ef">print</span>(post<span style="color:#f92672">.</span>title, <span style="color:#e6db74">&#34;written by&#34;</span>, post<span style="color:#f92672">.</span>author<span style="color:#f92672">.</span>name)
+</code></pre></div><p>The difference between the two methods is that <strong>select_related()</strong> creates an SQL join and includes the related-object data in the SELECT statement. It is only suitable for foreign key and one-to-one relationships. On the other hand, <strong>prefetch_related()</strong> does a separate lookup for each relationship and uses Python to perform joins. This enables us to prefetch all kinds of relationship objects, which are: <em>many-to-many, many-to-one, foreign key, and one-to-one relationships.</em></p>
+<p>There are tools that permit you to find N + 1 Queries Problem but I will not cover them for the sack of this post shortness.</p>
+<p>Thanks for reading this article ❤</p>
+<p>Connect with me on <a href="https://www.linkedin.com/in/younes-belouche-641bb3197/">Linkedin</a>, <a href="https://www.instagram.com/younes_belouche/">Instagram</a> and <a href="https://github.com/dombroks">Github</a>.</p>
+<p>By <a href="https://medium.com/@younes_belouche">Younes Belouche</a> on <a href="https://medium.com/p/fd57e3a1761e">August 30, 2022</a>.</p>
+<p><a href="https://medium.com/@younes_belouche/n-1-queries-problem-a-django-example-fd57e3a1761e">Medium link</a></p>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="copyright-box">
+                    <p class="copyright">&copy; Copyright <strong>DevFolio</strong>. All Rights Reserved</p>
+                    <div class="credits">
+                        Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+
+
+<script src="../../vendor/purecounter/purecounter_vanilla.js"></script>
+<script src="../../vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="../../vendor/glightbox/js/glightbox.min.js"></script>
+<script src="../../vendor/swiper/swiper-bundle.min.js"></script>
+<script src="../../vendor/typed.js/typed.min.js"></script>
+<script src="../../vendor/php-email-form/validate.js"></script>
+<script src="../../js/main.js"></script>
+
+</body>
+</html>

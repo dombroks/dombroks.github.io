@@ -1,1 +1,153 @@
-<!doctype html><html lang=en><head><meta charset=utf-8><meta content="width=device-width,initial-scale=1" name=viewport><title>How to save your trained machine learning model</title><meta content name=description><meta content name=keywords><link href=../../img/me.jpg rel=icon><link href=../../img/apple-touch-icon.png rel=apple-touch-icon><link href=../../vendor/bootstrap/css/bootstrap.min.css rel=stylesheet><link href=../../vendor/bootstrap-icons/bootstrap-icons.css rel=stylesheet><link href=../../vendor/glightbox/css/glightbox.min.css rel=stylesheet><link href=../../vendor/swiper/swiper-bundle.min.css rel=stylesheet><link href=../../css/style.css rel=stylesheet><style>.post-thumb img,.article-content img{max-width:100%;height:auto;display:block}.container{max-width:1200px}.col-md-8{flex:0 0 100%;max-width:100%}</style></head><body><header id=header class=fixed-top><div class="container d-flex align-items-center justify-content-between"><h1 class=logo><a href=../../>Younes Belouche</a></h1><nav id=navbar class=navbar><ul><li><a class="nav-link scrollto" href=../../>Home</a></li><li><a class="nav-link scrollto" href=../../#about>About</a></li><li><a class="nav-link scrollto" href=../../#services>Services</a></li><li><a class="nav-link scrollto" href=../../#work>Projects</a></li><li><a class="nav-link scrollto" href=../../#blog>Blog</a></li><li><a class="nav-link scrollto" href=../../#contact>Contact</a></li></ul><i class="bi bi-list mobile-nav-toggle"></i></nav></div></header><div class="hero hero-single route bg-image"><div class=overlay-mf></div><div class="hero-content display-table"><div class=table-cell><div class=container><h2 class="hero-title mb-4">How to save your trained machine learning model</h2></div></div></div></div><main id=main><section class="blog-wrapper sect-pt4" id=blog><div class=container><div class=row><div class=col-md-8><div class=post-box><div class=post-thumb><img src=../../img/pickle.webp class=img-fluid alt></div><div class=post-meta><h1 class=article-title>How to save your trained machine learning model</h1><ul><li><span class="bi bi-person"></span>Younes Belouche</li><li><span class="bi bi-tag"></span>Machine learning | Python</li></ul></div><div class=article-content><hr><h3 id=efficient-machine-learning-model-saving-and-reloading-in-python-a-guide-to-pickle-and-joblib-for-machinelearning>Efficient Machine Learning Model Saving and Reloading in Python: A Guide to Pickle and Joblib for Machine Learning</h3><p>Save a trained model with ability to reload it</p><p>Article image by Zan on Unsplash</p><p>We all know that training models process often takes the big part of our time. So, in this article we mention a way or two to save our trained model, therefore, you will save time by training the model once and reload it when you need it.</p><p><img src=https://cdn-images-1.medium.com/max/800/1*REGnvwZmowvVdUIIKtd-2Q.jpeg alt></p><p>Photo by <a href=https://www.flickr.com/photos/spanginator/3414847568/>Christine</a>, some rights reserved.</p><h4 id=first-let-me-introduce-you-topickle>First, let me introduce you to pickle</h4><p>Pickle module is a powerful algorithm for serializing and de-serializing a Python object structure. Serialization is the operation or the process of turning an object hierarchy into a byte stream, this process is called “Pickling” when we talk about Pickle, and “unpickling” is the inverse operation, meaning that the byte stream is converted back into an object hierarchy.</p><h4 id=let-me-give-you-a-simpleexample>Let me give you a simple example:</h4><h4 id=1saving-themodel>1.Saving the model</h4><p><img src=https://cdn-images-1.medium.com/max/800/1*taFWXqPQguRHHO13rKGjig.png alt></p><p>Serializing and saving our trained model</p><h4 id=2reloading-themodel>2.Reloading the model</h4><p><img src=https://cdn-images-1.medium.com/max/800/1*P4-5jjwTUm46dOPeW3dLzg.png alt></p><p>Reloading our model</p><p>Running the example saves the model to “model.pkl” in your local working directory. Load the saved model and evaluating it provide an estimation of the accuracy of the model on an unseen data.</p><p>You can also use Joblib, it is like pickle and easy to use. Those two modules are used in Scikit-Learn machine learning models but don’t worry, you can save your Keras’s models like this:</p><p><img src=https://cdn-images-1.medium.com/max/800/1*zov3ZqNFES2wc2p_S32IDA.png alt></p><p>Keras model</p><h3 id=summary>Summary</h3><p>In this post you have discovered how to persist your machine learning algorithms in Python, if you want to contact me, this my <a href=https://www.linkedin.com/in/younes-belouche-641bb3197/><em>LinkedIn</em></a> account, I hope you enjoyed.</p><p>By <a href=https://medium.com/@younes_belouche>Younes Belouche</a> on <a href=https://medium.com/p/a159455218f5>April 30, 2020</a>.</p><p><a href=https://medium.com/@younes_belouche/how-to-save-your-trained-machine-learning-model-a159455218f5>Medium Link</a></p></div></div></div></div></div></section></main><footer><div class=container><div class=row><div class=col-sm-12><div class=copyright-box><p class=copyright>&copy; Copyright <strong>DevFolio</strong>. All Rights Reserved</p><div class=credits>Designed by <a href=https://bootstrapmade.com/>BootstrapMade</a></div></div></div></div></div></footer><script src=../../vendor/purecounter/purecounter_vanilla.js></script><script src=../../vendor/bootstrap/js/bootstrap.bundle.min.js></script><script src=../../vendor/glightbox/js/glightbox.min.js></script><script src=../../vendor/swiper/swiper-bundle.min.js></script><script src=../../vendor/typed.js/typed.min.js></script><script src=../../vendor/php-email-form/validate.js></script><script src=../../js/main.js></script></body></html>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+    <title>How to save your trained machine learning model</title>
+    <meta content="" name="description">
+    <meta content="" name="keywords">
+
+    
+    <link href="../../img/me.jpg" rel="icon">
+    <link href="../../img/apple-touch-icon.png" rel="apple-touch-icon">
+
+    
+    <link href="../../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../../vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+    <link href="../../vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
+    <link href="../../vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+
+    
+    <link href="../../css/style.css" rel="stylesheet">
+
+    <style>
+        .post-thumb img,
+        .article-content img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .container {
+            max-width: 1200px;
+        }
+
+        .col-md-8 {
+            flex: 0 0 100%;
+            max-width: 100%;
+        }
+    </style>
+</head>
+
+<body>
+
+
+<header id="header" class="fixed-top">
+    <div class="container d-flex align-items-center justify-content-between">
+        <h1 class="logo"><a href="../../">Younes Belouche</a></h1>
+
+        <nav id="navbar" class="navbar">
+            <ul>
+                <li><a class="nav-link scrollto" href="../../">Home</a></li>
+                <li><a class="nav-link scrollto" href="../../#about">About</a></li>
+                <li><a class="nav-link scrollto" href="../../#services">Services</a></li>
+                <li><a class="nav-link scrollto" href="../../#work">Projects</a></li>
+                <li><a class="nav-link scrollto" href="../../#blog">Blog</a></li>
+                <li><a class="nav-link scrollto" href="../../#contact">Contact</a></li>
+            </ul>
+            <i class="bi bi-list mobile-nav-toggle"></i>
+        </nav>
+    </div>
+</header>
+
+<div class="hero hero-single route bg-image">
+    <div class="overlay-mf"></div>
+    <div class="hero-content display-table">
+        <div class="table-cell">
+            <div class="container">
+                <h2 class="hero-title mb-4">How to save your trained machine learning model</h2>
+            </div>
+        </div>
+    </div>
+</div>
+
+<main id="main">
+    
+    <section class="blog-wrapper sect-pt4" id="blog">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="post-box">
+                        <div class="post-thumb">
+                            <img src="../../img/pickle.webp" class="img-fluid" alt="">
+                        </div>
+                        <div class="post-meta">
+                            <h1 class="article-title">How to save your trained machine learning model</h1>
+                            <ul>
+                                <li><span class="bi bi-person"></span> Younes Belouche</li>
+                                <li><span class="bi bi-tag"></span> Machine learning | Python</li>
+                            </ul>
+                        </div>
+                        <div class="article-content">
+                            <hr>
+<h3 id="efficient-machine-learning-model-saving-and-reloading-in-python-a-guide-to-pickle-and-joblib-for-machinelearning">Efficient Machine Learning Model Saving and Reloading in Python: A Guide to Pickle and Joblib for Machine Learning</h3>
+<p>Save a trained model with ability to reload it</p>
+<p>Article image by Zan on Unsplash</p>
+<p>We all know that training models process often takes the big part of our time. So, in this article we mention a way or two to save our trained model, therefore, you will save time by training the model once and reload it when you need it.</p>
+<p><img src="https://cdn-images-1.medium.com/max/800/1*REGnvwZmowvVdUIIKtd-2Q.jpeg" alt=""></p>
+<p>Photo by <a href="https://www.flickr.com/photos/spanginator/3414847568/">Christine</a>, some rights reserved.</p>
+<h4 id="first-let-me-introduce-you-topickle">First, let me introduce you to pickle</h4>
+<p>Pickle module is a powerful algorithm for serializing and de-serializing a Python object structure. Serialization is the operation or the process of turning an object hierarchy into a byte stream, this process is called “Pickling” when we talk about Pickle, and “unpickling” is the inverse operation, meaning that the byte stream is converted back into an object hierarchy.</p>
+<h4 id="let-me-give-you-a-simpleexample">Let me give you a simple example:</h4>
+<h4 id="1saving-themodel">1.Saving the model</h4>
+<p><img src="https://cdn-images-1.medium.com/max/800/1*taFWXqPQguRHHO13rKGjig.png" alt=""></p>
+<p>Serializing and saving our trained model</p>
+<h4 id="2reloading-themodel">2.Reloading the model</h4>
+<p><img src="https://cdn-images-1.medium.com/max/800/1*P4-5jjwTUm46dOPeW3dLzg.png" alt=""></p>
+<p>Reloading our model</p>
+<p>Running the example saves the model to “model.pkl” in your local working directory. Load the saved model and evaluating it provide an estimation of the accuracy of the model on an unseen data.</p>
+<p>You can also use Joblib, it is like pickle and easy to use. Those two modules are used in Scikit-Learn machine learning models but don’t worry, you can save your Keras’s models like this:</p>
+<p><img src="https://cdn-images-1.medium.com/max/800/1*zov3ZqNFES2wc2p_S32IDA.png" alt=""></p>
+<p>Keras model</p>
+<h3 id="summary">Summary</h3>
+<p>In this post you have discovered how to persist your machine learning algorithms in Python, if you want to contact me, this my <a href="https://www.linkedin.com/in/younes-belouche-641bb3197/"><em>LinkedIn</em></a> account, I hope you enjoyed.</p>
+<p>By <a href="https://medium.com/@younes_belouche">Younes Belouche</a> on <a href="https://medium.com/p/a159455218f5">April 30, 2020</a>.</p>
+<p><a href="https://medium.com/@younes_belouche/how-to-save-your-trained-machine-learning-model-a159455218f5">Medium Link</a></p>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="copyright-box">
+                    <p class="copyright">&copy; Copyright <strong>DevFolio</strong>. All Rights Reserved</p>
+                    <div class="credits">
+                        Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+
+
+<script src="../../vendor/purecounter/purecounter_vanilla.js"></script>
+<script src="../../vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="../../vendor/glightbox/js/glightbox.min.js"></script>
+<script src="../../vendor/swiper/swiper-bundle.min.js"></script>
+<script src="../../vendor/typed.js/typed.min.js"></script>
+<script src="../../vendor/php-email-form/validate.js"></script>
+<script src="../../js/main.js"></script>
+
+</body>
+</html>
