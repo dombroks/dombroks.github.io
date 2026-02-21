@@ -1,0 +1,10 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=Portfolio Project Manager
+Comment=Manage Hugo portfolio projects
+Exec=/home/younes/PycharmProjects/dombroks.github.io/open_manager.sh
+Icon=applications-internet
+Terminal=true
+Categories=Development;WebDevelopment;
+
