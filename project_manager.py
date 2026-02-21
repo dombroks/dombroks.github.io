@@ -4,6 +4,7 @@ Simple web interface to add projects to Hugo portfolio website
 """
 from flask import Flask, render_template, request, redirect, url_for, flash
 import os
+import subprocess
 from datetime import datetime
 from werkzeug.utils import secure_filename
 
@@ -19,6 +20,21 @@ app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16MB max file size
 
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+def build_hugo_site():
+    """Build the Hugo site"""
+    try:
+        result = subprocess.run(['hugo'], capture_output=True, text=True, timeout=30)
+        if result.returncode == 0:
+            return True, "Hugo site built successfully!"
+        else:
+            return False, f"Hugo build failed: {result.stderr}"
+    except subprocess.TimeoutExpired:
+        return False, "Hugo build timed out (30s limit exceeded)"
+    except FileNotFoundError:
+        return False, "Hugo is not installed or not in PATH"
+    except Exception as e:
+        return False, f"Error building Hugo site: {str(e)}"
 
 @app.route('/')
 def index():
@@ -92,9 +108,27 @@ link : "{link}"
             f.write(content)
 
         flash(f'Project "{title}" added successfully!', 'success')
+
+        # Build Hugo site
+        success, message = build_hugo_site()
+        if success:
+            flash(message, 'success')
+        else:
+            flash(message, 'error')
+
         return redirect(url_for('index'))
 
     return render_template('add_project.html')
+
+@app.route('/build', methods=['POST'])
+def build_site():
+    """Manually trigger Hugo site build"""
+    success, message = build_hugo_site()
+    if success:
+        flash(message, 'success')
+    else:
+        flash(message, 'error')
+    return redirect(url_for('index'))
 
 @app.route('/view/<project_name>')
 def view_project(project_name):

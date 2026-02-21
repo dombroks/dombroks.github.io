@@ -8,6 +8,9 @@
 
 <div class="button-group">
     <a href="{{ url_for('add_project') }}" class="btn">➕ Add New Project</a>
+    <form method="POST" action="{{ url_for('build_site') }}" style="display: inline;">
+        <button type="submit" class="btn btn-secondary">🔨 Build Site</button>
+    </form>
 </div>
 
 <h2>Your Projects ({{ projects|length }})</h2>
