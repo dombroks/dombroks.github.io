@@ -6,7 +6,7 @@
     <description>Recent content on My Personal Website</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sat, 07 Feb 2026 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Fri, 06 Feb 2026 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/index.xml" rel="self" type="application/rss+xml" />
     
@@ -14,10 +14,10 @@
     <item>
       <title>Products &amp; Reviews</title>
       <link>/projects/products__reviews/</link>
-      <pubDate>Sat, 07 Feb 2026 00:00:00 +0000</pubDate>
+      <pubDate>Fri, 06 Feb 2026 00:00:00 +0000</pubDate>
       
       <guid>/projects/products__reviews/</guid>
-      <description></description>
+      <description>A modern Android application built with Jetpack Compose that displays products and their reviews from an API. The app follows Clean Architecture principles and implements the MVVM pattern with reactive state management.</description>
     </item>
     
     <item>

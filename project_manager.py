@@ -36,6 +36,30 @@ def build_hugo_site():
     except Exception as e:
         return False, f"Error building Hugo site: {str(e)}"
 
+def git_commit_and_push(message):
+    """Commit and push changes to GitHub"""
+    try:
+        # Add all changes
+        subprocess.run(['git', 'add', '.'], check=True, capture_output=True)
+
+        # Commit changes
+        result = subprocess.run(['git', 'commit', '-m', message], capture_output=True, text=True)
+        if result.returncode != 0:
+            if 'nothing to commit' in result.stdout:
+                return True, "No changes to commit"
+            return False, f"Git commit failed: {result.stderr}"
+
+        # Push to origin
+        result = subprocess.run(['git', 'push'], capture_output=True, text=True, timeout=60)
+        if result.returncode == 0:
+            return True, "Changes pushed to GitHub successfully! GitHub Actions will deploy your site."
+        else:
+            return False, f"Git push failed: {result.stderr}"
+    except subprocess.TimeoutExpired:
+        return False, "Git push timed out (60s limit exceeded)"
+    except Exception as e:
+        return False, f"Error with git: {str(e)}"
+
 @app.route('/')
 def index():
     """Display all existing projects"""
@@ -128,6 +152,27 @@ def build_site():
         flash(message, 'success')
     else:
         flash(message, 'error')
+    return redirect(url_for('index'))
+
+@app.route('/deploy', methods=['POST'])
+def deploy_site():
+    """Build, commit and push to GitHub"""
+    # First build the site
+    success, message = build_hugo_site()
+    if not success:
+        flash(message, 'error')
+        return redirect(url_for('index'))
+
+    flash(message, 'success')
+
+    # Then commit and push
+    commit_msg = request.form.get('commit_message', 'Update portfolio content')
+    success, message = git_commit_and_push(commit_msg)
+    if success:
+        flash(message, 'success')
+    else:
+        flash(message, 'error')
+
     return redirect(url_for('index'))
 
 @app.route('/view/<project_name>')
